@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.moviereservationsystem.TableNames;
 import org.example.moviereservationsystem.actor.ActorEntity;
+import org.example.moviereservationsystem.cinema.CinemaEntity;
 import org.example.moviereservationsystem.director.DirectorEntity;
 
 import java.util.ArrayList;

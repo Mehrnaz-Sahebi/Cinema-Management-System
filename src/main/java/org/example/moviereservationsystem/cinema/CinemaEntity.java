@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.moviereservationsystem.TableNames;
+import org.example.moviereservationsystem.address.AddressEntity;
 import org.example.moviereservationsystem.movie.MovieEntity;
 
 import java.util.ArrayList;
