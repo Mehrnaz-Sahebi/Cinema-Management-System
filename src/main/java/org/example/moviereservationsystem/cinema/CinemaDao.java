@@ -1,6 +1,6 @@
 package org.example.moviereservationsystem.cinema;
 
-import org.example.moviereservationsystem.Dao;
+import org.example.moviereservationsystem.BaseDao;
 
-public class CinemaDao extends Dao {
+public class CinemaDao extends BaseDao {
 }

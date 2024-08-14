@@ -9,7 +9,4 @@ import org.springframework.stereotype.Service;
 public class MovieService {
     @Autowired
     private MovieDao movieDao;
-    public MovieEntity getMovieById(int id) {
-        return movieDao.getMovieById(id);
-    }
 }

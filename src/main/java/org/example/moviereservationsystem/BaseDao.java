@@ -1,8 +1,7 @@
 package org.example.moviereservationsystem;
 
-import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
-import org.example.moviereservationsystem.movie.MovieEntity;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Repository;
 
+import java.util.function.Supplier;
+
 @Repository
-public class Dao {
+public class BaseDao {
     @Getter
     private LocalContainerEntityManagerFactoryBean entityManagerFactory;
     @Getter
@@ -22,7 +23,13 @@ public class Dao {
         this.entityManagerFactory = entityManagerFactory;
         sessionFactory = entityManagerFactory.getNativeEntityManagerFactory().unwrap(SessionFactory.class);
     }
-    public <T> T getById(int id, Class<T> entityClass){
+
+    public <T> T createInstance(Supplier<T> supplier) {
+        return supplier.get();
+    }
+
+
+    public <T> T getById(int id, Class<T> entityClass) throws EntityNotFoundException{
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;
         T t = null;
@@ -36,6 +43,7 @@ public class Dao {
         } finally {
             session.close();
         }
+        if (t==null) throw new EntityNotFoundException();
         return t;
     }
 }
