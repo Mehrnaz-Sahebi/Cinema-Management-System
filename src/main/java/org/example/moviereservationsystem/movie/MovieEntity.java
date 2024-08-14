@@ -49,5 +49,20 @@ public class MovieEntity {
             inverseJoinColumns = { @JoinColumn(name = "cinema-id") }
     )
     private ArrayList<CinemaEntity> cinemas;
+
+    @Override
+    public String toString() {
+        return "MovieEntity{" +
+                "movieId=" + movieId +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", year=" + year +
+                ", director=" + director +
+                ", genre='" + genre + '\'' +
+                ", rating=" + rating +
+                ", actors=" + actors +
+                ", cinemas=" + cinemas +
+                '}';
+    }
 }
 

@@ -9,9 +9,14 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class Dao {
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
     @Getter
-    private SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
+    private LocalContainerEntityManagerFactoryBean entityManagerFactory;
+    @Getter
+    private SessionFactory sessionFactory;
+    @Autowired
+    public void setEntityManagerFactory(LocalContainerEntityManagerFactoryBean entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+        sessionFactory = entityManagerFactory.getNativeEntityManagerFactory().unwrap(SessionFactory.class);
 
+    }
 }

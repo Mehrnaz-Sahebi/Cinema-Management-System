@@ -22,6 +22,7 @@ public class MovieDao extends Dao {
         } finally {
             session.close();
         }
+        if (movie==null) return new MovieEntity();
         return movie;
     }
 }
