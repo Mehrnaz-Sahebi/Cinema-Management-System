@@ -7,6 +7,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserDao extends Dao {
-
+    public UserEntity getUSerById(int id) {
+        UserEntity user = super.getById(id,UserEntity.class);
+        if (user == null) return new UserEntity();
+        return user;
+    }
 
 }
