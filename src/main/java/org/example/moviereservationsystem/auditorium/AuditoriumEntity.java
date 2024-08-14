@@ -25,7 +25,7 @@ public class AuditoriumEntity {
     private int rowCount;
 
     @ManyToOne
-    @JoinColumn(name = "cinema-id", referencedColumnName = "cinema-id")
+    @JoinColumn(name = "cinema-id")
     private CinemaEntity cinema;
 
 }

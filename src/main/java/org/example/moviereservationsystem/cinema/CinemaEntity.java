@@ -22,9 +22,9 @@ public class CinemaEntity {
     private int cinemaId;
     @Column(name = "name")
     private String name;
-    @Column(name = "address-id")
-    @Embedded
-    private AddressEntity address;
+//    @Embedded
+    @OneToOne @JoinColumn(name = "address-id")
+    private AddressEntity addressId;
 
     @OneToMany(mappedBy = "cinema")
     private ArrayList<AuditoriumEntity> auditoria;

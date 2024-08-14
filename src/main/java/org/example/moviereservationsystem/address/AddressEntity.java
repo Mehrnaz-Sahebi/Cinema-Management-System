@@ -5,13 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.moviereservationsystem.TableNames;
+import org.example.moviereservationsystem.cinema.CinemaEntity;
 
 @NoArgsConstructor
 @Setter
 @Getter
 @Entity
-@Embeddable
-@Table(name = TableNames.ADDRESS)
+//@Embeddable
+@Table(name =TableNames.ADDRESS)
 public class AddressEntity {
     @Id
     @Column(name = "address-id")
@@ -24,6 +25,7 @@ public class AddressEntity {
     private String street;
     @Column(name = "city")
     private String city;
-
+    @OneToOne(mappedBy = "addressId")
+    private CinemaEntity cinema;
 
 }
