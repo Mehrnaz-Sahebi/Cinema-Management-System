@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.example.moviereservationsystem.TableNames;
 import org.example.moviereservationsystem.movie.MovieEntity;
 import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Setter
@@ -25,6 +26,6 @@ public class ActorEntity {
     private String lastName;
     @Column(name = "movies")
     @ManyToMany(mappedBy = "actors")
-    private ArrayList<MovieEntity> movies;
+    private List<MovieEntity> movies;
 
 }

@@ -1,5 +1,6 @@
 package org.example.moviereservationsystem.movie;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
@@ -24,5 +25,14 @@ public class MovieController {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
         return movie;
+    }
+    @PostMapping(SLASH_MOVIE_SLASH+"{movie}")
+    public MovieEntity addMovie(@PathVariable MovieEntity movie, HttpServletResponse response) {
+        MovieEntity movieToReturn = null;
+        try {
+            movieToReturn = movieService.addEntity(movie);
+        }catch (EntityExistsException e){
+            response.setStatus(HttpServletResponse.SC_CONFLICT);
+        } return movieToReturn;
     }
 }

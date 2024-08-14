@@ -8,6 +8,7 @@ import org.example.moviereservationsystem.TableNames;
 import org.example.moviereservationsystem.movie.MovieEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Setter
@@ -24,6 +25,6 @@ public class DirectorEntity {
     private String lastName;
 
     @OneToMany (mappedBy = "director")
-    private ArrayList<MovieEntity> movieList;
+    private List<MovieEntity> movies;
 
 }

@@ -10,6 +10,7 @@ import org.example.moviereservationsystem.auditorium.AuditoriumEntity;
 import org.example.moviereservationsystem.movie.MovieEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Setter
@@ -27,9 +28,9 @@ public class CinemaEntity {
     private AddressEntity addressId;
 
     @OneToMany(mappedBy = "cinema")
-    private ArrayList<AuditoriumEntity> auditoria;
+    private List<AuditoriumEntity> auditoria;
 
     @ManyToMany (mappedBy = "cinemas")
-    private ArrayList<MovieEntity> movies;
+    private List<MovieEntity> movies;
 
 }

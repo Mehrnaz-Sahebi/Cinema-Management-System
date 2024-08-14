@@ -1,5 +1,6 @@
 package org.example.moviereservationsystem;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 import org.hibernate.HibernateException;
@@ -45,5 +46,24 @@ public class BaseDao {
         }
         if (t==null) throw new EntityNotFoundException();
         return t;
+    }
+    public <T> T addEntity(T entity) throws EntityExistsException {
+        Session session = getSessionFactory().openSession();
+        Transaction transaction = null;
+        T entityToReturn = null;
+        try {
+            transaction = session.beginTransaction();
+            //TODO replace save
+            entityToReturn = (T) session.save(entity);
+            transaction.commit();
+        } catch (HibernateException e){
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        } catch (EntityExistsException e){
+            throw new EntityExistsException();
+        } finally {
+            session.close();
+        }
+        return entityToReturn;
     }
 }

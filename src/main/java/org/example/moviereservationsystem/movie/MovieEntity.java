@@ -10,6 +10,7 @@ import org.example.moviereservationsystem.cinema.CinemaEntity;
 import org.example.moviereservationsystem.director.DirectorEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Setter
@@ -41,14 +42,14 @@ public class MovieEntity {
             joinColumns = { @JoinColumn(name = "movie-id") },
             inverseJoinColumns = { @JoinColumn(name = "actor-id") }
     )
-    private ArrayList<ActorEntity> actors;
+    private List<ActorEntity> actors;
     @ManyToMany
     @JoinTable(
             name = "movie-cinema",
             joinColumns = { @JoinColumn(name = "movie-id") },
             inverseJoinColumns = { @JoinColumn(name = "cinema-id") }
     )
-    private ArrayList<CinemaEntity> cinemas;
+    private List<CinemaEntity> cinemas;
 
     @Override
     public String toString() {
