@@ -9,6 +9,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 
 @Configuration
@@ -21,11 +22,11 @@ public class HibernateConfig {
         sessionFactory.setPackagesToScan(  new String[] {
                 "org.example.moviereservationsystem"
         });
-//        Properties hibernateProperties = new Properties();
-//        hibernateProperties.put("hibernate.dialect", HIBERNATE_DIALECT);
-//        hibernateProperties.put("hibernate.show_sql", HIBERNATE_SHOW_SQL);
-//        hibernateProperties.put("hibernate.hbm2ddl.auto", HIBERNATE_HBM2DDL_AUTO);
-//        sessionFactory.setHibernateProperties(hibernateProperties);
+        Properties hibernateProperties = new Properties();
+        hibernateProperties.put("hibernate.dialect", "${hibernate.dialect}");
+        hibernateProperties.put("hibernate.show_sql", "true");
+        hibernateProperties.put("hibernate.hbm2ddl.auto", "${hibernate.hbm2ddl.auto}");
+        sessionFactory.setHibernateProperties(hibernateProperties);
         return sessionFactory;
     }
     @Bean HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
