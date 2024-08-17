@@ -34,13 +34,12 @@ public class MovieDao extends BaseDao  {
 
 //                 for when we have cache
             movie = (MovieEntity) session.find(MovieEntity.class, id);
-//            List<ActorEntity> actors = movie.getActors();
-//            Hibernate.initialize(actors);
-//            List<CinemaEntity> cinemas = movie.getCinemas();
-//            Hibernate.initialize(cinemas);
-//            DirectorEntity director = (DirectorEntity) session.get(DirectorEntity.class, movie.getDirector().getDirectorId());
-//            List<MovieEntity> directorMovies = director.getMovies();
-//            Hibernate.initialize(directorMovies);
+            List<ActorEntity> actors = movie.getActors();
+            Hibernate.initialize(actors);
+            List<CinemaEntity> cinemas = movie.getCinemas();
+            Hibernate.initialize(cinemas);
+            DirectorEntity director = (DirectorEntity) session.get(DirectorEntity.class, movie.getDirector().getDirectorId());
+            Hibernate.initialize(director);
 
 
 //            String hql = "SELECT M.actors FROM  MovieEntity M WHERE M.id = :id";

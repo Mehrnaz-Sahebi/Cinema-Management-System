@@ -28,6 +28,7 @@ public class DirectorEntity {
     private String firstName;
     @Column(name = "last-name")
     private String lastName;
+    @Transient
     @OneToMany (mappedBy = "director")
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<MovieEntity> movies;

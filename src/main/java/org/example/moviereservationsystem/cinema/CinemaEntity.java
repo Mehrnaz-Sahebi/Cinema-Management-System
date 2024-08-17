@@ -29,7 +29,7 @@ public class CinemaEntity {
 //    @Embedded
     @OneToOne @JoinColumn(name = "address-id")
     private AddressEntity addressId;
-
+    @Transient
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany(mappedBy = "cinema")
     private List<AuditoriumEntity> auditoria;

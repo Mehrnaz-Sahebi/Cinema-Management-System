@@ -27,8 +27,8 @@ public class MovieController {
         }
         return movie;
     }
-    @PostMapping(SLASH_MOVIE_SLASH+"{movie}")
-    public MovieEntity addMovie(@PathVariable MovieEntity movie, HttpServletResponse response) {
+    @PostMapping("/movie")
+    public MovieEntity addMovie(@RequestBody MovieEntity movie, HttpServletResponse response) {
         MovieEntity movieToReturn = null;
         try {
             movieToReturn = movieService.addEntity(movie);

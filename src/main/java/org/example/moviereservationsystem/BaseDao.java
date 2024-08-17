@@ -3,14 +3,14 @@ package org.example.moviereservationsystem;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.*;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -31,18 +31,13 @@ public class BaseDao {
     }
 
     //TODO CAN YOU DO SMTH ABOUT THE LISTS?
-    public <T> T getById(int id, Class<T> entityClass/*, List<Class> collectionFields*/) throws EntityNotFoundException{
+    public <T> T getById(int id, Class<T> entityClass) throws EntityNotFoundException{
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;
         T t = null;
         try {
             transaction = session.beginTransaction();
             t = (T) session.get(entityClass, id);
-//            if (collectionFields != null){
-//                for (Class collectionField : collectionFields) {
-//                    List<> fieldList = t.
-//                }
-//            }
             transaction.commit();
         } catch (HibernateException e){
             if (transaction != null) transaction.rollback();
@@ -56,18 +51,20 @@ public class BaseDao {
     public <T> T addEntity(T entity) throws EntityExistsException {
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;
-        T entityToReturn = null;
+        T entityToReturn = entity;
         try {
             transaction = session.beginTransaction();
             //TODO replace save
-            entityToReturn = (T) session.save(entity);
+            session.persist(entity);
             transaction.commit();
-        } catch (HibernateException e){
+        } catch (EntityExistsException | DataIntegrityViolationException | ConstraintViolationException e){
+            throw new EntityExistsException();
+        }
+        catch (HibernateException e){
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
-        } catch (EntityExistsException e){
-            throw new EntityExistsException();
-        } finally {
+        }
+        finally{
             session.close();
         }
         return entityToReturn;

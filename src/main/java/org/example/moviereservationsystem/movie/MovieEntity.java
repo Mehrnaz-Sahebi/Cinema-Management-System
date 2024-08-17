@@ -41,7 +41,7 @@ public class MovieEntity {
     private String genre;
     @Column(name = "rating")
     private int rating;
-
+    @Transient
     @ManyToMany
     @Fetch(FetchMode.JOIN)
     @JoinTable(
@@ -51,6 +51,7 @@ public class MovieEntity {
     )
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<ActorEntity> actors;
+    @Transient
     @ManyToMany
     @Fetch(FetchMode.JOIN)
     @JoinTable(
