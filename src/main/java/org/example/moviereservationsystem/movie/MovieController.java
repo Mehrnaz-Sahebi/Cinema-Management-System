@@ -20,7 +20,8 @@ public class MovieController {
     public MovieEntity getMovie(@PathVariable int id, HttpServletResponse response) {
         MovieEntity movie = null;
         try {
-            movie = movieService.getById(id,MovieEntity.class);
+            movie = movieService.getById(id);
+            System.out.println(movie.getCinemas());
         } catch (EntityNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 @Repository
@@ -29,14 +30,19 @@ public class BaseDao {
         return supplier.get();
     }
 
-
-    public <T> T getById(int id, Class<T> entityClass) throws EntityNotFoundException{
+    //TODO CAN YOU DO SMTH ABOUT THE LISTS?
+    public <T> T getById(int id, Class<T> entityClass/*, List<Class> collectionFields*/) throws EntityNotFoundException{
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;
         T t = null;
         try {
             transaction = session.beginTransaction();
             t = (T) session.get(entityClass, id);
+//            if (collectionFields != null){
+//                for (Class collectionField : collectionFields) {
+//                    List<> fieldList = t.
+//                }
+//            }
             transaction.commit();
         } catch (HibernateException e){
             if (transaction != null) transaction.rollback();

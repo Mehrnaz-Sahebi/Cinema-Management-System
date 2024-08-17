@@ -1,5 +1,6 @@
 package org.example.moviereservationsystem.movie;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,10 @@ import org.example.moviereservationsystem.TableNames;
 import org.example.moviereservationsystem.actor.ActorEntity;
 import org.example.moviereservationsystem.cinema.CinemaEntity;
 import org.example.moviereservationsystem.director.DirectorEntity;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +22,8 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name = TableNames.MOVIE)
-
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class MovieEntity {
     @Id
     @Column(name = "movie-id")
@@ -37,18 +43,22 @@ public class MovieEntity {
     private int rating;
 
     @ManyToMany
+    @Fetch(FetchMode.JOIN)
     @JoinTable(
             name = "movie-actor",
             joinColumns = { @JoinColumn(name = "movie-id") },
             inverseJoinColumns = { @JoinColumn(name = "actor-id") }
     )
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<ActorEntity> actors;
     @ManyToMany
+    @Fetch(FetchMode.JOIN)
     @JoinTable(
             name = "movie-cinema",
             joinColumns = { @JoinColumn(name = "movie-id") },
             inverseJoinColumns = { @JoinColumn(name = "cinema-id") }
     )
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<CinemaEntity> cinemas;
 
     @Override
