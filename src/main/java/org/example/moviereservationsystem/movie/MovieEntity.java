@@ -8,6 +8,7 @@ import org.example.moviereservationsystem.TableNames;
 import org.example.moviereservationsystem.actor.ActorColumnNames;
 import org.example.moviereservationsystem.actor.ActorEntity;
 import org.example.moviereservationsystem.base.BaseEntity;
+import org.example.moviereservationsystem.cinema.CinemaColumnNames;
 import org.example.moviereservationsystem.cinema.CinemaEntity;
 import org.example.moviereservationsystem.director.DirectorEntity;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -56,7 +57,7 @@ public class MovieEntity implements BaseEntity {
     @JoinTable(
             name = "movie-cinema",
             joinColumns = { @JoinColumn(name = MovieColumnNames.MOVIE_ID) },
-            inverseJoinColumns = { @JoinColumn(name = "cinema-id") }//TODO
+            inverseJoinColumns = { @JoinColumn(name = CinemaColumnNames.CINEMA_ID) }
     )
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<CinemaEntity> cinemas;

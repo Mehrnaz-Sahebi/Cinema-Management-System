@@ -23,5 +23,4 @@ public class AddressEntity implements BaseEntity {
     private String street;
     @Column(name = AddressColumnNames.CITY)
     private String city;
-
 }
