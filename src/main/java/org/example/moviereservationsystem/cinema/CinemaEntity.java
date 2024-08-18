@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.example.moviereservationsystem.TableNames;
 import org.example.moviereservationsystem.address.AddressEntity;
 import org.example.moviereservationsystem.auditorium.AuditoriumEntity;
+import org.example.moviereservationsystem.base.BaseEntity;
 import org.example.moviereservationsystem.movie.MovieEntity;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -20,10 +21,10 @@ import java.util.List;
 @Table(name = TableNames.CINEMA)
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class CinemaEntity {
+public class CinemaEntity extends BaseEntity {
     @Id
     @Column(name = "cinema-id")
-    private int cinemaId;
+    private int id;
     @Column(name = "name")
     private String name;
     //TODO can you do anything about this
@@ -42,7 +43,7 @@ public class CinemaEntity {
     @Override
     public String toString() {
         return "CinemaEntity{" +
-                "cinemaId=" + cinemaId +
+                "cinemaId=" + id +
                 ", name='" + name + '\'' +
                 ", addressId=" + addressId +
                 ", auditoria=" + auditoria +

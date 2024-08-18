@@ -8,16 +8,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.moviereservationsystem.TableNames;
+import org.example.moviereservationsystem.base.BaseEntity;
 
 @NoArgsConstructor
 @Setter
 @Getter
 @Table(name = TableNames.USER)
 @Entity
-public class UserEntity {
+public class UserEntity extends BaseEntity {
     @Id
+    //phoneNumber
     @Column (name = "user-id")
-    private String phoneNumber;
+    private int id;
     @Column (name = "first-name")
     private String firstName;
     @Column (name = "last-name")

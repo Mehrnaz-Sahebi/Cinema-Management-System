@@ -10,6 +10,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.function.Supplier;
 
 @Repository
@@ -46,25 +48,28 @@ public class BaseDao {
         if (t==null) throw new EntityNotFoundException();
         return t;
     }
-    public <T> T addEntity(T entity) throws EntityExistsException {
+    public <T extends BaseEntity> T addEntity(T entity) throws EntityExistsException {
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;
-        T entityToReturn = entity;
         try {
             transaction = session.beginTransaction();
+            System.out.println(entity.getClass());
+            System.out.println(entity.getId());
+            if ((T) session.get(entity.getClass(), entity.getId()) != null) {
+                System.out.println(entity.getId());
+                throw new EntityExistsException();
+            }
             //TODO replace save
             session.persist(entity);
             transaction.commit();
-        } catch (EntityExistsException | DataIntegrityViolationException | ConstraintViolationException e){
-            throw new EntityExistsException();
         }
         catch (HibernateException e){
             if (transaction != null) transaction.rollback();
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally{
             session.close();
         }
-        return entityToReturn;
+        return entity;
     }
 }

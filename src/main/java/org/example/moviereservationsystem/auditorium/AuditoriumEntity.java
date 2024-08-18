@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.moviereservationsystem.TableNames;
+import org.example.moviereservationsystem.base.BaseEntity;
 import org.example.moviereservationsystem.cinema.CinemaEntity;
 
 
@@ -13,10 +14,10 @@ import org.example.moviereservationsystem.cinema.CinemaEntity;
 @Getter
 @Entity
 @Table(name = TableNames.AUDITORIUM)
-public class AuditoriumEntity {
+public class AuditoriumEntity extends BaseEntity {
     @Id
     @Column(name = "auditorium-id")
-    private int auditoriumId;
+    private int id;
     @Column(name = "name")
     private String name;
     @Column(name = "capacity")

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.moviereservationsystem.TableNames;
+import org.example.moviereservationsystem.base.BaseEntity;
 import org.example.moviereservationsystem.cinema.CinemaEntity;
 
 @NoArgsConstructor
@@ -13,10 +14,10 @@ import org.example.moviereservationsystem.cinema.CinemaEntity;
 @Entity
 //@Embeddable
 @Table(name =TableNames.ADDRESS)
-public class AddressEntity {
+public class AddressEntity extends BaseEntity {
     @Id
     @Column(name = "address-id")
-    private int addressId;
+    private int id;
     @Column(name = "number")
     private String number;
     @Column(name = "alley")

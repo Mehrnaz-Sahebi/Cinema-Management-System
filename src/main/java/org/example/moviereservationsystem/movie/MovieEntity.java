@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.moviereservationsystem.TableNames;
 import org.example.moviereservationsystem.actor.ActorEntity;
+import org.example.moviereservationsystem.base.BaseEntity;
 import org.example.moviereservationsystem.cinema.CinemaEntity;
 import org.example.moviereservationsystem.director.DirectorEntity;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -24,10 +25,10 @@ import java.util.List;
 @Table(name = TableNames.MOVIE)
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class MovieEntity {
+public class MovieEntity extends BaseEntity {
     @Id
     @Column(name = "movie-id")
-    private int movieId;
+    private int id;
     @Column(name = "name")
     private String name;
     @Column(name = "description")
@@ -64,7 +65,7 @@ public class MovieEntity {
     @Override
     public String toString() {
         return "MovieEntity{" +
-                "movieId=" + movieId +
+                "movieId=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", year=" + year +

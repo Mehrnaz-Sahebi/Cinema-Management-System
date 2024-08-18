@@ -23,7 +23,7 @@ public class ActorEntity extends BaseEntity {
 
     @Id
     @Column(name = "actor-id")
-    private int actorId;
+    private int id;
     @Column(name = "first-name")
     private String firstName;
     @Column(name = "last-name")
