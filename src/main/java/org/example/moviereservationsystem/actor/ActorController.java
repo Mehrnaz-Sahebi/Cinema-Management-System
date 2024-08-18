@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(RequestNames.ACTORS)
 public class ActorController {
     public static final String SLASH_ACTOR_SLASH = "/actor/";
+    public static final String SLASH_ACTOR = "/actor";
     @Autowired
     private ActorService actorService;
 
@@ -27,7 +28,7 @@ public class ActorController {
         }
         return actor;
     }
-    @PostMapping("/actor")
+    @PostMapping(SLASH_ACTOR)
     public ActorEntity addActor(@RequestBody ActorEntity actor, HttpServletResponse response) {
         ActorEntity actorToReturn = null;
         try {
