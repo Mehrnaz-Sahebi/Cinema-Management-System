@@ -1,7 +1,7 @@
 package org.example.moviereservationsystem.director;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.example.moviereservationsystem.BaseDao;
+import org.example.moviereservationsystem.base.BaseDao;
 import org.example.moviereservationsystem.movie.MovieEntity;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;

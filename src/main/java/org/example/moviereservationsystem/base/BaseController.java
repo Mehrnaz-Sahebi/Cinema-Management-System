@@ -1,4 +1,4 @@
-package org.example.moviereservationsystem;
+package org.example.moviereservationsystem.base;
 
 import org.springframework.web.bind.annotation.RestController;
 

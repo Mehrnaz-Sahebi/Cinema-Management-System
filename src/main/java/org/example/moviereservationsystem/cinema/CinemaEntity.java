@@ -26,6 +26,7 @@ public class CinemaEntity {
     private int cinemaId;
     @Column(name = "name")
     private String name;
+    //TODO can you do anything about this
 //    @Embedded
     @OneToOne @JoinColumn(name = "address-id")
     private AddressEntity addressId;
@@ -33,7 +34,7 @@ public class CinemaEntity {
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany(mappedBy = "cinema")
     private List<AuditoriumEntity> auditoria;
-
+    @Transient
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @ManyToMany (mappedBy = "cinemas")
     private List<MovieEntity> movies;

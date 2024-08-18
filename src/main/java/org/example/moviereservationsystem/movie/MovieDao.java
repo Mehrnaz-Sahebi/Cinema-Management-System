@@ -1,8 +1,7 @@
 package org.example.moviereservationsystem.movie;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.Query;
-import org.example.moviereservationsystem.BaseDao;
+import org.example.moviereservationsystem.base.BaseDao;
 import org.example.moviereservationsystem.actor.ActorEntity;
 import org.example.moviereservationsystem.cinema.CinemaEntity;
 import org.example.moviereservationsystem.director.DirectorEntity;

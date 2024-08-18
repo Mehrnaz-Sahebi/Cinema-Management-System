@@ -1,4 +1,4 @@
-package org.example.moviereservationsystem;
+package org.example.moviereservationsystem.base;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;

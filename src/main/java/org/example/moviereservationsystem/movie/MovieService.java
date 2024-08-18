@@ -1,9 +1,8 @@
 package org.example.moviereservationsystem.movie;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.example.moviereservationsystem.BaseService;
+import org.example.moviereservationsystem.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service

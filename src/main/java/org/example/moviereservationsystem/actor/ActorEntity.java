@@ -5,12 +5,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.moviereservationsystem.BaseEntity;
+import org.example.moviereservationsystem.base.BaseEntity;
 import org.example.moviereservationsystem.TableNames;
 import org.example.moviereservationsystem.movie.MovieEntity;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor

@@ -1,4 +1,4 @@
-package org.example.moviereservationsystem;
+package org.example.moviereservationsystem.base;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
@@ -10,8 +10,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Repository;
 
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.List;
 import java.util.function.Supplier;
 
 @Repository
@@ -62,7 +60,7 @@ public class BaseDao {
         }
         catch (HibernateException e){
             if (transaction != null) transaction.rollback();
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         finally{
             session.close();
