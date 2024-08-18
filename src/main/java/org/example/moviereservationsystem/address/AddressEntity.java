@@ -13,15 +13,15 @@ import org.example.moviereservationsystem.cinema.CinemaEntity;
 @Getter
 @Embeddable
 public class AddressEntity implements BaseEntity {
-    @Column(name = "address-id", nullable = false)
+    @Column(name = AddressColumnNames.ADDRESS_ID, nullable = false)
     private int id;
-    @Column(name = "number")
+    @Column(name = AddressColumnNames.NUMBER)
     private String number;
-    @Column(name = "alley")
+    @Column(name = AddressColumnNames.ALLEY)
     private String alley;
-    @Column(name = "street")
+    @Column(name = AddressColumnNames.STREET)
     private String street;
-    @Column(name = "city")
+    @Column(name = AddressColumnNames.CITY)
     private String city;
 
 }

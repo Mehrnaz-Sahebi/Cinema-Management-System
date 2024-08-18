@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.moviereservationsystem.TableNames;
+import org.example.moviereservationsystem.actor.ActorColumnNames;
 import org.example.moviereservationsystem.actor.ActorEntity;
 import org.example.moviereservationsystem.base.BaseEntity;
 import org.example.moviereservationsystem.cinema.CinemaEntity;
@@ -25,28 +26,28 @@ import java.util.List;
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class MovieEntity implements BaseEntity {
     @Id
-    @Column(name = "movie-id", nullable = false)
+    @Column(name = MovieColumnNames.MOVIE_ID, nullable = false)
     private int id;
-    @Column(name = "name")
-    private String name;
-    @Column(name = "description")
+    @Column(name = MovieColumnNames.TITLE)
+    private String title;
+    @Column(name = MovieColumnNames.DESCRIPTION)
     private String description;
-    @Column(name = "year")
+    @Column(name = MovieColumnNames.YEAR)
     private int year;
 //    @ManyToOne
-//    @JoinColumn(name = "directorId-id")
+//    @JoinColumn(title = "directorId-id")
     @Embedded
     private DirectorEntity directorId;
-    @Column(name = "genre")
+    @Column(name = MovieColumnNames.GENRE)
     private String genre;
-    @Column(name = "rating")
+    @Column(name = MovieColumnNames.RATING)
     private int rating;
     @ManyToMany
     @Fetch(FetchMode.JOIN)
     @JoinTable(
             name = "movie-actor",
-            joinColumns = { @JoinColumn(name = "movie-id") },
-            inverseJoinColumns = { @JoinColumn(name = "actor-id") }
+            joinColumns = { @JoinColumn(name = MovieColumnNames.MOVIE_ID) },
+            inverseJoinColumns = { @JoinColumn(name = ActorColumnNames.ACTOR_ID) }
     )
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<ActorEntity> actors;
@@ -54,8 +55,8 @@ public class MovieEntity implements BaseEntity {
     @Fetch(FetchMode.JOIN)
     @JoinTable(
             name = "movie-cinema",
-            joinColumns = { @JoinColumn(name = "movie-id") },
-            inverseJoinColumns = { @JoinColumn(name = "cinema-id") }
+            joinColumns = { @JoinColumn(name = MovieColumnNames.MOVIE_ID) },
+            inverseJoinColumns = { @JoinColumn(name = "cinema-id") }//TODO
     )
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<CinemaEntity> cinemas;
@@ -64,7 +65,7 @@ public class MovieEntity implements BaseEntity {
     public String toString() {
         return "MovieEntity{" +
                 "movieId=" + id +
-                ", name='" + name + '\'' +
+                ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", year=" + year +
                 ", directorId=" + directorId +

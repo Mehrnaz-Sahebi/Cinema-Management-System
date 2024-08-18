@@ -23,9 +23,9 @@ import java.util.List;
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class CinemaEntity implements BaseEntity {
     @Id
-    @Column(name = "cinema-id", nullable = false)
+    @Column(name = CinemaColumnNames.CINEMA_ID, nullable = false)
     private int id;
-    @Column(name = "name")
+    @Column(name = CinemaColumnNames.NAME)
     private String name;
     @Embedded
     private AddressEntity addressId;
@@ -42,7 +42,7 @@ public class CinemaEntity implements BaseEntity {
     public String toString() {
         return "CinemaEntity{" +
                 "cinemaId=" + id +
-                ", name='" + name + '\'' +
+                ", title='" + name + '\'' +
                 ", addressId=" + addressId +
                 ", auditoria=" + auditoria +
                 ", movies=" + movies +

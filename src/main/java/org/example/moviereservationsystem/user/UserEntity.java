@@ -18,15 +18,15 @@ import org.example.moviereservationsystem.base.BaseEntity;
 public class UserEntity implements BaseEntity {
     @Id
     //phoneNumber
-    @Column (name = "user-id", nullable = false)
+    @Column (name = UserColumnNames.USER_ID, nullable = false)
     private int id;
-    @Column (name = "first-name")
+    @Column (name = UserColumnNames.FIRST_NAME)
     private String firstName;
-    @Column (name = "last-name")
+    @Column (name = UserColumnNames.LAST_NAME)
     private String lastName;
-    @Column (name = "email")
+    @Column (name = UserColumnNames.EMAIL)
     private String email;
-    @Column (name = "password")
+    @Column (name = UserColumnNames.PASSWORD)
     private String password;
 }
 

@@ -18,11 +18,11 @@ import java.util.List;
 @Getter
 @Embeddable
 public class DirectorEntity {
-    @Column(name = "director-id", nullable = false)
+    @Column(name = DirectorColumnNames.DIRECTOR_ID, nullable = false)
     private int directorId;
-    @Column(name = "first-name")
+    @Column(name = DirectorColumnNames.DIRECTOR_FIRST_NAME)
     private String firstName;
-    @Column(name = "last-name")
+    @Column(name = DirectorColumnNames.DIRECTOR_LAST_NAME)
     private String lastName;
 
 

@@ -22,13 +22,13 @@ import java.util.List;
 public class ActorEntity implements BaseEntity {
 
     @Id
-    @Column(name = "actor-id", nullable = false)
+    @Column(name = ActorColumnNames.ACTOR_ID, nullable = false)
     private int id;
-    @Column(name = "first-name")
+    @Column(name = ActorColumnNames.FIRST_NAME )
     private String firstName;
-    @Column(name = "last-name")
+    @Column(name = ActorColumnNames.LAST_NAME)
     private String lastName;
-    @Column(name = "movies")
+    @Column(name = ActorColumnNames.MOVIES)
     @ManyToMany(mappedBy = "actors")
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<MovieEntity> movies;

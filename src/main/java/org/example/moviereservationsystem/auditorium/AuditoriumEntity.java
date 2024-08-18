@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.moviereservationsystem.TableNames;
 import org.example.moviereservationsystem.base.BaseEntity;
+import org.example.moviereservationsystem.cinema.CinemaColumnNames;
 import org.example.moviereservationsystem.cinema.CinemaEntity;
 
 
@@ -16,17 +17,17 @@ import org.example.moviereservationsystem.cinema.CinemaEntity;
 @Table(name = TableNames.AUDITORIUM)
 public class AuditoriumEntity implements BaseEntity {
     @Id
-    @Column(name = "auditorium-id", nullable = false)
+    @Column(name = AuditoriumColumnNames.AUDITORIUM_ID, nullable = false)
     private int id;
-    @Column(name = "name")
+    @Column(name = AuditoriumColumnNames.NAME)
     private String name;
-    @Column(name = "capacity")
+    @Column(name = AuditoriumColumnNames.CAPACITY)
     private int capacity;
-    @Column(name = "row-count")
+    @Column(name = AuditoriumColumnNames.ROW_COUNT)
     private int rowCount;
 
     @ManyToOne
-    @JoinColumn(name = "cinema-id")
+    @JoinColumn(name = CinemaColumnNames.CINEMA_ID)
     private CinemaEntity cinema;
 
 }
