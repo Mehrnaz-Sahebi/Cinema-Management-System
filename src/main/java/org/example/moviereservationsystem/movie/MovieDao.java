@@ -22,7 +22,7 @@ public class MovieDao extends BaseDao  {
         try {
             transaction = session.beginTransaction();
 
-//            String hql = "select M.name, M.genre, M.rating, M.description, M.director from MovieEntity M where id = :id";
+//            String hql = "select M.name, M.genre, M.rating, M.description, M.directorId from MovieEntity M where id = :id";
 //            Query query = session.createQuery(hql);
 //            query.setParameter("id", id);
 //            List results = query.getResultList();
@@ -37,7 +37,7 @@ public class MovieDao extends BaseDao  {
             Hibernate.initialize(actors);
             List<CinemaEntity> cinemas = movie.getCinemas();
             Hibernate.initialize(cinemas);
-            DirectorEntity director = (DirectorEntity) session.get(DirectorEntity.class, movie.getDirector().getDirectorId());
+            DirectorEntity director = (DirectorEntity) session.get(DirectorEntity.class, movie.getDirectorId().getDirectorId());
             Hibernate.initialize(director);
 
 

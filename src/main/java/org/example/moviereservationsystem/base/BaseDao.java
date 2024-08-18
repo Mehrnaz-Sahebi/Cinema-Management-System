@@ -55,7 +55,7 @@ public class BaseDao {
             transaction = session.beginTransaction();
             System.out.println(entity.getClass());
             System.out.println(entity.getId());
-            if ((T) session.get(entity.getClass(), entity.getId()) != null) {
+            if (session.get(entity.getClass(), entity.getId()) != null) {
                 System.out.println(entity.getId());
                 throw new EntityExistsException();
             }

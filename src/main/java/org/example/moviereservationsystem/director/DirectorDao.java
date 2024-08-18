@@ -18,8 +18,6 @@ public class DirectorDao extends BaseDao {
         try {
             transaction = session.beginTransaction();
             director = (DirectorEntity) session.get(DirectorEntity.class, id);
-            List<MovieEntity> movies = director.getMovies();
-            Hibernate.initialize(movies);
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();

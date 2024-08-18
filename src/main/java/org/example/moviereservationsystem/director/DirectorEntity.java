@@ -16,22 +16,15 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
-@Entity
-@Table (name = TableNames.DIRECTOR)
-@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Embeddable
 public class DirectorEntity {
-    @Id
     @Column(name = "director-id")
     private int directorId;
     @Column(name = "first-name")
     private String firstName;
     @Column(name = "last-name")
     private String lastName;
-    @Transient
-    @OneToMany (mappedBy = "director")
-    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private List<MovieEntity> movies;
+
 
     @Override
     public String toString() {
@@ -39,7 +32,6 @@ public class DirectorEntity {
                 "directorId=" + directorId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", movies=" + movies +
                 '}';
     }
 }

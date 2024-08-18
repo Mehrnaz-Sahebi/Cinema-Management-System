@@ -1,6 +1,5 @@
 package org.example.moviereservationsystem.movie;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,6 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -35,9 +33,10 @@ public class MovieEntity implements BaseEntity {
     private String description;
     @Column(name = "year")
     private int year;
-    @ManyToOne
-    @JoinColumn(name = "director-id")
-    private DirectorEntity director;
+//    @ManyToOne
+//    @JoinColumn(name = "directorId-id")
+    @Embedded
+    private DirectorEntity directorId;
     @Column(name = "genre")
     private String genre;
     @Column(name = "rating")
@@ -68,7 +67,7 @@ public class MovieEntity implements BaseEntity {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", year=" + year +
-                ", director=" + director +
+                ", directorId=" + directorId +
                 ", genre='" + genre + '\'' +
                 ", rating=" + rating +
                 ", actors=" + actors +
