@@ -27,9 +27,7 @@ public class CinemaEntity implements BaseEntity {
     private int id;
     @Column(name = "name")
     private String name;
-    //TODO can you do anything about this
-//    @Embedded
-    @OneToOne @JoinColumn(name = "address-id")
+    @Embedded
     private AddressEntity addressId;
     @Transient
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

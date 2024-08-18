@@ -11,11 +11,8 @@ import org.example.moviereservationsystem.cinema.CinemaEntity;
 @NoArgsConstructor
 @Setter
 @Getter
-@Entity
-//@Embeddable
-@Table(name =TableNames.ADDRESS)
+@Embeddable
 public class AddressEntity implements BaseEntity {
-    @Id
     @Column(name = "address-id")
     private int id;
     @Column(name = "number")
@@ -26,7 +23,5 @@ public class AddressEntity implements BaseEntity {
     private String street;
     @Column(name = "city")
     private String city;
-    @OneToOne(mappedBy = "addressId")
-    private CinemaEntity cinema;
 
 }
