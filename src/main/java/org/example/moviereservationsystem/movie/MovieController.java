@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(RequestNames.MOVIES)
 public class MovieController {
     public static final String SLASH_MOVIE_SLASH = "/movie/";
+    public static final String SLASH_MOVIE = "/movie";
     @Autowired
     private MovieService movieService;
 
@@ -26,11 +27,11 @@ public class MovieController {
         }
         return movie;
     }
-    @PostMapping("/movie")
+    @PostMapping(SLASH_MOVIE)
     public MovieEntity addMovie(@RequestBody MovieEntity movie, HttpServletResponse response) {
         MovieEntity movieToReturn = null;
         try {
-            movieToReturn = movieService.addEntity(movie);
+            movieToReturn = movieService.addMovie(movie);
         }catch (EntityExistsException e){
             response.setStatus(HttpServletResponse.SC_CONFLICT);
         } return movieToReturn;

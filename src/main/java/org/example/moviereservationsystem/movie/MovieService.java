@@ -1,5 +1,6 @@
 package org.example.moviereservationsystem.movie;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.example.moviereservationsystem.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,5 +13,8 @@ public class MovieService extends BaseService {
     private MovieDao movieDao;
     public MovieEntity getById(int id) throws EntityNotFoundException {
         return movieDao.getById(id);
+    }
+    public MovieEntity addMovie(MovieEntity movie) throws EntityExistsException {
+        return movieDao.addEntity(movie);
     }
 }
