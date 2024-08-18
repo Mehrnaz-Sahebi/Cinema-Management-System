@@ -14,7 +14,7 @@ import org.example.moviereservationsystem.cinema.CinemaEntity;
 @Getter
 @Entity
 @Table(name = TableNames.AUDITORIUM)
-public class AuditoriumEntity extends BaseEntity {
+public class AuditoriumEntity implements BaseEntity {
     @Id
     @Column(name = "auditorium-id")
     private int id;

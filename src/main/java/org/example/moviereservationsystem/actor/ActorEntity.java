@@ -19,7 +19,7 @@ import java.util.List;
 @Table(name = TableNames.ACTOR)
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class ActorEntity extends BaseEntity {
+public class ActorEntity implements BaseEntity {
 
     @Id
     @Column(name = "actor-id")

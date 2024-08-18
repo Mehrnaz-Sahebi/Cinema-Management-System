@@ -14,7 +14,7 @@ import org.example.moviereservationsystem.cinema.CinemaEntity;
 @Entity
 //@Embeddable
 @Table(name =TableNames.ADDRESS)
-public class AddressEntity extends BaseEntity {
+public class AddressEntity implements BaseEntity {
     @Id
     @Column(name = "address-id")
     private int id;

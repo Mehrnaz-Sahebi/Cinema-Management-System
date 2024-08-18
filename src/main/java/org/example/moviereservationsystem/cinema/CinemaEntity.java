@@ -21,7 +21,7 @@ import java.util.List;
 @Table(name = TableNames.CINEMA)
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class CinemaEntity extends BaseEntity {
+public class CinemaEntity implements BaseEntity {
     @Id
     @Column(name = "cinema-id")
     private int id;
