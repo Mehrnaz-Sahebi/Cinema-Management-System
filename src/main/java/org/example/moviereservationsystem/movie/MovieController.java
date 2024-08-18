@@ -21,7 +21,6 @@ public class MovieController {
         MovieEntity movie = null;
         try {
             movie = movieService.getById(id);
-            System.out.println(movie.getCinemas());
         } catch (EntityNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }

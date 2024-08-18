@@ -9,9 +9,12 @@ import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class ActorDao extends BaseDao {
     public ActorEntity getById(int id) throws EntityNotFoundException {
         Session session = getSessionFactory().openSession();
