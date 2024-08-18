@@ -13,7 +13,7 @@ import org.example.moviereservationsystem.cinema.CinemaEntity;
 @Getter
 @Embeddable
 public class AddressEntity implements BaseEntity {
-    @Column(name = "address-id")
+    @Column(name = "address-id", nullable = false)
     private int id;
     @Column(name = "number")
     private String number;

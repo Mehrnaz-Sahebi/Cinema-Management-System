@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 @Embeddable
 public class DirectorEntity {
-    @Column(name = "director-id")
+    @Column(name = "director-id", nullable = false)
     private int directorId;
     @Column(name = "first-name")
     private String firstName;

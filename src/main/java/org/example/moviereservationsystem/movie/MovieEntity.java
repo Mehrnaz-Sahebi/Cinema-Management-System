@@ -25,7 +25,7 @@ import java.util.List;
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class MovieEntity implements BaseEntity {
     @Id
-    @Column(name = "movie-id")
+    @Column(name = "movie-id", nullable = false)
     private int id;
     @Column(name = "name")
     private String name;

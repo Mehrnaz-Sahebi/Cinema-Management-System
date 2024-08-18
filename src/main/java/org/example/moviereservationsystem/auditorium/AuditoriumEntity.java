@@ -16,7 +16,7 @@ import org.example.moviereservationsystem.cinema.CinemaEntity;
 @Table(name = TableNames.AUDITORIUM)
 public class AuditoriumEntity implements BaseEntity {
     @Id
-    @Column(name = "auditorium-id")
+    @Column(name = "auditorium-id", nullable = false)
     private int id;
     @Column(name = "name")
     private String name;

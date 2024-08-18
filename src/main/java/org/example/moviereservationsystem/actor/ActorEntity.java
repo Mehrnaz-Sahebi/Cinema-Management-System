@@ -22,7 +22,7 @@ import java.util.List;
 public class ActorEntity implements BaseEntity {
 
     @Id
-    @Column(name = "actor-id")
+    @Column(name = "actor-id", nullable = false)
     private int id;
     @Column(name = "first-name")
     private String firstName;

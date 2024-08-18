@@ -18,7 +18,7 @@ import org.example.moviereservationsystem.base.BaseEntity;
 public class UserEntity implements BaseEntity {
     @Id
     //phoneNumber
-    @Column (name = "user-id")
+    @Column (name = "user-id", nullable = false)
     private int id;
     @Column (name = "first-name")
     private String firstName;
