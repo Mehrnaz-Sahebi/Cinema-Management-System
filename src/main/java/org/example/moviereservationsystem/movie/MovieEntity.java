@@ -42,7 +42,6 @@ public class MovieEntity implements BaseEntity {
     private String genre;
     @Column(name = "rating")
     private int rating;
-
     @ManyToMany
     @Fetch(FetchMode.JOIN)
     @JoinTable(

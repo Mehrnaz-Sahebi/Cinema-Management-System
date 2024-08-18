@@ -15,7 +15,7 @@ import java.util.List;
 
 @Repository
 public class MovieDao extends BaseDao  {
-    public MovieEntity getBId(int id){
+    public MovieEntity getBId(int id) throws EntityNotFoundException{
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;
         MovieEntity movie = null;
@@ -32,7 +32,7 @@ public class MovieDao extends BaseDao  {
 
 
 //                 for when we have cache
-            movie = (MovieEntity) session.find(MovieEntity.class, id);
+            movie = (MovieEntity) session.get(MovieEntity.class, id);
             List<ActorEntity> actors = movie.getActors();
             Hibernate.initialize(actors);
             List<CinemaEntity> cinemas = movie.getCinemas();
@@ -56,13 +56,12 @@ public class MovieDao extends BaseDao  {
         } catch (HibernateException e){
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
-        }catch (NullPointerException e){
+        }catch (NullPointerException | EntityNotFoundException e){
             throw new EntityNotFoundException();
         }
         finally {
             session.close();
         }
-        if (movie==null) throw new EntityNotFoundException();
         return movie;
     }
 }
