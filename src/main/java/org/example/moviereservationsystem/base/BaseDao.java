@@ -26,10 +26,6 @@ public class BaseDao {
         sessionFactory = entityManagerFactory.getNativeEntityManagerFactory().unwrap(SessionFactory.class);
     }
 
-    public <T> T createInstance(Supplier<T> supplier) {
-        return supplier.get();
-    }
-
     //TODO CAN YOU DO SMTH ABOUT THE LISTS?
     public <T> T getById(int id, Class<T> entityClass) throws EntityNotFoundException{
         Session session = getSessionFactory().openSession();
@@ -53,10 +49,7 @@ public class BaseDao {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            System.out.println(entity.getClass());
-            System.out.println(entity.getId());
             if (session.get(entity.getClass(), entity.getId()) != null) {
-                System.out.println(entity.getId());
                 throw new EntityExistsException();
             }
             //TODO replace save
