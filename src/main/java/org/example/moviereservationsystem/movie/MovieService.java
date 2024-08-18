@@ -11,6 +11,6 @@ public class MovieService extends BaseService {
     @Autowired
     private MovieDao movieDao;
     public MovieEntity getById(int id) throws EntityNotFoundException {
-        return movieDao.getBId(id);
+        return movieDao.getById(id);
     }
 }
