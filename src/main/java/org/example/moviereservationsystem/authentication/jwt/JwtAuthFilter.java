@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.moviereservationsystem.user.UserEntityDetails;
 import org.example.moviereservationsystem.user.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,17 +26,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private UserService userService;
     @Autowired
     private JwtUtils jwtUtils;
-
+    public static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthFilter.class);
+    //TODO doesn't accept requests from browser
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        final String auhHeader = request.getHeader("Authorization");
+        final String authHeader = request.getHeader("Authorization");
         final String userPhoneNumber;
         final String jwtToken;
-        if (auhHeader == null || !auhHeader.startsWith("Bearer")){
+        if (authHeader == null || !authHeader.startsWith("Bearer")){
             filterChain.doFilter(request,response);
             return;
         }
-        jwtToken = auhHeader.substring(7);
+        jwtToken = authHeader.substring(7);
         userPhoneNumber = jwtUtils.extractUsername(jwtToken);
         if(userPhoneNumber!=null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserEntityDetails userEntityDetails = (UserEntityDetails) userService.loadUserByUsername(userPhoneNumber);
