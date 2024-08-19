@@ -1,6 +1,7 @@
 package org.example.moviereservationsystem.movie;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.example.moviereservationsystem.MessageCreator;
 import org.example.moviereservationsystem.base.BaseDao;
 import org.example.moviereservationsystem.actor.ActorEntity;
 import org.example.moviereservationsystem.cinema.CinemaEntity;
@@ -45,7 +46,7 @@ public class MovieDao extends BaseDao  {
             transaction.commit();
         } catch (HibernateException e){
             if (transaction != null) transaction.rollback();
-            LOGGER.error("Error getting movie "+ movie.getId(), e);
+            LOGGER.error(MessageCreator.errorGetting("Movie",id), e);
             e.printStackTrace();
         }catch (NullPointerException | EntityNotFoundException e){
             throw new EntityNotFoundException();

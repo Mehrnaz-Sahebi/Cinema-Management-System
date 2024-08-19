@@ -3,6 +3,7 @@ package org.example.moviereservationsystem.base;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
+import org.example.moviereservationsystem.MessageCreator;
 import org.hibernate.*;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -39,7 +40,7 @@ public class BaseDao {
             transaction.commit();
         } catch (HibernateException e){
             if (transaction != null) transaction.rollback();
-            LOGGER.error("Error getting "+entityClass.getSimpleName()+" "+id, e);
+            LOGGER.error(MessageCreator.errorGetting(entityClass.getSimpleName(),id), e);
         } finally {
             session.close();
         }
@@ -60,7 +61,7 @@ public class BaseDao {
         }
         catch (HibernateException e){
             if (transaction != null) transaction.rollback();
-            LOGGER.error("Error creating "+entity.getClass().getSimpleName()+" "+entity.getId(), e);
+            LOGGER.error(MessageCreator.errorCreating(entity.getClass().getSimpleName(),entity.getId()), e);
         }
         finally{
             session.close();

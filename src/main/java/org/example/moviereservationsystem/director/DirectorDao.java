@@ -1,6 +1,7 @@
 package org.example.moviereservationsystem.director;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.example.moviereservationsystem.MessageCreator;
 import org.example.moviereservationsystem.base.BaseDao;
 import org.example.moviereservationsystem.movie.MovieEntity;
 import org.hibernate.Hibernate;
@@ -24,7 +25,7 @@ public class DirectorDao extends BaseDao {
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();
-            LOGGER.error("Error getting director "+director.getDirectorId(),e);
+            LOGGER.error(MessageCreator.errorGetting("Director",id),e);
         } catch (NullPointerException e) {
             throw new EntityNotFoundException();
         } finally {

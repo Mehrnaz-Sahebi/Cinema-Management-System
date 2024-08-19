@@ -37,11 +37,7 @@ public class UserService extends BaseService implements UserDetailsService {
         userEntity.setPassword(passwordEncoder.encode(password));
         userEntity.setRole(UserRoles.CUSTOMER);
         UserEntity userToReturn = null;
-        try {
-            userToReturn = userDao.addEntity(userEntity);
-        } catch (EntityExistsException e) {
-            throw new EntityExistsException("User already exists");
-        }
+        userToReturn = userDao.addEntity(userEntity);
         return userToReturn;
     }
 
