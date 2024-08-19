@@ -28,6 +28,8 @@ public class UserEntity implements BaseEntity {
     private String email;
     @Column (name = UserColumnNames.PASSWORD)
     private String password;
+    @Column (name = UserColumnNames.ROLE)
+    private String role;
 }
 
 
