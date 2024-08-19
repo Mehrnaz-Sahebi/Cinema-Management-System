@@ -3,9 +3,8 @@ package org.example.moviereservationsystem.user;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.example.moviereservationsystem.base.BaseService;
+import org.example.moviereservationsystem.configs.MyPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,7 +17,7 @@ public class UserService extends BaseService implements UserDetailsService {
     private UserDao userDao;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private MyPasswordEncoder passwordEncoder;
 
     public UserEntity getById(int id) throws EntityNotFoundException {
         return userDao.getById(id);
@@ -32,7 +31,7 @@ public class UserService extends BaseService implements UserDetailsService {
         } catch (EntityNotFoundException e){
             throw new UsernameNotFoundException("User not found");
         }
-        return new UserEntityPrincipal(userEntity);
+        return new UserEntityDetails(userEntity);
     }
     public UserEntity addUser(UserEntity userEntity) throws EntityExistsException {
         String password = userEntity.getPassword();

@@ -4,8 +4,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.example.moviereservationsystem.user.UserEntityPrincipal;
+import org.example.moviereservationsystem.user.UserEntityDetails;
 import org.example.moviereservationsystem.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +20,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
     @Autowired
+    @Getter
     private UserService userService;
     @Autowired
     private JwtUtils jwtUtils;
@@ -35,9 +37,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         jwtToken = auhHeader.substring(7);
         userPhoneNumber = jwtUtils.extractUsername(jwtToken);
         if(userPhoneNumber!=null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserEntityPrincipal userEntityPrincipal = (UserEntityPrincipal) userService.loadUserByUsername(userPhoneNumber);
-            if (jwtUtils.isTokenValid(jwtToken, userEntityPrincipal)){
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userEntityPrincipal,null, userEntityPrincipal.getAuthorities());
+            UserEntityDetails userEntityDetails = (UserEntityDetails) userService.loadUserByUsername(userPhoneNumber);
+            if (jwtUtils.isTokenValid(jwtToken, userEntityDetails)){
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userEntityDetails,null, userEntityDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }

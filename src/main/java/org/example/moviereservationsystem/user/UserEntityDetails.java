@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class UserEntityPrincipal implements UserDetails {
+public class UserEntityDetails implements UserDetails {
     private UserEntity userEntity;
 
-    public UserEntityPrincipal(UserEntity userEntity) {
+    public UserEntityDetails(UserEntity userEntity) {
         this.userEntity = userEntity;
     }
 
