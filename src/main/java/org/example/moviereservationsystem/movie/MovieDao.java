@@ -8,12 +8,15 @@ import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public class MovieDao extends BaseDao  {
+    public static final Logger LOGGER = LoggerFactory.getLogger(MovieDao.class);
     public MovieEntity getById(int id) throws EntityNotFoundException{
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;
@@ -42,6 +45,7 @@ public class MovieDao extends BaseDao  {
             transaction.commit();
         } catch (HibernateException e){
             if (transaction != null) transaction.rollback();
+            LOGGER.error("Error getting movie "+ movie.getId(), e);
             e.printStackTrace();
         }catch (NullPointerException | EntityNotFoundException e){
             throw new EntityNotFoundException();

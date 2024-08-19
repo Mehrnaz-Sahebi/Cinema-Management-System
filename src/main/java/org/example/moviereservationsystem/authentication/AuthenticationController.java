@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.moviereservationsystem.authentication.jwt.JwtUtils;
 import org.example.moviereservationsystem.user.UserEntityDetails;
 import org.example.moviereservationsystem.user.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +25,7 @@ public class AuthenticationController {
     private UserService userService;
     @Autowired
     private JwtUtils jwtUtils;
+    public static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
     @PostMapping
     public ResponseEntity<String> authenticate(@RequestBody AuthenticationRequest request){
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getPhoneNumber(),request.getPassword()));
@@ -30,6 +33,7 @@ public class AuthenticationController {
         if(userEntityDetails != null){
             return ResponseEntity.ok(jwtUtils.generateToken(userEntityDetails));
         }
+        LOGGER.info("Authentication failed for phone number " + request.getPhoneNumber() + "and password " + request.getPassword());
         return ResponseEntity.status(400).body("Invalid phone number or password");
     }
 }

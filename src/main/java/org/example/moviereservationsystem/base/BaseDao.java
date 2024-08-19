@@ -5,6 +5,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 import org.hibernate.*;
 import org.hibernate.exception.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -25,7 +27,7 @@ public class BaseDao {
         this.entityManagerFactory = entityManagerFactory;
         sessionFactory = entityManagerFactory.getNativeEntityManagerFactory().unwrap(SessionFactory.class);
     }
-
+    public static final Logger LOGGER = LoggerFactory.getLogger(BaseDao.class);
     //TODO CAN YOU DO SMTH ABOUT THE LISTS?
     public <T> T getById(int id, Class<T> entityClass) throws EntityNotFoundException{
         Session session = getSessionFactory().openSession();
@@ -37,7 +39,7 @@ public class BaseDao {
             transaction.commit();
         } catch (HibernateException e){
             if (transaction != null) transaction.rollback();
-            e.printStackTrace();
+            LOGGER.error("Error getting "+entityClass.getSimpleName()+" "+id, e);
         } finally {
             session.close();
         }
@@ -58,7 +60,7 @@ public class BaseDao {
         }
         catch (HibernateException e){
             if (transaction != null) transaction.rollback();
-            e.printStackTrace();
+            LOGGER.error("Error creating "+entity.getClass().getSimpleName()+" "+entity.getId(), e);
         }
         finally{
             session.close();

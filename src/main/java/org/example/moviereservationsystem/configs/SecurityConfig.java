@@ -3,6 +3,7 @@ package org.example.moviereservationsystem.configs;
 import lombok.RequiredArgsConstructor;
 import org.example.moviereservationsystem.authentication.MyPasswordEncoder;
 import org.example.moviereservationsystem.authentication.jwt.JwtAuthFilter;
+import org.example.moviereservationsystem.user.UserController;
 import org.example.moviereservationsystem.user.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -32,6 +33,8 @@ public class SecurityConfig {
             (requests
                     .requestMatchers("/auth")
                     .permitAll()
+                    .requestMatchers(UserController.SLASH_ADD_USER)
+                    .permitAll()
                     .requestMatchers("/admin/**")
                     .hasRole(UserRoles.ADMIN)
                     .anyRequest())
@@ -54,7 +57,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManage(AuthenticationConfiguration configuration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 }

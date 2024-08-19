@@ -7,10 +7,13 @@ import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class DirectorDao extends BaseDao {
+    public final static Logger LOGGER = LoggerFactory.getLogger(DirectorDao.class);
     public DirectorEntity getById(int id) {
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;
@@ -21,7 +24,7 @@ public class DirectorDao extends BaseDao {
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();
-            e.printStackTrace();
+            LOGGER.error("Error getting director "+director.getDirectorId(),e);
         } catch (NullPointerException e) {
             throw new EntityNotFoundException();
         } finally {
