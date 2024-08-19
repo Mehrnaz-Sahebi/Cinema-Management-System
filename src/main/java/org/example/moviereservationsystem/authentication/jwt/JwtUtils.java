@@ -1,4 +1,4 @@
-package org.example.moviereservationsystem.configs.jwt;
+package org.example.moviereservationsystem.authentication.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

@@ -1,4 +1,4 @@
-package org.example.moviereservationsystem.configs.jwt;
+package org.example.moviereservationsystem.authentication.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

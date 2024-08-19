@@ -1,7 +1,7 @@
-package org.example.moviereservationsystem.configs;
+package org.example.moviereservationsystem.authentication;
 
 import lombok.RequiredArgsConstructor;
-import org.example.moviereservationsystem.configs.jwt.JwtUtils;
+import org.example.moviereservationsystem.authentication.jwt.JwtUtils;
 import org.example.moviereservationsystem.user.UserEntityDetails;
 import org.example.moviereservationsystem.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

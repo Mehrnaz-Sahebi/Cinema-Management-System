@@ -1,4 +1,4 @@
-package org.example.moviereservationsystem.configs;
+package org.example.moviereservationsystem.authentication;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;

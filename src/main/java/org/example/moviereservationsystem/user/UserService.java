@@ -3,12 +3,11 @@ package org.example.moviereservationsystem.user;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.example.moviereservationsystem.base.BaseService;
-import org.example.moviereservationsystem.configs.MyPasswordEncoder;
+import org.example.moviereservationsystem.authentication.MyPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,4 +1,4 @@
-package org.example.moviereservationsystem.configs;
+package org.example.moviereservationsystem.authentication;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
