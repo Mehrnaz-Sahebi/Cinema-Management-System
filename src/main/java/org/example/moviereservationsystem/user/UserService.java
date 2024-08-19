@@ -1,17 +1,25 @@
 package org.example.moviereservationsystem.user;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.example.moviereservationsystem.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService extends BaseService implements UserDetailsService {
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public UserEntity getById(int id) throws EntityNotFoundException {
         return userDao.getById(id);
     }
@@ -26,4 +34,17 @@ public class UserService extends BaseService implements UserDetailsService {
         }
         return new UserEntityPrincipal(userEntity);
     }
+    public UserEntity addUser(UserEntity userEntity) throws EntityExistsException {
+        String password = userEntity.getPassword();
+        userEntity.setPassword(passwordEncoder.encode(password));
+        userEntity.setRole(UserRoles.CUSTOMER);
+        UserEntity userToReturn = null;
+        try {
+            userToReturn = userDao.addEntity(userEntity);
+        } catch (EntityExistsException e) {
+            throw new EntityExistsException("User already exists");
+        }
+        return userToReturn;
+    }
+
 }
