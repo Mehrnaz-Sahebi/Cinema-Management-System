@@ -18,8 +18,6 @@ import java.util.List;
 @Getter
 @Embeddable
 public class DirectorEntity {
-    @Column(name = DirectorColumnNames.DIRECTOR_ID, nullable = false)
-    private int directorId;
     @Column(name = DirectorColumnNames.DIRECTOR_FIRST_NAME)
     private String firstName;
     @Column(name = DirectorColumnNames.DIRECTOR_LAST_NAME)
@@ -29,8 +27,7 @@ public class DirectorEntity {
     @Override
     public String toString() {
         return "DirectorEntity{" +
-                "directorId=" + directorId +
-                ", firstName='" + firstName + '\'' +
+                "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 '}';
     }

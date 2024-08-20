@@ -8,4 +8,5 @@ public interface RequestNames {
     public static final String ADDRESSES = "addresses";
     public static final String ACTORS = "actors";
     public static final String AUDITORIUMS = "auditoriums";
+    public static final String ADMIN = "admin";
 }

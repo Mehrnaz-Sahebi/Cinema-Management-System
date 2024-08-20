@@ -40,7 +40,8 @@ public class SecurityConfig {
                     .requestMatchers(UserController.SLASH_ADD_USER)
                     .permitAll()
                     .requestMatchers("/admin/**")
-                    .hasRole(UserRoles.ADMIN)
+                    .hasAuthority(UserRoles.ADMIN)
+//                    .permitAll()
                     .anyRequest())
                     .authenticated();
 //                    .permitAll();

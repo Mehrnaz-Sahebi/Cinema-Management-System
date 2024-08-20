@@ -62,6 +62,7 @@ public class BaseDao {
         catch (HibernateException e){
             if (transaction != null) transaction.rollback();
             LOGGER.error(MessageCreator.errorCreating(entity.getClass().getSimpleName(),entity.getId()), e);
+            return null;//TODO be careful
         }
         finally{
             session.close();
