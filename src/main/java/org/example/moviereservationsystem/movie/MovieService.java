@@ -17,4 +17,7 @@ public class MovieService extends BaseService {
     public MovieEntity addMovie(MovieEntity movie) throws EntityExistsException {
         return movieDao.addMovie(movie);
     }
+    public MovieEntity addMovieToCinema(String movieTitle, String cinemaName) throws EntityNotFoundException{
+        return movieDao.addMovieToCinema(movieTitle,cinemaName);
+    }
 }
