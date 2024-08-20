@@ -7,4 +7,5 @@ public interface MovieColumnNames {
     public static final String RATING = "rating";
     public static final String DESCRIPTION = "description";
     public static final String GENRE = "genre";
+    public static final String LENGTH_IN_MINUTES = "length-in-minutes";
 }

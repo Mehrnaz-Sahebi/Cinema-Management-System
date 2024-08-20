@@ -8,12 +8,17 @@ import org.example.moviereservationsystem.TableNames;
 import org.example.moviereservationsystem.base.BaseEntity;
 import org.example.moviereservationsystem.cinema.CinemaColumnNames;
 import org.example.moviereservationsystem.cinema.CinemaEntity;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import java.util.List;
 
 
 @NoArgsConstructor
 @Setter
 @Getter
 @Entity
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = TableNames.AUDITORIUM)
 public class AuditoriumEntity implements BaseEntity {
     @Id
@@ -29,5 +34,10 @@ public class AuditoriumEntity implements BaseEntity {
     @ManyToOne
     @JoinColumn(name = CinemaColumnNames.CINEMA_ID)
     private CinemaEntity cinema;
+    @Transient
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany (mappedBy = "auditorium")
+    private List<AuditoriumEntity> auditoriums;
+
 
 }

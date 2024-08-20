@@ -8,6 +8,7 @@ public interface TableNames {
     public static final String ADDRESS = "address";
     public static final String ACTOR = "actor";
     public static final String AUDITORIUM = "auditorium";
+    public static final String SCHEDULE = "schedule";
 
 
 }

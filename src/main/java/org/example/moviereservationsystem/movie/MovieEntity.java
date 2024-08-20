@@ -35,8 +35,6 @@ public class MovieEntity implements BaseEntity {
     private String description;
     @Column(name = MovieColumnNames.YEAR)
     private int year;
-//    @ManyToOne
-//    @JoinColumn(title = "directorId-id")
     @Embedded
     private DirectorEntity directorId;
     @Column(name = MovieColumnNames.GENRE)
@@ -61,6 +59,9 @@ public class MovieEntity implements BaseEntity {
     )
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<CinemaEntity> cinemas;
+
+    @Column(name = MovieColumnNames.LENGTH_IN_MINUTES)
+    private int lengthInMinutes;
 
     @Override
     public String toString() {
