@@ -20,14 +20,20 @@ public class CinemaDao extends BaseDao {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            String hql = "FROM CinemaEntity C WHERE C.name =: name";
-            Query query = session.createQuery(hql);
-            query.setParameter("name",cinema.getName());
-            List results = query.list();
-            if (results.size() > 0) {
+            String hql1 = "FROM CinemaEntity C WHERE C.name =: name";
+            Query query1 = session.createQuery(hql1);
+            query1.setParameter("name",cinema.getName());
+            List results1 = query1.list();
+            if (!results1.isEmpty()) {
                 throw new EntityExistsException();
             }
-            //TODO replace save
+            String hql2 = "FROM CinemaEntity C WHERE C.addressId =: address";
+            Query query2 = session.createQuery(hql2);
+            query2.setParameter("address",cinema.getAddressId());
+            List results2 = query2.list();
+            if (!results2.isEmpty()){
+                throw new EntityExistsException();
+            }
             session.persist(cinema);
             transaction.commit();
         }

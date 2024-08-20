@@ -51,4 +51,11 @@ public class CinemaEntity implements BaseEntity {
                 ", movies=" + movies +
                 '}';
     }
+
+    public CinemaEntity(String name, AddressEntity addressId, List<AuditoriumEntity> auditoria, List<MovieEntity> movies) {
+        this.name = name;
+        this.addressId = addressId;
+        this.auditoria = auditoria;
+        this.movies = movies;
+    }
 }

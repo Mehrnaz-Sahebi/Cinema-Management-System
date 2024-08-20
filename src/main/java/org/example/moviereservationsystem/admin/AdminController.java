@@ -29,7 +29,7 @@ public class AdminController {
     public CinemaEntity addCinema(@RequestBody CinemaDto cinema, HttpServletResponse response) {
         CinemaEntity cinemaToReturn = null;
         AddressEntity address = new AddressEntity(cinema.getAddressId(),cinema.getNumber(),cinema.getAlley(),cinema.getStreet(),cinema.getCity());
-        CinemaEntity cinemaToSave = new CinemaEntity(0,cinema.getName(),address,null,null);
+        CinemaEntity cinemaToSave = new CinemaEntity(cinema.getName(),address,null,null);
         try {
             cinemaToReturn = cinemaService.addCinema(cinemaToSave);
         } catch (EntityExistsException e) {
