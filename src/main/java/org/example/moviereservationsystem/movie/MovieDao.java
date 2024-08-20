@@ -1,5 +1,6 @@
 package org.example.moviereservationsystem.movie;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.example.moviereservationsystem.LoggerMessageCreator;
 import org.example.moviereservationsystem.base.BaseDao;
@@ -17,9 +18,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class MovieDao extends BaseDao  {
+public class MovieDao extends BaseDao {
     public static final Logger LOGGER = LoggerFactory.getLogger(MovieDao.class);
-    public MovieEntity getById(int id) throws EntityNotFoundException{
+
+    public MovieEntity getById(int id) throws EntityNotFoundException {
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;
         MovieEntity movie = null;
@@ -45,16 +47,40 @@ public class MovieDao extends BaseDao  {
 //            movie.setCinemas(results2);
 
             transaction.commit();
-        } catch (HibernateException e){
+        } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorGetting("Movie",id), e);
+            LOGGER.error(LoggerMessageCreator.errorGetting("Movie", id), e);
             e.printStackTrace();
-        }catch (NullPointerException | EntityNotFoundException e){
+        } catch (NullPointerException | EntityNotFoundException e) {
             throw new EntityNotFoundException();
+        } finally {
+            session.close();
         }
-        finally {
+        return movie;
+    }
+
+    public MovieEntity addMovie(MovieEntity movie) throws EntityExistsException {
+        Session session = getSessionFactory().openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            String hql1 = "FROM MovieEntity M WHERE M.title =: title";
+            Query query1 = session.createQuery(hql1);
+            query1.setParameter("title", movie.getTitle());
+            List results1 = query1.list();
+            if (!results1.isEmpty()) {
+                throw new EntityExistsException();
+            }
+            session.persist(movie);
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) transaction.rollback();
+            LOGGER.error(LoggerMessageCreator.errorCreating("movie", movie.getTitle()), e);
+            return null;
+        } finally {
             session.close();
         }
         return movie;
     }
 }
+
