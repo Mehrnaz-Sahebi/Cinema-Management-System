@@ -9,6 +9,7 @@ import org.example.moviereservationsystem.auditorium.AuditoriumColumnNames;
 import org.example.moviereservationsystem.auditorium.AuditoriumEntity;
 import org.example.moviereservationsystem.base.BaseEntity;
 import org.example.moviereservationsystem.cinema.CinemaEntity;
+import org.example.moviereservationsystem.movie.MovieColumnNames;
 import org.example.moviereservationsystem.movie.MovieEntity;
 
 import java.sql.Timestamp;
@@ -24,10 +25,9 @@ public class ScheduleEntity implements BaseEntity {
     private int id;
     @ManyToOne
     @JoinColumn(name = AuditoriumColumnNames.AUDITORIUM_ID)
-    @Column(name = ScheduleColumnNames.AUDITORIUM_ID)
     private AuditoriumEntity auditorium;
-    @OneToOne
-    @Column(name = ScheduleColumnNames.MOVIE_ID)
+    @ManyToOne
+    @JoinColumn(name = MovieColumnNames.MOVIE_ID)
     private MovieEntity movie;
     @Column(name = ScheduleColumnNames.TIME)
     private Timestamp time;

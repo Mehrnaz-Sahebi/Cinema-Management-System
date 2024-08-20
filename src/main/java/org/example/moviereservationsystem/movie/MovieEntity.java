@@ -11,6 +11,7 @@ import org.example.moviereservationsystem.base.BaseEntity;
 import org.example.moviereservationsystem.cinema.CinemaColumnNames;
 import org.example.moviereservationsystem.cinema.CinemaEntity;
 import org.example.moviereservationsystem.director.DirectorEntity;
+import org.example.moviereservationsystem.schedule.ScheduleEntity;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -59,6 +60,9 @@ public class MovieEntity implements BaseEntity {
     )
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<CinemaEntity> cinemas;
+    @OneToMany(mappedBy = "movie")
+    @Transient
+    private List<ScheduleEntity> schedules;
 
     @Column(name = MovieColumnNames.LENGTH_IN_MINUTES)
     private int lengthInMinutes;
