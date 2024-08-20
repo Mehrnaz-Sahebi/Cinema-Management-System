@@ -10,11 +10,14 @@ public class LoggerMessageCreator {
     public static String infoAlreadyExists(String entityName, int id){
         return entityName+" with id= "+id+" already exists.";
     }
-    public static String infoAlreadyExists(String entityName, String id){
-        return entityName+" with id= "+id+" already exists.";
+    public static String infoAlreadyExists(String entityName, String name){
+        return entityName+" with id= "+name+" already exists.";
     }
     public static String errorCreating(String entityName, int id){
         return "Error creating "+entityName+" with id= "+id+ " from db.";
+    }
+    public static String errorCreating(String entityName, String name){
+        return "Error creating "+entityName+" with id= "+name+ " from db.";
     }
     public static String errorWritingResponse(String methodName){
         return "Error writing response in method "+methodName;

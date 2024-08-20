@@ -34,4 +34,9 @@ public class ActorEntity implements BaseEntity {
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<MovieEntity> movies;
 
+    public ActorEntity(String firstName, String lastName, List<MovieEntity> movies) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.movies = movies;
+    }
 }
