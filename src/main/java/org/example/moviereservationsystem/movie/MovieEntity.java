@@ -43,6 +43,8 @@ public class MovieEntity implements BaseEntity {
     private String genre;
     @Column(name = MovieColumnNames.RATING)
     private int rating;
+    @Column(name = MovieColumnNames.LENGTH_IN_MINUTES)
+    private int lengthInMinutes;
     @ManyToMany
     @Fetch(FetchMode.JOIN)
     @JoinTable(
@@ -65,8 +67,6 @@ public class MovieEntity implements BaseEntity {
     @Transient
     private List<ScheduleEntity> schedules;
 
-    @Column(name = MovieColumnNames.LENGTH_IN_MINUTES)
-    private int lengthInMinutes;
 
     @Override
     public String toString() {
@@ -81,6 +81,16 @@ public class MovieEntity implements BaseEntity {
                 ", actors=" + actors +
                 ", cinemas=" + cinemas +
                 '}';
+    }
+
+    public MovieEntity(String title, String description, int year, DirectorEntity directorId, String genre, int rating, int lengthInMinutes) {
+        this.title = title;
+        this.description = description;
+        this.year = year;
+        this.directorId = directorId;
+        this.genre = genre;
+        this.rating = rating;
+        this.lengthInMinutes = lengthInMinutes;
     }
 }
 

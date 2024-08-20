@@ -12,8 +12,13 @@ import org.example.moviereservationsystem.address.AddressEntity;
 import org.example.moviereservationsystem.cinema.CinemaDto;
 import org.example.moviereservationsystem.cinema.CinemaEntity;
 import org.example.moviereservationsystem.cinema.CinemaService;
+import org.example.moviereservationsystem.director.DirectorEntity;
+import org.example.moviereservationsystem.movie.MovieDto;
+import org.example.moviereservationsystem.movie.MovieEntity;
+import org.example.moviereservationsystem.movie.MovieService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.DirectFieldAccessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +35,8 @@ public class AdminController {
     private CinemaService cinemaService;
     @Autowired
     private ActorService actorService;
+    @Autowired
+    private MovieService movieService;
     @PostMapping("/add-cinema")
     public CinemaEntity addCinema(@RequestBody CinemaDto cinema, HttpServletResponse response) {
         CinemaEntity cinemaToReturn = null;
@@ -62,5 +69,22 @@ public class AdminController {
             }
         }
         return actorToReturn;
+    }
+    @PostMapping("/add-movie")
+    public MovieEntity addMovie(@RequestBody MovieDto movie, HttpServletResponse response) {
+        MovieEntity movieToReturn = null;
+        DirectorEntity director = new DirectorEntity(movie.getDirectorFirstName(),movie.getDirectorLastName());
+        MovieEntity movieToSave = new MovieEntity(movie.getTitle(),movie.getDescription(),movie.getYear(),director,movie.getGenre(),movie.getRating(),movie.getLengthInMinutes());
+        try {
+            movieToReturn = movieService.addMovie(movieToSave);
+        } catch (EntityExistsException e) {
+            try {
+                ResponseCreator.sendAlreadyExistsError(response,"movie");
+                LOGGER.info(LoggerMessageCreator.infoAlreadyExists("movie",movie.getTitle()));
+            } catch (IOException ex) {
+                LOGGER.error(LoggerMessageCreator.errorWritingResponse("addMovie"));
+            }
+        }
+        return movieToReturn;
     }
 }

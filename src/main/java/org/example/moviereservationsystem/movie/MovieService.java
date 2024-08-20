@@ -15,6 +15,6 @@ public class MovieService extends BaseService {
         return movieDao.getById(id);
     }
     public MovieEntity addMovie(MovieEntity movie) throws EntityExistsException {
-        return movieDao.addEntity(movie);
+        return movieDao.addMovie(movie);
     }
 }
