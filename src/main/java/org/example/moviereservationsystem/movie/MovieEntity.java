@@ -28,6 +28,7 @@ import java.util.List;
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class MovieEntity implements BaseEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = MovieColumnNames.MOVIE_ID, nullable = false)
     private int id;
     @Column(name = MovieColumnNames.TITLE)

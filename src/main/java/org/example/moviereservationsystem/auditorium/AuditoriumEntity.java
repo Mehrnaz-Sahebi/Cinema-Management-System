@@ -22,6 +22,7 @@ import java.util.List;
 @Table(name = TableNames.AUDITORIUM)
 public class AuditoriumEntity implements BaseEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = AuditoriumColumnNames.AUDITORIUM_ID, nullable = false)
     private int id;
     @Column(name = AuditoriumColumnNames.NAME)

@@ -20,7 +20,7 @@ import java.sql.Timestamp;
 @Table(name = TableNames.SCHEDULE)
 public class ScheduleEntity implements BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = ScheduleColumnNames.SCHEDULE_ID)
     private int id;
     @ManyToOne

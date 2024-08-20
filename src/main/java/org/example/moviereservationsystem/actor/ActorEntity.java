@@ -22,6 +22,7 @@ import java.util.List;
 public class ActorEntity implements BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = ActorColumnNames.ACTOR_ID, nullable = false)
     private int id;
     @Column(name = ActorColumnNames.FIRST_NAME )

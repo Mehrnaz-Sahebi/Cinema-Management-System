@@ -22,6 +22,7 @@ import java.util.List;
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class CinemaEntity implements BaseEntity {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = CinemaColumnNames.CINEMA_ID, nullable = false)
     private int id;
