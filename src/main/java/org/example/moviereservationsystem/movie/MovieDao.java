@@ -1,5 +1,6 @@
 package org.example.moviereservationsystem.movie;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.example.moviereservationsystem.LoggerMessageCreator;
 import org.example.moviereservationsystem.base.BaseDao;
@@ -53,6 +54,29 @@ public class MovieDao extends BaseDao  {
             throw new EntityNotFoundException();
         }
         finally {
+            session.close();
+        }
+        return movie;
+    }
+    public MovieEntity addMovie(MovieEntity movie) throws EntityExistsException{
+        Session session = getSessionFactory().openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            String hql1 = "FROM MovieEntity M WHERE M.title =: title";
+            Query query1 = session.createQuery(hql1);
+            query1.setParameter("title", movie.getTitle());
+            List results1 = query1.list();
+            if (!results1.isEmpty()) {
+                throw new EntityExistsException();
+            }
+            session.persist(movie);
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) transaction.rollback();
+            LOGGER.error(LoggerMessageCreator.errorCreating("Movie", movie.getTitle()), e);
+            return null;
+        } finally {
             session.close();
         }
         return movie;
