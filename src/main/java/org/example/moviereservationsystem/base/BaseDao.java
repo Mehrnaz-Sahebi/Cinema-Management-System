@@ -3,19 +3,13 @@ package org.example.moviereservationsystem.base;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
-import org.example.moviereservationsystem.MessageCreator;
+import org.example.moviereservationsystem.LoggerMessageCreator;
 import org.hibernate.*;
-import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Repository;
-
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.function.Supplier;
 
 @Repository
 public class BaseDao {
@@ -40,7 +34,7 @@ public class BaseDao {
             transaction.commit();
         } catch (HibernateException e){
             if (transaction != null) transaction.rollback();
-            LOGGER.error(MessageCreator.errorGetting(entityClass.getSimpleName(),id), e);
+            LOGGER.error(LoggerMessageCreator.errorGetting(entityClass.getSimpleName(),id), e);
         } finally {
             session.close();
         }
@@ -61,7 +55,7 @@ public class BaseDao {
         }
         catch (HibernateException e){
             if (transaction != null) transaction.rollback();
-            LOGGER.error(MessageCreator.errorCreating(entity.getClass().getSimpleName(),entity.getId()), e);
+            LOGGER.error(LoggerMessageCreator.errorCreating(entity.getClass().getSimpleName(),entity.getId()), e);
             return null;//TODO be careful
         }
         finally{

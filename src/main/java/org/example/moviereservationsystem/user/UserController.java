@@ -3,7 +3,7 @@ package org.example.moviereservationsystem.user;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.moviereservationsystem.MessageCreator;
+import org.example.moviereservationsystem.LoggerMessageCreator;
 import org.example.moviereservationsystem.RequestNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ public class UserController {
             user = userService.getById(id);
         } catch (EntityNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.info(MessageCreator.notFound("User", id));
+            LOGGER.info(LoggerMessageCreator.infoNotFound("User", id));
         }
         return user;
     }
@@ -37,7 +37,7 @@ public class UserController {
             userToReturn = userService.addUser(user);
         }catch (EntityExistsException e){
             response.setStatus(HttpServletResponse.SC_CONFLICT);
-            LOGGER.info(MessageCreator.alreadyExists("User", user.getId()));
+            LOGGER.info(LoggerMessageCreator.infoAlreadyExists("User", user.getId()));
         } return userToReturn;
     }
 }

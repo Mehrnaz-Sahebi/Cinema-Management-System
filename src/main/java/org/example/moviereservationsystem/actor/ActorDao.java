@@ -2,9 +2,8 @@ package org.example.moviereservationsystem.actor;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
-import org.example.moviereservationsystem.MessageCreator;
+import org.example.moviereservationsystem.LoggerMessageCreator;
 import org.example.moviereservationsystem.base.BaseDao;
-import org.example.moviereservationsystem.cinema.CinemaEntity;
 import org.example.moviereservationsystem.movie.MovieEntity;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -12,7 +11,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,7 +30,7 @@ public class ActorDao extends BaseDao {
             transaction.commit();
         } catch (HibernateException e){
             if (transaction != null) transaction.rollback();
-            LOGGER.error(MessageCreator.errorGetting("Actor",id), e);
+            LOGGER.error(LoggerMessageCreator.errorGetting("Actor",id), e);
         }catch (NullPointerException | EntityNotFoundException e){
             throw new EntityNotFoundException();
         }
