@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class ScheduleDao extends BaseDao {
@@ -60,6 +61,7 @@ public class ScheduleDao extends BaseDao {
             Predicate auditoriumEquals = cb.equal(root.get("auditorium"), schedule.getAuditorium());
             cq.select(root).where(cb.and(auditoriumEquals,cb.or(cb.and(startingTimeAfter,startingTimeBefore), cb.and(endTimeBefore, endTimeAfter))));
             List<ScheduleEntity> results3 = session.createQuery(cq).getResultList();
+            transaction.commit();
             if (!results3.isEmpty()) {
                 throw new ScheduleException("There's another schedule in that time in that auditorium.");
             }
@@ -73,6 +75,53 @@ public class ScheduleDao extends BaseDao {
             session.close();
         }
         return schedule;
+    }
+    public List<ScheduleEntity> getAllSchedules() {
+        Session session = getSessionFactory().openSession();
+        Transaction transaction = null;
+        List results1 = null;
+        try {
+            transaction = session.beginTransaction();
+            String hql1 = "FROM ScheduleEntity";
+            Query query1 = session.createQuery(hql1);
+            results1 = query1.list();
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) transaction.rollback();
+            LOGGER.error(LoggerMessageCreator.errorGettingAll("ScheduleEntity"), e);
+            return null;
+        } finally {
+            session.close();
+        }
+        return (List<ScheduleEntity>) results1;
+    }
+    public List<ScheduleEntity> getSchedulesForMovie(String movieTitle) throws  EntityNotFoundException{
+        Session session = getSessionFactory().openSession();
+        Transaction transaction = null;
+        List results2 = null;
+        try {
+            transaction = session.beginTransaction();
+            String hql1 = "FROM MovieEntity M WHERE M.title =: title";
+            Query query1 = session.createQuery(hql1);
+            query1.setParameter("title", movieTitle);
+            List results1 = query1.list();
+            if (results1.isEmpty()) {
+                throw new EntityNotFoundException();
+            }
+            MovieEntity movie = (MovieEntity) results1.get(0);
+            String hql2 = "FROM ScheduleEntity S WHERE S.movie =: movie";
+            Query query2 = session.createQuery(hql2);
+            query2.setParameter("movie", movie);
+            results2 = query2.list();
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) transaction.rollback();
+            LOGGER.error(LoggerMessageCreator.errorGettingAllWith("ScheduleEntity","MovieTitle",movieTitle), e);
+            return null;
+        } finally {
+            session.close();
+        }
+        return (List<ScheduleEntity>) results2;
     }
 
 }

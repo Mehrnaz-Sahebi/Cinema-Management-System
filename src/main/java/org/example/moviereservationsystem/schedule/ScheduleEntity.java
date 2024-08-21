@@ -12,10 +12,14 @@ import org.example.moviereservationsystem.base.BaseEntity;
 import org.example.moviereservationsystem.cinema.CinemaEntity;
 import org.example.moviereservationsystem.movie.MovieColumnNames;
 import org.example.moviereservationsystem.movie.MovieEntity;
+import org.example.moviereservationsystem.ticket.TicketEntity;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cascade;
 
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -39,6 +43,10 @@ public class ScheduleEntity implements BaseEntity {
     private Timestamp endingTime;
     @Column(name = ScheduleColumnNames.REMAINING_TICKET_COUNT)
     private int remainingTicketCount;
+    @Transient
+    @OneToMany(mappedBy = "schedule")
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<TicketEntity> tickets;
 
     public ScheduleEntity(Timestamp endingTime, Timestamp startingTime, MovieEntity movie, AuditoriumEntity auditorium) {
         this.endingTime = endingTime;

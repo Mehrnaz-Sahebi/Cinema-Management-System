@@ -32,4 +32,10 @@ public class LoggerMessageCreator {
     public static String infoScheduleConflict (String message, String schedule){
         return "Schedule conflict: "+message+" for schedule "+schedule;
     }
+    public static String errorGettingAll(String entityName){
+        return "Error getting all "+entityName+" from db.";
+    }
+    public static String errorGettingAllWith(String entityName, String fieldName, String value){
+        return "Error getting all "+entityName+" from db with " + fieldName + " = " + value + " from db.";
+    }
 }

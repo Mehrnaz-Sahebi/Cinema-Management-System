@@ -4,6 +4,9 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Set;
+
 @Service
 public class ScheduleService  {
     @Autowired
@@ -13,5 +16,11 @@ public class ScheduleService  {
     }
     public ScheduleEntity getSchedule(int id) throws EntityNotFoundException{
         return scheduleDao.getById(id, ScheduleEntity.class);
+    }
+    public List<ScheduleEntity> getAllSchedules(){
+        return scheduleDao.getAllSchedules();
+    }
+    public List<ScheduleEntity> getSchedulesForMovie(String movieTitle) throws EntityNotFoundException{
+        return scheduleDao.getSchedulesForMovie(movieTitle);
     }
 }

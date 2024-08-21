@@ -1,15 +1,17 @@
 package org.example.moviereservationsystem.user;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.moviereservationsystem.TableNames;
 import org.example.moviereservationsystem.base.BaseEntity;
+import org.example.moviereservationsystem.ticket.TicketEntity;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import java.util.Set;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -31,15 +33,13 @@ public class UserEntity implements BaseEntity {
     private String password;
     @Column (name = UserColumnNames.ROLE)
     private String role;
+    @Transient
+    @OneToMany(mappedBy = "owner")
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<TicketEntity> tickets;
 
-    public UserEntity(int id, String firstName, String lastName, String email) {
+    public UserEntity(int id, String firstName, String lastName, String email, String password, String role) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-    }
-
-    public UserEntity(String firstName, String lastName, String email, String password, String role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
