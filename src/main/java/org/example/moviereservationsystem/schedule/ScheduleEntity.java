@@ -3,6 +3,7 @@ package org.example.moviereservationsystem.schedule;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.moviereservationsystem.TableNames;
 import org.example.moviereservationsystem.auditorium.AuditoriumColumnNames;
@@ -12,10 +13,13 @@ import org.example.moviereservationsystem.cinema.CinemaEntity;
 import org.example.moviereservationsystem.movie.MovieColumnNames;
 import org.example.moviereservationsystem.movie.MovieEntity;
 
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name = TableNames.SCHEDULE)
 public class ScheduleEntity implements BaseEntity {
@@ -29,7 +33,28 @@ public class ScheduleEntity implements BaseEntity {
     @ManyToOne
     @JoinColumn(name = MovieColumnNames.MOVIE_ID)
     private MovieEntity movie;
-    @Column(name = ScheduleColumnNames.TIME)
-    private Timestamp time;
+    @Column(name = ScheduleColumnNames.STARTING_TIME)
+    private Timestamp startingTime;
+    @Column(name = ScheduleColumnNames.ENDING_TIME)
+    private Timestamp endingTime;
+    @Column(name = ScheduleColumnNames.REMAINING_TICKET_COUNT)
+    private int remainingTicketCount;
 
+    public ScheduleEntity(Timestamp endingTime, Timestamp startingTime, MovieEntity movie, AuditoriumEntity auditorium) {
+        this.endingTime = endingTime;
+        this.startingTime = startingTime;
+        this.movie = movie;
+        this.auditorium = auditorium;
+    }
+
+    @Override
+    public String toString() {
+        return "ScheduleEntity{" +
+                "auditorium=" + auditorium +
+                ", movie=" + movie +
+                ", startingTime=" + startingTime +
+                ", endingTime=" + endingTime +
+                ", remainingTicketCount=" + remainingTicketCount +
+                '}';
+    }
 }

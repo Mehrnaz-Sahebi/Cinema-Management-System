@@ -14,6 +14,10 @@ import org.example.moviereservationsystem.cinema.CinemaDto;
 import org.example.moviereservationsystem.cinema.CinemaEntity;
 import org.example.moviereservationsystem.movie.MovieEntity;
 import org.example.moviereservationsystem.movie.MovieService;
+import org.example.moviereservationsystem.schedule.ScheduleDto;
+import org.example.moviereservationsystem.schedule.ScheduleEntity;
+import org.example.moviereservationsystem.schedule.ScheduleException;
+import org.example.moviereservationsystem.schedule.ScheduleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +33,8 @@ public class ManagerController {
     private MovieService movieService;
     @Autowired
     private AuditoriumService auditoriumService;
+    @Autowired
+    private ScheduleService scheduleService;
 
     @PutMapping("/add-movie-to-cinema/{movieTitle}/{cinemaName}")
     public MovieEntity addMovieToCinema(@PathVariable String movieTitle, @PathVariable String cinemaName, HttpServletResponse response) {
@@ -51,7 +57,7 @@ public class ManagerController {
     @PostMapping("/add-auditorium")
     public AuditoriumEntity addAuditorium(@RequestBody AuditoriumDto auditorium, HttpServletResponse response) {
         AuditoriumEntity auditoriumToReturn = null;
-        AuditoriumEntity auditoriumToSave = new AuditoriumEntity(auditorium.getName(),auditorium.getCapacity(),auditorium.getRowCount());
+        AuditoriumEntity auditoriumToSave = new AuditoriumEntity(auditorium.getName(), auditorium.getCapacity(), auditorium.getRowCount());
         try {
             auditoriumToReturn = auditoriumService.addAuditorium(auditoriumToSave);
         } catch (EntityExistsException e) {
@@ -64,11 +70,12 @@ public class ManagerController {
         }
         return auditoriumToReturn;
     }
+
     @PutMapping("/add-auditorium-to-cinema/{auditoriumName}/{cinemaName}")
     public AuditoriumEntity addAuditoriumToCinema(@PathVariable String auditoriumName, @PathVariable String cinemaName, HttpServletResponse response) {
         AuditoriumEntity auditoriumToReturn = null;
         try {
-            auditoriumToReturn = auditoriumService.addAuditoriumToCinema(auditoriumName,cinemaName);
+            auditoriumToReturn = auditoriumService.addAuditoriumToCinema(auditoriumName, cinemaName);
         } catch (EntityNotFoundException e) {
             try {
                 ResponseCreator.sendNotFoundError(response, e.getMessage());
@@ -80,5 +87,33 @@ public class ManagerController {
             }
         }
         return auditoriumToReturn;
+    }
+
+    @PostMapping("/add-schedule")
+    public ScheduleEntity addSchedule(@RequestBody ScheduleDto schedule, HttpServletResponse response) {
+        ScheduleEntity scheduleToReturn = null;
+        ScheduleEntity scheduleToSave = new ScheduleEntity(schedule.getEndingTime(), schedule.getStartingTime(), schedule.getMovie(), schedule.getAuditorium());
+        scheduleToSave.setRemainingTicketCount(schedule.getAuditorium().getCapacity());
+        try {
+            scheduleToReturn = scheduleService.addSchedule(scheduleToSave);
+        } catch (EntityNotFoundException e) {
+            try {
+                ResponseCreator.sendNotFoundError(response, e.getMessage());
+                if (e.getMessage().equals("auditorium"))
+                    LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), schedule.getAuditorium().getName()));
+                else LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), schedule.getMovie().getTitle()));
+            } catch (IOException ex) {
+                LOGGER.error(LoggerMessageCreator.errorWritingResponse("addSchedule"));
+            }
+        } catch (ScheduleException e){
+            try {
+                ResponseCreator.sendScheduleConflictError(response,e.getMessage());
+                LOGGER.info(LoggerMessageCreator.infoScheduleConflict(e.getMessage(),scheduleToSave.toString()));
+
+            } catch (IOException ex) {
+                LOGGER.error(LoggerMessageCreator.errorWritingResponse("addSchedule"));
+            }
+        }
+        return scheduleToReturn;
     }
 }

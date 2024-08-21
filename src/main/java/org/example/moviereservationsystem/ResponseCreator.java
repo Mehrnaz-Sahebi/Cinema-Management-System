@@ -17,4 +17,10 @@ public class ResponseCreator {
         response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         response.getWriter().write(entityName +" doesn't exist.");
     }
+    public static void sendScheduleConflictError(HttpServletResponse response, String errorMessage) throws IOException {
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(HttpServletResponse.SC_CONFLICT);
+        response.getWriter().write("There is a schedule conflict:"+errorMessage);
+    }
 }

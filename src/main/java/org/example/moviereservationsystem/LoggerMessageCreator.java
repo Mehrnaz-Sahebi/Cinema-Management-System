@@ -2,9 +2,9 @@ package org.example.moviereservationsystem;
 
 public class LoggerMessageCreator {
     public static String infoNotFound(String entityName, int id){
-        return entityName+" with id= "+id+" not found.";
+        return entityName+" with id = "+id+" not found.";
     }public static String infoNotFound(String entityName, String name){
-        return entityName+" with id= "+name+ " not found.";
+        return entityName+" with name = "+name+ " not found.";
     }
     public static String errorGetting(String entityName, int id){
         return "Error getting "+entityName+" with id= "+id+ " from db.";
@@ -26,5 +26,8 @@ public class LoggerMessageCreator {
     }
     public static String errorWritingResponse(String methodName){
         return "Error writing response in method "+methodName;
+    }
+    public static String infoScheduleConflict (String message, String schedule){
+        return "Schedule conflict: "+message+" for schedule "+schedule;
     }
 }

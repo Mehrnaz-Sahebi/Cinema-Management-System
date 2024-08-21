@@ -10,4 +10,5 @@ public interface RequestNames {
     public static final String AUDITORIUMS = "auditoriums";
     public static final String ADMIN = "admin";
     public static final String MANAGER = "manager";
+    public static final String SCHEDULE = "schedule";
 }
