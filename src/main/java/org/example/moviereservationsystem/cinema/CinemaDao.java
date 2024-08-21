@@ -1,8 +1,10 @@
 package org.example.moviereservationsystem.cinema;
 
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.example.moviereservationsystem.LoggerMessageCreator;
 import org.example.moviereservationsystem.base.BaseDao;
+import org.example.moviereservationsystem.movie.MovieEntity;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -11,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 @Repository
 public class CinemaDao extends BaseDao {
@@ -47,4 +50,5 @@ public class CinemaDao extends BaseDao {
         }
         return cinema;
     }
+
 }

@@ -11,4 +11,10 @@ public class ResponseCreator {
         response.setStatus(HttpServletResponse.SC_CONFLICT);
         response.getWriter().write("This "+ entityName +" already exists.");
     }
+    public static void sendNotFoundError(HttpServletResponse response, String entityName) throws IOException {
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        response.getWriter().write(entityName +" doesn't exist.");
+    }
 }
