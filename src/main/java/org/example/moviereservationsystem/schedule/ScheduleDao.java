@@ -20,6 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -145,6 +147,29 @@ public class ScheduleDao extends BaseDao {
         } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();
             LOGGER.error(LoggerMessageCreator.errorGettingAllWith("ScheduleEntity","CinemaName",cinemaName), e);
+            return null;
+        } finally {
+            session.close();
+        }
+        return (List<ScheduleEntity>) results2;
+    }
+    public List<ScheduleEntity> getSchedulesForDate(Date date) {
+        Session session = getSessionFactory().openSession();
+        Transaction transaction = null;
+        List results2 = null;
+        try {
+            transaction = session.beginTransaction();
+
+            String hql2 = "FROM ScheduleEntity S WHERE year (S.startingTime) =: dYear and month (S.startingTime)=: dMonth year and day (S.startingTime)=: dDay";
+            Query query2 = session.createQuery(hql2);
+            query2.setParameter("dYear", date.getYear());
+            query2.setParameter("dMonth", date.getMonth());
+            query2.setParameter("dDay", date.getDate());
+            results2 = query2.list();
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) transaction.rollback();
+            LOGGER.error(LoggerMessageCreator.errorGettingAllWith("ScheduleEntity","Date",date.toString()), e);
             return null;
         } finally {
             session.close();

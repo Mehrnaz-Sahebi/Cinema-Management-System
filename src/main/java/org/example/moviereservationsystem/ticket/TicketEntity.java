@@ -31,7 +31,14 @@ public class TicketEntity implements BaseEntity {
     @ManyToOne
     @JoinColumn(name = ScheduleColumnNames.SCHEDULE_ID)
     private ScheduleEntity schedule;
+
+    public TicketEntity(UserEntity owner, ScheduleEntity schedule) {
+        this.owner = owner;
+        this.schedule = schedule;
+    }
+
     @ManyToOne
     @JoinColumn(name = UserColumnNames.USER_ID)
-    private UserEntity owner;
+    private UserEntity owner
+            ;
 }
