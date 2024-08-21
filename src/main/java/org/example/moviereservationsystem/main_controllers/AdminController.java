@@ -130,6 +130,19 @@ public class AdminController {
         if (userToReturn != null) userToReturn.setPassword("HIDDEN");
         return userToReturn;
     }
+    @DeleteMapping("/delete-cinema/{cinemaName}")
+    public void deleteCinema(@PathVariable String cinemaName, HttpServletResponse response) {
+        try {
+            cinemaService.deleteCinema(cinemaName);
+        } catch (EntityExistsException e) {
+            try {
+                ResponseCreator.sendNotFoundError(response, "Cinema");
+                LOGGER.info(LoggerMessageCreator.infoNotFound("Cinema", cinemaName));
+            } catch (IOException ex) {
+                LOGGER.error(LoggerMessageCreator.errorWritingResponse("deleteCinema"));
+            }
+        }
+    }
 
 
 }

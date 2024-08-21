@@ -5,11 +5,14 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 import org.example.moviereservationsystem.LoggerMessageCreator;
 import org.hibernate.*;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class BaseDao {
@@ -62,5 +65,35 @@ public class BaseDao {
             session.close();
         }
         return entity;
+    }
+    public <T extends BaseEntity> void deleteEntity(String fieldName,String fieldValue,Boolean isInt, Class<T> entityClass) throws EntityNotFoundException {
+        Session session = getSessionFactory().openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            String hql1 = "FROM "+entityClass.getSimpleName()+" E WHERE E."+fieldName+" =: fieldValue";
+            Query query1 = session.createQuery(hql1);
+            if (isInt){
+                query1.setParameter("fieldValue", Integer.parseInt(fieldValue));
+            } else {
+                query1.setParameter("fieldValue", fieldValue);
+            }
+            List results1 = query1.list();
+            if (results1.isEmpty()) {
+                throw new EntityNotFoundException();
+            }
+            String hql = "delete from " + entityClass.getSimpleName() + " E where E."+fieldName+ " =: fieldValue";
+            Query query = session.createQuery(hql);
+            query.setParameter("fieldValue", fieldValue);
+            query.executeUpdate();
+            transaction.commit();
+        }
+        catch (HibernateException e){
+            if (transaction != null) transaction.rollback();
+            LOGGER.error(LoggerMessageCreator.errorDeleting(entityClass.getSimpleName(),fieldValue), e);
+        }
+        finally{
+            session.close();
+        }
     }
 }

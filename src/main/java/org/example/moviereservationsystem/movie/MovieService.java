@@ -25,4 +25,7 @@ public class MovieService extends BaseService {
     public MovieEntity addActorToMovie(String movieTitle, ActorEntity actor) throws EntityNotFoundException{
         return movieDao.addActorToMovie(movieTitle,actor);
     }
+    public void deleteMovie(String movieTitle) throws EntityNotFoundException{
+        movieDao.deleteEntity("title",movieTitle,false,MovieEntity.class);
+    }
 }

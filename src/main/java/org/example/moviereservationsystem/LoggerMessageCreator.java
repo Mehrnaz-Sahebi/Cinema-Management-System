@@ -13,16 +13,18 @@ public class LoggerMessageCreator {
         return entityName+" with id= "+id+" already exists.";
     }
     public static String infoAlreadyExists(String entityName, String name){
-        return entityName+" with id= "+name+" already exists.";
+        return entityName+" with name= "+name+" already exists.";
     }
     public static String errorCreating(String entityName, int id){
         return "Error creating "+entityName+" with id= "+id+ " from db.";
     }
     public static String errorCreating(String entityName, String name){
-        return "Error creating "+entityName+" with id= "+name+ " from db.";
+        return "Error creating "+entityName+" with name= "+name+ " from db.";
     }
     public static String errorUpdating(String entityName, String name){
-        return "Error updating "+entityName+" with id= "+name+ " from db.";
+        return "Error updating "+entityName+" with name= "+name+ " from db.";
+    }public static String errorDeleting(String entityName, String name){
+        return "Error deleting "+entityName+" with name/id "+name+ " from db.";
     }
     public static String errorWritingResponse(String methodName){
         return "Error writing response in method "+methodName;
