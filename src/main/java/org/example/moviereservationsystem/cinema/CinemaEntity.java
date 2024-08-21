@@ -36,7 +36,7 @@ public class CinemaEntity implements BaseEntity {
     @Transient
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany(mappedBy = "cinema")
-    private List<AuditoriumEntity> auditoria;
+    private Set<AuditoriumEntity> auditoria;
 
     @Transient
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -54,7 +54,7 @@ public class CinemaEntity implements BaseEntity {
                 '}';
     }
 
-    public CinemaEntity(String name, AddressEntity addressId, List<AuditoriumEntity> auditoria, Set<MovieEntity> movies) {
+    public CinemaEntity(String name, AddressEntity addressId, Set<AuditoriumEntity> auditoria, Set<MovieEntity> movies) {
         this.name = name;
         this.addressId = addressId;
         this.auditoria = auditoria;

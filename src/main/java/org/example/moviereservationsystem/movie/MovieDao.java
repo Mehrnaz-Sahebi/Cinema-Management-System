@@ -105,7 +105,7 @@ public class MovieDao extends BaseDao {
             Query query3 = session.createQuery(hql3);
             query3.setParameter("cinemasToSave",cinemasToSave);
             query3.setParameter("title",movieTitle);
-
+            query3.executeUpdate();
             String hql4 = "FROM MovieEntity M WHERE M.title =: title";
             Query query4 = session.createQuery(hql4);
             query4.setParameter("title",movieTitle);

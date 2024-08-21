@@ -64,4 +64,21 @@ public class ManagerController {
         }
         return auditoriumToReturn;
     }
+    @PutMapping("/add-auditorium-to-cinema/{auditoriumName}/{cinemaName}")
+    public AuditoriumEntity addAuditoriumToCinema(@PathVariable String auditoriumName, @PathVariable String cinemaName, HttpServletResponse response) {
+        AuditoriumEntity auditoriumToReturn = null;
+        try {
+            auditoriumToReturn = auditoriumService.addAuditoriumToCinema(auditoriumName,cinemaName);
+        } catch (EntityNotFoundException e) {
+            try {
+                ResponseCreator.sendNotFoundError(response, e.getMessage());
+                if (e.getMessage().equals("auditorium"))
+                    LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), auditoriumName));
+                else LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), cinemaName));
+            } catch (IOException ex) {
+                LOGGER.error(LoggerMessageCreator.errorWritingResponse("addMovieToCinema"));
+            }
+        }
+        return auditoriumToReturn;
+    }
 }
