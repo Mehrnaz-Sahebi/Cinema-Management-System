@@ -54,7 +54,7 @@ public class MovieEntity implements BaseEntity {
             inverseJoinColumns = { @JoinColumn(name = ActorColumnNames.ACTOR_ID) }
     )
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private List<ActorEntity> actors;
+    private Set<ActorEntity> actors;
 
     @ManyToMany
     @Fetch(FetchMode.JOIN)

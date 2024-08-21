@@ -30,13 +30,13 @@ public class ActorEntity implements BaseEntity {
     private String firstName;
     @Column(name = ActorColumnNames.LAST_NAME)
     private String lastName;
-
+    @Transient
     @Column(name = ActorColumnNames.MOVIES)
     @ManyToMany(mappedBy = "actors")
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<MovieEntity> movies;
 
-    public ActorEntity(String firstName, String lastName, List<MovieEntity> movies) {
+    public ActorEntity(String firstName, String lastName, Set<MovieEntity> movies) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.movies = movies;

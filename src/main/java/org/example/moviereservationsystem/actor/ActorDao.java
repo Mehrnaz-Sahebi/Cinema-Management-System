@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class ActorDao extends BaseDao {
@@ -27,7 +28,7 @@ public class ActorDao extends BaseDao {
         try {
             transaction = session.beginTransaction();
             actor = (ActorEntity) session.get(ActorEntity.class, id);
-            List<MovieEntity> movies = actor.getMovies();
+            Set<MovieEntity> movies = actor.getMovies();
             Hibernate.initialize(movies);
             transaction.commit();
         } catch (HibernateException e) {
