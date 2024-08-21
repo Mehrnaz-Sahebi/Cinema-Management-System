@@ -169,6 +169,19 @@ public class AdminController {
             }
         }
     }
+    @DeleteMapping("/delete-user/{phoneNumber}")
+    public void deleteUser(@PathVariable int phoneNumber, HttpServletResponse response) {
+        try {
+            userService.deleteUser(phoneNumber);
+        } catch (EntityNotFoundException e) {
+            try {
+                ResponseCreator.sendNotFoundError(response, "User");
+                LOGGER.info(LoggerMessageCreator.infoNotFound("User", phoneNumber));
+            } catch (IOException ex) {
+                LOGGER.error(LoggerMessageCreator.errorWritingResponse("deleteUser"));
+            }
+        }
+    }
 
 
 }

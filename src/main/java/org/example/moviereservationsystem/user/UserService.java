@@ -45,5 +45,8 @@ public class UserService extends BaseService implements UserDetailsService {
     public UserEntity changeRole(int phoneNumber, String newRole) throws EntityNotFoundException{
         return userDao.changeRole(phoneNumber, newRole);
     }
+    public void deleteUser(int phoneNumber) throws EntityNotFoundException{
+        userDao.deleteEntity("id",Integer.toString(phoneNumber),true,UserEntity.class);
+    }
 
 }
