@@ -63,4 +63,19 @@ public class CustomerController {
         }
         return schedules;
     }
+    @GetMapping("/schedules-for-cinema/{cinemaName}")
+    public List<ScheduleEntity> getSchedulesForCinema(@PathVariable String cinemaName, HttpServletResponse response) {
+        List<ScheduleEntity> schedules = null;
+        try {
+            schedules = scheduleService.getSchedulesForCinema(cinemaName);
+        } catch (EntityNotFoundException e) {
+            try {
+                ResponseCreator.sendNotFoundError(response,"cinema");
+                LOGGER.info((LoggerMessageCreator.infoNotFound("CinemaEntity", cinemaName)));
+            } catch (IOException ex) {
+                LOGGER.error(LoggerMessageCreator.errorWritingResponse("getSchedulesForCinema"));
+            }
+        }
+        return schedules;
+    }
 }

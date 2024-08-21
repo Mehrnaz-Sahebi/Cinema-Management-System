@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class ScheduleService  {
@@ -22,5 +21,8 @@ public class ScheduleService  {
     }
     public List<ScheduleEntity> getSchedulesForMovie(String movieTitle) throws EntityNotFoundException{
         return scheduleDao.getSchedulesForMovie(movieTitle);
+    }
+    public List<ScheduleEntity> getSchedulesForCinema(String cinemaName) throws EntityNotFoundException{
+        return scheduleDao.getSchedulesForCinema(cinemaName);
     }
 }

@@ -123,5 +123,33 @@ public class ScheduleDao extends BaseDao {
         }
         return (List<ScheduleEntity>) results2;
     }
+    public List<ScheduleEntity> getSchedulesForCinema(String cinemaName) throws  EntityNotFoundException{
+        Session session = getSessionFactory().openSession();
+        Transaction transaction = null;
+        List results2 = null;
+        try {
+            transaction = session.beginTransaction();
+            String hql1 = "FROM CinemaEntity C WHERE C.name =: name";
+            Query query1 = session.createQuery(hql1);
+            query1.setParameter("name",cinemaName);
+            List results1 = query1.list();
+            if (results1.isEmpty()) {
+                throw new EntityNotFoundException();
+            }
+            CinemaEntity cinema = (CinemaEntity) results1.get(0);
+            String hql2 = "FROM ScheduleEntity S WHERE S.auditorium.cinema =: cinema";
+            Query query2 = session.createQuery(hql2);
+            query2.setParameter("cinema",cinema);
+            results2 = query2.list();
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) transaction.rollback();
+            LOGGER.error(LoggerMessageCreator.errorGettingAllWith("ScheduleEntity","CinemaName",cinemaName), e);
+            return null;
+        } finally {
+            session.close();
+        }
+        return (List<ScheduleEntity>) results2;
+    }
 
 }
