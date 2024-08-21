@@ -66,5 +66,32 @@ public class ActorDao extends BaseDao {
         }
         return actor;
     }
+
+    public void deleteActor(String firstName, String lastName) throws EntityNotFoundException {
+        Session session = getSessionFactory().openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            String hql1 = "FROM ActorEntity A WHERE A.firstName =: firstName and A.lastName =: lastName";
+            Query query1 = session.createQuery(hql1);
+            query1.setParameter("firstName", firstName);
+            query1.setParameter("lastName", lastName);
+            List results1 = query1.list();
+            if (results1.isEmpty()) {
+                throw new EntityNotFoundException();
+            }
+            String hql = "delete from ActorEntity where firstName =: firstName and lastName =: lastName";
+            Query query = session.createQuery(hql);
+            query.setParameter("firstName", firstName);
+            query.setParameter("lastName", lastName);
+            query.executeUpdate();
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) transaction.rollback();
+            LOGGER.error(LoggerMessageCreator.errorDeleting("ActorEntity", firstName + " " + lastName), e);
+        } finally {
+            session.close();
+        }
+    }
 }
 

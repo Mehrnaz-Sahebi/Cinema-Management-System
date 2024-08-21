@@ -143,6 +143,19 @@ public class AdminController {
             }
         }
     }
+    @DeleteMapping("/delete-actor/{firstNAme}/{lastName}")
+    public void deleteActor(@PathVariable String firstNAme,@PathVariable String lastName, HttpServletResponse response) {
+        try {
+            actorService.deleteActor(firstNAme,lastName);
+        } catch (EntityNotFoundException e) {
+            try {
+                ResponseCreator.sendNotFoundError(response, "Actor");
+                LOGGER.info(LoggerMessageCreator.infoNotFound("Actor", firstNAme+" "+lastName));
+            } catch (IOException ex) {
+                LOGGER.error(LoggerMessageCreator.errorWritingResponse("deleteActor"));
+            }
+        }
+    }
     @DeleteMapping("/delete-movie/{movieTitle}")
     public void deleteMovie(@PathVariable String movieTitle, HttpServletResponse response) {
         try {

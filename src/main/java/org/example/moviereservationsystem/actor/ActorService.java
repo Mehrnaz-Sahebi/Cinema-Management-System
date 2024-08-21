@@ -19,6 +19,6 @@ public class ActorService extends BaseService {
         return actorDao.addActor(actor);
     }
     public void deleteActor(String firstName, String LastName) throws EntityNotFoundException{
-        //TODO
+        actorDao.deleteActor(firstName, LastName);
     }
 }
