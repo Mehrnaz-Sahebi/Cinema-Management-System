@@ -18,6 +18,7 @@ import org.hibernate.annotations.FetchMode;
 
 
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @Setter
@@ -54,6 +55,7 @@ public class MovieEntity implements BaseEntity {
     )
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<ActorEntity> actors;
+
     @ManyToMany
     @Fetch(FetchMode.JOIN)
     @JoinTable(
@@ -62,7 +64,8 @@ public class MovieEntity implements BaseEntity {
             inverseJoinColumns = { @JoinColumn(name = CinemaColumnNames.CINEMA_ID) }
     )
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private List<CinemaEntity> cinemas;
+    private Set<CinemaEntity> cinemas;
+
     @OneToMany(mappedBy = "movie")
     @Transient
     private List<ScheduleEntity> schedules;

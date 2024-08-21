@@ -107,4 +107,24 @@ public class AdminController {
         return movieToRetutn;
     }
 
+//    @PutMapping("/add-movie-to-cinema/{movieTitle}/{cinemaName}")
+    public MovieEntity addActorToMovie(@PathVariable String movieTitle, @PathVariable String cinemaName, HttpServletResponse response) {
+        MovieEntity movieToRetutn = null;
+        try {
+            movieToRetutn = movieService.addMovieToCinema(movieTitle, cinemaName);
+        } catch (EntityNotFoundException e) {
+            try {
+                ResponseCreator.sendNotFoundError(response, e.getMessage());
+                if (e.getMessage().equals("movie"))
+                    LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), movieTitle));
+                else LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), cinemaName));
+            } catch (IOException ex) {
+                LOGGER.error(LoggerMessageCreator.errorWritingResponse("addMovieToCinema"));
+            }
+        }
+        return movieToRetutn;
+    }
+
+
+
 }

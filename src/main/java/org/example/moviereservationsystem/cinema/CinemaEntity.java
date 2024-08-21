@@ -14,6 +14,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,10 +37,11 @@ public class CinemaEntity implements BaseEntity {
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany(mappedBy = "cinema")
     private List<AuditoriumEntity> auditoria;
+
     @Transient
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @ManyToMany (mappedBy = "cinemas")
-    private List<MovieEntity> movies;
+    private Set<MovieEntity> movies;
 
     @Override
     public String toString() {
@@ -52,7 +54,7 @@ public class CinemaEntity implements BaseEntity {
                 '}';
     }
 
-    public CinemaEntity(String name, AddressEntity addressId, List<AuditoriumEntity> auditoria, List<MovieEntity> movies) {
+    public CinemaEntity(String name, AddressEntity addressId, List<AuditoriumEntity> auditoria, Set<MovieEntity> movies) {
         this.name = name;
         this.addressId = addressId;
         this.auditoria = auditoria;

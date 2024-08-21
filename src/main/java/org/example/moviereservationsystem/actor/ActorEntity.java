@@ -11,6 +11,7 @@ import org.example.moviereservationsystem.movie.MovieEntity;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @Setter
@@ -29,10 +30,11 @@ public class ActorEntity implements BaseEntity {
     private String firstName;
     @Column(name = ActorColumnNames.LAST_NAME)
     private String lastName;
+
     @Column(name = ActorColumnNames.MOVIES)
     @ManyToMany(mappedBy = "actors")
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private List<MovieEntity> movies;
+    private Set<MovieEntity> movies;
 
     public ActorEntity(String firstName, String lastName, List<MovieEntity> movies) {
         this.firstName = firstName;

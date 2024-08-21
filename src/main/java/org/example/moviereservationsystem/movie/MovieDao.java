@@ -16,7 +16,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class MovieDao extends BaseDao {
@@ -31,7 +33,7 @@ public class MovieDao extends BaseDao {
             movie = (MovieEntity) session.get(MovieEntity.class, id);
             List<ActorEntity> actors = movie.getActors();
             Hibernate.initialize(actors);
-            List<CinemaEntity> cinemas = movie.getCinemas();
+            Set<CinemaEntity> cinemas = movie.getCinemas();
             Hibernate.initialize(cinemas);
             transaction.commit();
         } catch (HibernateException e) {
@@ -93,9 +95,9 @@ public class MovieDao extends BaseDao {
                 throw new EntityNotFoundException("cinema");
             }
             CinemaEntity cinemaToAdd = (CinemaEntity) results2.get(0);
-            List<CinemaEntity> cinemasToSave = movieToReturn.getCinemas();
+            Set<CinemaEntity> cinemasToSave = movieToReturn.getCinemas();
             if (cinemasToSave == null){
-                cinemasToSave = new ArrayList<>();
+                cinemasToSave = new HashSet<>();
             }
             cinemasToSave.add(cinemaToAdd);
 
