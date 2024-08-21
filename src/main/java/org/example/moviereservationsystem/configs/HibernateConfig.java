@@ -54,8 +54,8 @@ public class HibernateConfig {
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/movie-reservation");
         dataSource.setUsername("root");
-//        dataSource.setPassword("root");
-        dataSource.setPassword("Mehrnaz@1383#");
+        dataSource.setPassword("root");
+//        dataSource.setPassword("Mehrnaz@1383#");
         return dataSource;
     }
 //    @Bean

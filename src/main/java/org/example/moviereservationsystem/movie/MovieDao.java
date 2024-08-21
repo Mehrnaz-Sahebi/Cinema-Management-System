@@ -28,25 +28,11 @@ public class MovieDao extends BaseDao {
         MovieEntity movie = null;
         try {
             transaction = session.beginTransaction();
-//                 for when we have cache
             movie = (MovieEntity) session.get(MovieEntity.class, id);
             List<ActorEntity> actors = movie.getActors();
             Hibernate.initialize(actors);
             List<CinemaEntity> cinemas = movie.getCinemas();
             Hibernate.initialize(cinemas);
-
-
-//            String hql = "SELECT M.actors FROM  MovieEntity M WHERE M.id = :id";
-//            Query query = session.createQuery(hql);
-//            query.setParameter("id", id);
-//            List results = query.list();
-//            movie.setActors(results);
-//            String hql2 = "SELECT M.cinemas FROM  MovieEntity M WHERE M.id = :id";
-//            Query query2 = session.createQuery(hql2);
-//            query2.setParameter("id", id);
-//            List results2 = query2.list();
-//            movie.setCinemas(results2);
-
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();
@@ -60,29 +46,6 @@ public class MovieDao extends BaseDao {
         return movie;
     }
 
-    public MovieEntity addMovie(MovieEntity movie) throws EntityExistsException {
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
-        try {
-            transaction = session.beginTransaction();
-            String hql1 = "FROM MovieEntity M WHERE M.title =: title";
-            Query query1 = session.createQuery(hql1);
-            query1.setParameter("title", movie.getTitle());
-            List results1 = query1.list();
-            if (!results1.isEmpty()) {
-                throw new EntityExistsException();
-            }
-            session.persist(movie);
-            transaction.commit();
-        } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorCreating("movie", movie.getTitle()), e);
-            return null;
-        } finally {
-            session.close();
-        }
-        return movie;
-    }
     public MovieEntity addMovie(MovieEntity movie) throws EntityExistsException{
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;
@@ -112,19 +75,16 @@ public class MovieDao extends BaseDao {
         MovieEntity movieToReturn = null;
         try {
             transaction = session.beginTransaction();
-            String hql1 = "SELECT M.cinemas FROM MovieEntity M WHERE M.title =: movieTitle";
+
+            String hql1 = "FROM MovieEntity M WHERE M.title =: title";
             Query query1 = session.createQuery(hql1);
-            query1.setParameter("movieTitle", movieTitle);
+            query1.setParameter("title", movieTitle);
             List results1 = query1.list();
             if (results1.isEmpty()) {
                 throw new EntityNotFoundException("movie");
             }
-            List<CinemaEntity> cinemasToSave = null;
-            if ((List<CinemaEntity>)results1.get(0) == null){
-                cinemasToSave = new ArrayList<>();
-            } else {
-                cinemasToSave = (List<CinemaEntity>) results1.get(0);
-            }
+            movieToReturn = (MovieEntity) results1.get(0);
+
             String hql2 = "FROM CinemaEntity C WHERE C.name =: cinemaName";
             Query query2 = session.createQuery(hql2);
             query2.setParameter("cinemaName",cinemaName);
@@ -132,12 +92,18 @@ public class MovieDao extends BaseDao {
             if (results2.isEmpty()){
                 throw new EntityNotFoundException("cinema");
             }
-            cinemasToSave.add((CinemaEntity) results2.get(0));
+            CinemaEntity cinemaToAdd = (CinemaEntity) results2.get(0);
+            List<CinemaEntity> cinemasToSave = movieToReturn.getCinemas();
+            if (cinemasToSave == null){
+                cinemasToSave = new ArrayList<>();
+            }
+            cinemasToSave.add(cinemaToAdd);
+
             String hql3 = "UPDATE MovieEntity M SET M.cinemas =: cinemasToSave WHERE M.title =: title";
             Query query3 = session.createQuery(hql3);
             query3.setParameter("cinemasToSave",cinemasToSave);
             query3.setParameter("title",movieTitle);
-            List results3 = query3.list();
+
             String hql4 = "FROM MovieEntity M WHERE M.title =: title";
             Query query4 = session.createQuery(hql4);
             query4.setParameter("title",movieTitle);
