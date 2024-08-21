@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.jws.soap.SOAPBinding;
+
 @Service
 public class UserService extends BaseService implements UserDetailsService {
     @Autowired
@@ -39,6 +41,9 @@ public class UserService extends BaseService implements UserDetailsService {
         UserEntity userToReturn = null;
         userToReturn = userDao.addEntity(userEntity);
         return userToReturn;
+    }
+    public UserEntity changeRole(int phoneNumber, String newRole) throws EntityNotFoundException{
+        return userDao.changeRole(phoneNumber, newRole);
     }
 
 }

@@ -17,9 +17,11 @@ import org.example.moviereservationsystem.director.DirectorEntity;
 import org.example.moviereservationsystem.movie.MovieDto;
 import org.example.moviereservationsystem.movie.MovieEntity;
 import org.example.moviereservationsystem.movie.MovieService;
+import org.example.moviereservationsystem.user.UserDao;
+import org.example.moviereservationsystem.user.UserEntity;
+import org.example.moviereservationsystem.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.DirectFieldAccessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +37,8 @@ public class AdminController {
     private ActorService actorService;
     @Autowired
     private MovieService movieService;
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/add-cinema")
     public CinemaEntity addCinema(@RequestBody CinemaDto cinema, HttpServletResponse response) {
@@ -123,6 +127,24 @@ public class AdminController {
             }
         }
         return movieToRetutn;
+    }
+    @PutMapping("/change-role/{userPhoneNumber}/{role}")
+    public UserEntity makeAdmin(@PathVariable int userPhoneNumber, @PathVariable String role, HttpServletResponse response) {
+        UserEntity userToReturn = null;
+        try {
+            userToReturn = userService.changeRole(userPhoneNumber,role);
+        } catch (EntityNotFoundException e){
+            try {
+                ResponseCreator.sendNotFoundError(response, e.getMessage());
+                if (e.getMessage().equals("user"))
+                    LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), userPhoneNumber));
+                else LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), role));
+            } catch (IOException ex){
+                LOGGER.error(LoggerMessageCreator.errorWritingResponse("changeRole"));
+            }
+        }
+        if (userToReturn!=null) userToReturn.setPassword("HIDDEN");
+        return userToReturn;
     }
 
 
