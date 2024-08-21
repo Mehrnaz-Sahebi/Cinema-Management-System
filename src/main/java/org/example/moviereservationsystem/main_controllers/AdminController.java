@@ -1,4 +1,4 @@
-package org.example.moviereservationsystem.admin;
+package org.example.moviereservationsystem.main_controllers;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;

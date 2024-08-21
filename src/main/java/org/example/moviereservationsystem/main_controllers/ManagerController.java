@@ -1,4 +1,4 @@
-package org.example.moviereservationsystem.manager;
+package org.example.moviereservationsystem.main_controllers;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
@@ -6,12 +6,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.example.moviereservationsystem.LoggerMessageCreator;
 import org.example.moviereservationsystem.RequestNames;
 import org.example.moviereservationsystem.ResponseCreator;
-import org.example.moviereservationsystem.address.AddressEntity;
 import org.example.moviereservationsystem.auditorium.AuditoriumDto;
 import org.example.moviereservationsystem.auditorium.AuditoriumEntity;
 import org.example.moviereservationsystem.auditorium.AuditoriumService;
-import org.example.moviereservationsystem.cinema.CinemaDto;
-import org.example.moviereservationsystem.cinema.CinemaEntity;
 import org.example.moviereservationsystem.movie.MovieEntity;
 import org.example.moviereservationsystem.movie.MovieService;
 import org.example.moviereservationsystem.schedule.ScheduleDto;
