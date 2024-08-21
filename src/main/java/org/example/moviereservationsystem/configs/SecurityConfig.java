@@ -36,7 +36,7 @@ public class SecurityConfig {
             (requests
                     .requestMatchers("/auth")
                     .permitAll()
-                    .requestMatchers(UserController.SLASH_ADD_USER)
+                    .requestMatchers("/sign-up")
                     .permitAll()
                     .requestMatchers("/admin/**")
                     .hasAuthority(UserRoles.ADMIN)
