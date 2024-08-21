@@ -134,12 +134,25 @@ public class AdminController {
     public void deleteCinema(@PathVariable String cinemaName, HttpServletResponse response) {
         try {
             cinemaService.deleteCinema(cinemaName);
-        } catch (EntityExistsException e) {
+        } catch (EntityNotFoundException e) {
             try {
                 ResponseCreator.sendNotFoundError(response, "Cinema");
                 LOGGER.info(LoggerMessageCreator.infoNotFound("Cinema", cinemaName));
             } catch (IOException ex) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("deleteCinema"));
+            }
+        }
+    }
+    @DeleteMapping("/delete-movie/{movieTitle}")
+    public void deleteMovie(@PathVariable String movieTitle, HttpServletResponse response) {
+        try {
+            movieService.deleteMovie(movieTitle);
+        } catch (EntityNotFoundException e) {
+            try {
+                ResponseCreator.sendNotFoundError(response, "Movie");
+                LOGGER.info(LoggerMessageCreator.infoNotFound("Movie", movieTitle));
+            } catch (IOException ex) {
+                LOGGER.error(LoggerMessageCreator.errorWritingResponse("deleteMovie"));
             }
         }
     }
