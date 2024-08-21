@@ -17,7 +17,6 @@ import org.example.moviereservationsystem.director.DirectorEntity;
 import org.example.moviereservationsystem.movie.MovieDto;
 import org.example.moviereservationsystem.movie.MovieEntity;
 import org.example.moviereservationsystem.movie.MovieService;
-import org.example.moviereservationsystem.user.UserDao;
 import org.example.moviereservationsystem.user.UserEntity;
 import org.example.moviereservationsystem.user.UserService;
 import org.slf4j.Logger;
@@ -93,29 +92,13 @@ public class AdminController {
         return movieToReturn;
     }
 
-    @PutMapping("/add-movie-to-cinema/{movieTitle}/{cinemaName}")
-    public MovieEntity addMovieToCinema(@PathVariable String movieTitle, @PathVariable String cinemaName, HttpServletResponse response) {
-        MovieEntity movieToRetutn = null;
-        try {
-            movieToRetutn = movieService.addMovieToCinema(movieTitle, cinemaName);
-        } catch (EntityNotFoundException e) {
-            try {
-                ResponseCreator.sendNotFoundError(response, e.getMessage());
-                if (e.getMessage().equals("movie"))
-                    LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), movieTitle));
-                else LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), cinemaName));
-            } catch (IOException ex) {
-                LOGGER.error(LoggerMessageCreator.errorWritingResponse("addMovieToCinema"));
-            }
-        }
-        return movieToRetutn;
-    }
+
 
     @PutMapping("/add-actor-to-movie/{movieTitle}")
     public MovieEntity addActorToMovie(@PathVariable String movieTitle, @RequestBody ActorDto actor, HttpServletResponse response) {
         MovieEntity movieToRetutn = null;
         try {
-            movieToRetutn = movieService.addActorToMovie(movieTitle, new ActorEntity(actor.getFirstName(),actor.getLastName(),null));
+            movieToRetutn = movieService.addActorToMovie(movieTitle, new ActorEntity(actor.getFirstName(), actor.getLastName(), null));
         } catch (EntityNotFoundException e) {
             try {
                 ResponseCreator.sendNotFoundError(response, e.getMessage());
@@ -128,25 +111,25 @@ public class AdminController {
         }
         return movieToRetutn;
     }
+
     @PutMapping("/change-role/{userPhoneNumber}/{role}")
     public UserEntity makeAdmin(@PathVariable int userPhoneNumber, @PathVariable String role, HttpServletResponse response) {
         UserEntity userToReturn = null;
         try {
-            userToReturn = userService.changeRole(userPhoneNumber,role);
-        } catch (EntityNotFoundException e){
+            userToReturn = userService.changeRole(userPhoneNumber, role);
+        } catch (EntityNotFoundException e) {
             try {
                 ResponseCreator.sendNotFoundError(response, e.getMessage());
                 if (e.getMessage().equals("user"))
                     LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), userPhoneNumber));
                 else LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), role));
-            } catch (IOException ex){
+            } catch (IOException ex) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("changeRole"));
             }
         }
-        if (userToReturn!=null) userToReturn.setPassword("HIDDEN");
+        if (userToReturn != null) userToReturn.setPassword("HIDDEN");
         return userToReturn;
     }
-
 
 
 }

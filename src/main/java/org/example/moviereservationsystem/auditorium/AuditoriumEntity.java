@@ -8,6 +8,7 @@ import org.example.moviereservationsystem.TableNames;
 import org.example.moviereservationsystem.base.BaseEntity;
 import org.example.moviereservationsystem.cinema.CinemaColumnNames;
 import org.example.moviereservationsystem.cinema.CinemaEntity;
+import org.example.moviereservationsystem.schedule.ScheduleEntity;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.util.List;
@@ -38,7 +39,11 @@ public class AuditoriumEntity implements BaseEntity {
     @Transient
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany (mappedBy = "auditorium")
-    private List<AuditoriumEntity> auditoriums;
+    private List<ScheduleEntity> schedules;
 
-
+    public AuditoriumEntity(String name, int capacity, int rowCount) {
+        this.name = name;
+        this.capacity = capacity;
+        this.rowCount = rowCount;
+    }
 }

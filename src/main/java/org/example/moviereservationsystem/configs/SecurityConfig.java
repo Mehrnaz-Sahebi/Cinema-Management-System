@@ -41,6 +41,10 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers("/admin/**")
                     .hasAuthority(UserRoles.ADMIN)
+                    .requestMatchers("/manager/**")
+                    .hasAuthority(UserRoles.ADMIN)
+                    .requestMatchers("/manager/**")
+                    .hasAuthority(UserRoles.MANAGER)
 //                    .permitAll()
                     .anyRequest())
                     .authenticated();

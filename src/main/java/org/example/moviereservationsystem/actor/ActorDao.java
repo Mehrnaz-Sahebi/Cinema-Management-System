@@ -59,7 +59,7 @@ public class ActorDao extends BaseDao {
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorCreating("Cinema", actor.toString()), e);
+            LOGGER.error(LoggerMessageCreator.errorCreating("Actor", actor.toString()), e);
             return null;
         } finally {
             session.close();
