@@ -41,4 +41,7 @@ public class LoggerMessageCreator {
     public static String infoTicketReservationFailed(String message, int scheduleId, int phoneNumber){
         return "Ticket reservation failed: " + message + " for user "+phoneNumber+"and schedule "+scheduleId;
     }
+    public static String infoTicketCancellationFailed(String message, int ticketId){
+        return "Ticket cancellation failed: " + message + " for ticket "+ticketId;
+    }
 }

@@ -29,4 +29,10 @@ public class ResponseCreator {
         response.setStatus(HttpServletResponse.SC_CONFLICT);
         response.getWriter().write("Ticket reservation failed: "+errorMessage);
     }
+    public static void sendTicketCancellationError(HttpServletResponse response, String errorMessage) throws IOException {
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.getWriter().write("Ticket cancellation failed: "+errorMessage);
+    }
 }

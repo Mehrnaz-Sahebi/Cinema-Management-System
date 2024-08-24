@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class TicketDao extends BaseDao {
     public static final Logger LOGGER = LoggerFactory.getLogger(TicketDao.class);
@@ -38,14 +40,6 @@ public class TicketDao extends BaseDao {
             }
             schedule.setRemainingTicketCount(schedule.getRemainingTicketCount()-1);
             user.setWallet(user.getWallet()-schedule.getPrice());
-            Query query1 = session.createQuery("update ScheduleEntity S set S.remainingTicketCount =: remaining where S.id =: id");
-            query1.setParameter("id", scheduleId);
-            query1.setParameter("remaining", schedule.getRemainingTicketCount());
-            query1.executeUpdate();
-            Query query2 = session.createQuery("update UserEntity U set U.wallet =: wallet where U.id =: id");
-            query2.setParameter("id",phoneNumber);
-            query2.setParameter("wallet",user.getWallet());
-            query2.executeUpdate();
             ticket = new TicketEntity(user,schedule);
             session.persist(ticket);
             transaction.commit();
@@ -56,5 +50,50 @@ public class TicketDao extends BaseDao {
             session.close();
         }
         return ticket;
+    }
+    public List<TicketEntity> getMyTickets(int phoneNumber){
+        Session session = getSessionFactory().openSession();
+        Transaction transaction = null;
+        List<TicketEntity> tickets = null;
+        try {
+            transaction = session.beginTransaction();
+            UserEntity user = session.get(UserEntity.class,phoneNumber);
+            Query query = session.createQuery("from TicketEntity T where T.owner =: user");
+            query.setParameter("user",user);
+            tickets = (List<TicketEntity>) query.list();
+            transaction.commit();
+        } catch (HibernateException e){
+            if (transaction!=null) transaction.rollback();
+            LOGGER.error(LoggerMessageCreator.errorGettingAllWith("TicketEntity","user-id",Integer.toString(phoneNumber)));
+        } finally {
+            session.close();
+        }
+        return tickets;
+    }
+    public void cancelTicket(int phoneNumber,int ticketId) throws EntityNotFoundException, TicketException{
+        Session session = getSessionFactory().openSession();
+        Transaction transaction = null;
+        TicketEntity ticket = null;
+        try {
+            transaction = session.beginTransaction();
+            ticket = session.get(TicketEntity.class,ticketId);
+            if (ticket == null){
+                throw new EntityNotFoundException();
+            }
+            UserEntity user = ticket.getOwner();
+            if (user.getId() != phoneNumber){
+                throw new TicketException("Only the owner can delete the ticket");
+            }
+            ScheduleEntity schedule = ticket.getSchedule();
+            user.setWallet(user.getWallet()+schedule.getPrice());
+            schedule.setRemainingTicketCount(schedule.getRemainingTicketCount()+1);
+            session.delete(ticket);
+            transaction.commit();
+        } catch (HibernateException e){
+            if (transaction!=null) transaction.rollback();
+            LOGGER.error(LoggerMessageCreator.errorDeleting("TicketEntity",ticket.toString()));
+        } finally {
+            session.close();
+        }
     }
 }

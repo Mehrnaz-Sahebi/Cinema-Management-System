@@ -9,6 +9,8 @@ import org.example.moviereservationsystem.user.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TicketService extends BaseService {
     @Autowired
@@ -19,5 +21,11 @@ public class TicketService extends BaseService {
     private UserDao userDao;
     public TicketEntity reserveTicket(int scheduleId,int phoneNumber) throws EntityNotFoundException, TicketException {
         return ticketDao.reserveTicket(scheduleId,phoneNumber);
+    }
+    public List<TicketEntity> getMyTickets(int phoneNumber){
+        return ticketDao.getMyTickets(phoneNumber);
+    }
+    public void cancelTicket(int phoneNumber, int ticketId) throws EntityNotFoundException, TicketException{
+        ticketDao.cancelTicket(phoneNumber,ticketId);
     }
 }
