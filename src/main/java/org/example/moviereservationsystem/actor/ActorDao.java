@@ -47,8 +47,7 @@ public class ActorDao extends BaseDao {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            String hql1 = "FROM ActorEntity A WHERE A.firstName =: firstName and A.lastName =: lastName";
-            Query query1 = session.createQuery(hql1);
+            Query query1 = session.createQuery("FROM ActorEntity A WHERE A.firstName =: firstName and A.lastName =: lastName");
             query1.setParameter("lastName", actor.getLastName());
             query1.setParameter("firstName", actor.getFirstName());
             List results1 = query1.list();
@@ -72,16 +71,14 @@ public class ActorDao extends BaseDao {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            String hql1 = "FROM ActorEntity A WHERE A.firstName =: firstName and A.lastName =: lastName";
-            Query query1 = session.createQuery(hql1);
+            Query query1 = session.createQuery("FROM ActorEntity A WHERE A.firstName =: firstName and A.lastName =: lastName");
             query1.setParameter("firstName", firstName);
             query1.setParameter("lastName", lastName);
             List results1 = query1.list();
             if (results1.isEmpty()) {
                 throw new EntityNotFoundException();
             }
-            String hql = "delete from ActorEntity where firstName =: firstName and lastName =: lastName";
-            Query query = session.createQuery(hql);
+            Query query = session.createQuery("delete from ActorEntity where firstName =: firstName and lastName =: lastName");
             query.setParameter("firstName", firstName);
             query.setParameter("lastName", lastName);
             query.executeUpdate();
