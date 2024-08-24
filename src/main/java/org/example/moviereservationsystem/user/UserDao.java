@@ -15,11 +15,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserDao extends BaseDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDao.class);
+
     public UserEntity getById(int id) throws EntityNotFoundException {
         return super.getById(id, UserEntity.class);
     }
+
     public UserEntity changeRole(int phoneNumber, String role) throws EntityNotFoundException {
-        if (!role.equals("ADMIN")&&!role.equals("CUSTOMER")&&!role.equals("MANAGER")) {
+        if (!role.equals(UserRoles.ADMIN) && !role.equals(UserRoles.CUSTOMER) && !role.equals(UserRoles.MANAGER)) {
             throw new EntityNotFoundException("role");
         }
         Session session = getSessionFactory().openSession();
@@ -27,20 +29,15 @@ public class UserDao extends BaseDao {
         UserEntity userToReturn = null;
         try {
             transaction = session.beginTransaction();
-            if (session.get(UserEntity.class, phoneNumber)==null){
+            userToReturn = session.get(UserEntity.class, phoneNumber);
+            if (userToReturn == null) {
                 throw new EntityNotFoundException("user");
             }
-            String hql1 = "UPDATE UserEntity SET role = :role WHERE id = :id";
-            Query query1 = session.createQuery(hql1);
-            query1.setParameter("role", role);
-            query1.setParameter("id", phoneNumber);
-            query1.executeUpdate();
-
-            userToReturn = (UserEntity) session.get(UserEntity.class, phoneNumber);
+            userToReturn.setRole(role);
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorUpdating("User", Integer.toString(phoneNumber)), e);
+            LOGGER.error(LoggerMessageCreator.errorUpdating("UserEntity", Integer.toString(phoneNumber)), e);
             e.printStackTrace();
         } finally {
             session.close();

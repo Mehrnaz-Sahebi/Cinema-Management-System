@@ -19,25 +19,27 @@ public class UserController {
     private UserService userService;
     public final static Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
-    @GetMapping(SLASH_USER_SLASH +"{id}")
+    @GetMapping(SLASH_USER_SLASH + "{id}")
     public UserEntity getUser(@PathVariable int id, HttpServletResponse response) {
         UserEntity user = null;
         try {
             user = userService.getById(id);
         } catch (EntityNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.info(LoggerMessageCreator.infoNotFound("User", id));
+            LOGGER.info(LoggerMessageCreator.infoNotFound("UserEntity", id));
         }
         return user;
     }
+
     @PostMapping(SLASH_ADD_USER)
     public UserEntity addUser(@RequestBody UserEntity user, HttpServletResponse response) {
         UserEntity userToReturn = null;
         try {
             userToReturn = userService.addUser(user);
-        }catch (EntityExistsException e){
+        } catch (EntityExistsException e) {
             response.setStatus(HttpServletResponse.SC_CONFLICT);
-            LOGGER.info(LoggerMessageCreator.infoAlreadyExists("User", user.getId()));
-        } return userToReturn;
+            LOGGER.info(LoggerMessageCreator.infoAlreadyExists("UserEntity", user.getId()));
+        }
+        return userToReturn;
     }
 }

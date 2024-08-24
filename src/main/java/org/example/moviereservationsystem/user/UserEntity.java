@@ -21,22 +21,29 @@ import java.util.Set;
 public class UserEntity implements BaseEntity {
     @Id
     //phoneNumber
-    @Column (name = UserColumnNames.USER_ID, nullable = false)
+    @Column(name = UserColumnNames.USER_ID, nullable = false)
     private int id;
-    @Column (name = UserColumnNames.FIRST_NAME)
+
+    @Column(name = UserColumnNames.FIRST_NAME)
     private String firstName;
-    @Column (name = UserColumnNames.LAST_NAME)
+
+    @Column(name = UserColumnNames.LAST_NAME)
     private String lastName;
-    @Column (name = UserColumnNames.EMAIL)
+
+    @Column(name = UserColumnNames.EMAIL)
     private String email;
-    @Column (name = UserColumnNames.PASSWORD)
+
+    @Column(name = UserColumnNames.PASSWORD)
     private String password;
-    @Column (name = UserColumnNames.ROLE)
+
+    @Column(name = UserColumnNames.ROLE)
     private String role;
+
     @Transient
     @OneToMany(mappedBy = "owner")
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<TicketEntity> tickets;
+
     @Column(name = UserColumnNames.WALLET)
     private long wallet;
 
