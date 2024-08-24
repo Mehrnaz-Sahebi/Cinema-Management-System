@@ -33,10 +33,10 @@ public class HibernateConfig {
         hibernateProperties.put("hibernate.show_sql", "true");
         hibernateProperties.put("hibernate.hbm2ddl.auto", "update");
         //TODO cache?
-        hibernateProperties.put("hibernate.cache.use_second_level_cache","true");
-        hibernateProperties.put("hibernate.cache.region.factory_class","org.hibernate.cache.jcache.JCacheRegionFactory");
-        hibernateProperties.put("hibernate.cache.provider_class","org.hibernate.cache.JCacheProvider");
-        hibernateProperties.put("hibernate.javax.cache.missing_cache_strategy","create");
+        hibernateProperties.put("hibernate.cache.use_second_level_cache", "true");
+        hibernateProperties.put("hibernate.cache.region.factory_class", "org.hibernate.cache.jcache.JCacheRegionFactory");
+        hibernateProperties.put("hibernate.cache.provider_class", "org.hibernate.cache.JCacheProvider");
+        hibernateProperties.put("hibernate.javax.cache.missing_cache_strategy", "create");
         em.setJpaProperties(hibernateProperties);
         return em;
     }

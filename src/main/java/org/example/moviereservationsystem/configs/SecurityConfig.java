@@ -29,26 +29,27 @@ public class SecurityConfig {
     private MyPasswordEncoder passwordEncoder;
     @Autowired
     private UserService userService;
+
     @Bean
-    public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests((requests) -> {
-            (requests
-                    .requestMatchers("/auth")
-                    .permitAll()
-                    .requestMatchers("/sign-up")
-                    .permitAll()
-                    .requestMatchers("/admin/**")
-                    .hasAuthority(UserRoles.ADMIN)
-                    .requestMatchers("/manager/**")
-                    .hasAuthority(UserRoles.ADMIN)
-                    .requestMatchers("/manager/**")
-                    .hasAuthority(UserRoles.MANAGER)
+                    (requests
+                            .requestMatchers("/auth")
+                            .permitAll()
+                            .requestMatchers("/sign-up")
+                            .permitAll()
+                            .requestMatchers("/admin/**")
+                            .hasAuthority(UserRoles.ADMIN)
+                            .requestMatchers("/manager/**")
+                            .hasAuthority(UserRoles.ADMIN)
+                            .requestMatchers("/manager/**")
+                            .hasAuthority(UserRoles.MANAGER)
 //                    .permitAll()
-                    .anyRequest())
-                    .authenticated();
+                            .anyRequest())
+                            .authenticated();
 //                    .permitAll();
-        })
+                })
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .authenticationProvider(authenticationProvider())
                 .sessionManagement(
@@ -56,8 +57,9 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable());
         http.formLogin(Customizer.withDefaults());
-        return (SecurityFilterChain)http.build();
+        return (SecurityFilterChain) http.build();
     }
+
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
