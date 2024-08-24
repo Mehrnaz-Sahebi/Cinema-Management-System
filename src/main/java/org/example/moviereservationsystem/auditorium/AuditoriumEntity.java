@@ -12,6 +12,7 @@ import org.example.moviereservationsystem.schedule.ScheduleEntity;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.util.List;
+import java.util.Set;
 
 
 @NoArgsConstructor
@@ -43,7 +44,7 @@ public class AuditoriumEntity implements BaseEntity {
     @Transient
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany(mappedBy = "auditorium")
-    private List<ScheduleEntity> schedules;
+    private Set<ScheduleEntity> schedules;
 
     public AuditoriumEntity(String name, int capacity, int rowCount) {
         this.name = name;

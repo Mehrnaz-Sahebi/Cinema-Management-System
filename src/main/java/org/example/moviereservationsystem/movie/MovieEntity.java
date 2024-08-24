@@ -76,7 +76,7 @@ public class MovieEntity implements BaseEntity {
 
     @OneToMany(mappedBy = "movie")
     @Transient
-    private List<ScheduleEntity> schedules;
+    private Set<ScheduleEntity> schedules;
 
 
     @Override
