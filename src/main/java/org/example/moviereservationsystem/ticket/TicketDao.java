@@ -18,7 +18,8 @@ import java.util.List;
 @Repository
 public class TicketDao extends BaseDao {
     public static final Logger LOGGER = LoggerFactory.getLogger(TicketDao.class);
-    public TicketEntity reserveTicket(int scheduleId,int phoneNumber) throws EntityNotFoundException, TicketException {
+
+    public TicketEntity reserveTicket(int scheduleId, int phoneNumber) throws EntityNotFoundException, TicketException {
         TicketEntity ticket = null;
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;
@@ -32,66 +33,68 @@ public class TicketDao extends BaseDao {
             if (schedule == null) {
                 throw new EntityNotFoundException("schedule");
             }
-            if (schedule.getRemainingTicketCount()<=0){
+            if (schedule.getRemainingTicketCount() <= 0) {
                 throw new TicketException("ticket remaining count is zero");
             }
-            if (schedule.getPrice()>user.getWallet()){
+            if (schedule.getPrice() > user.getWallet()) {
                 throw new TicketException("not enough money for buying the ticket");
             }
-            schedule.setRemainingTicketCount(schedule.getRemainingTicketCount()-1);
-            user.setWallet(user.getWallet()-schedule.getPrice());
-            ticket = new TicketEntity(user,schedule);
+            schedule.setRemainingTicketCount(schedule.getRemainingTicketCount() - 1);
+            user.setWallet(user.getWallet() - schedule.getPrice());
+            ticket = new TicketEntity(user, schedule);
             session.persist(ticket);
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorCreating("TicketEntity",ticket.toString()));
+            LOGGER.error(LoggerMessageCreator.errorCreating("TicketEntity", ticket.toString()));
         } finally {
             session.close();
         }
         return ticket;
     }
-    public List<TicketEntity> getMyTickets(int phoneNumber){
+
+    public List<TicketEntity> getMyTickets(int phoneNumber) {
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;
         List<TicketEntity> tickets = null;
         try {
             transaction = session.beginTransaction();
-            UserEntity user = session.get(UserEntity.class,phoneNumber);
+            UserEntity user = session.get(UserEntity.class, phoneNumber);
             Query query = session.createQuery("from TicketEntity T where T.owner =: user");
-            query.setParameter("user",user);
+            query.setParameter("user", user);
             tickets = (List<TicketEntity>) query.list();
             transaction.commit();
-        } catch (HibernateException e){
-            if (transaction!=null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorGettingAllWith("TicketEntity","user-id",Integer.toString(phoneNumber)));
+        } catch (HibernateException e) {
+            if (transaction != null) transaction.rollback();
+            LOGGER.error(LoggerMessageCreator.errorGettingAllWith("TicketEntity", "user-id", Integer.toString(phoneNumber)));
         } finally {
             session.close();
         }
         return tickets;
     }
-    public void cancelTicket(int phoneNumber,int ticketId) throws EntityNotFoundException, TicketException{
+
+    public void cancelTicket(int phoneNumber, int ticketId) throws EntityNotFoundException, TicketException {
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;
         TicketEntity ticket = null;
         try {
             transaction = session.beginTransaction();
-            ticket = session.get(TicketEntity.class,ticketId);
-            if (ticket == null){
+            ticket = session.get(TicketEntity.class, ticketId);
+            if (ticket == null) {
                 throw new EntityNotFoundException();
             }
             UserEntity user = ticket.getOwner();
-            if (user.getId() != phoneNumber){
+            if (user.getId() != phoneNumber) {
                 throw new TicketException("Only the owner can delete the ticket");
             }
             ScheduleEntity schedule = ticket.getSchedule();
-            user.setWallet(user.getWallet()+schedule.getPrice());
-            schedule.setRemainingTicketCount(schedule.getRemainingTicketCount()+1);
+            user.setWallet(user.getWallet() + schedule.getPrice());
+            schedule.setRemainingTicketCount(schedule.getRemainingTicketCount() + 1);
             session.delete(ticket);
             transaction.commit();
-        } catch (HibernateException e){
-            if (transaction!=null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorDeleting("TicketEntity",ticket.toString()));
+        } catch (HibernateException e) {
+            if (transaction != null) transaction.rollback();
+            LOGGER.error(LoggerMessageCreator.errorDeleting("TicketEntity", ticket.toString()));
         } finally {
             session.close();
         }

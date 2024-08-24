@@ -25,9 +25,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class TicketEntity implements BaseEntity {
     @Id
-    @Column(name = TicketColumnNames.TICKET_ID , nullable = false)
+    @Column(name = TicketColumnNames.TICKET_ID, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @ManyToOne
     @JoinColumn(name = ScheduleColumnNames.SCHEDULE_ID)
     private ScheduleEntity schedule;
