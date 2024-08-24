@@ -42,8 +42,8 @@ public class ManagerController {
             try {
                 ResponseCreator.sendNotFoundError(response, e.getMessage());
                 if (e.getMessage().equals("movie"))
-                    LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), movieTitle));
-                else LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), cinemaName));
+                    LOGGER.info(LoggerMessageCreator.infoNotFound("MovieEntity", movieTitle));
+                else LOGGER.info(LoggerMessageCreator.infoNotFound("CinemaEntity", cinemaName));
             } catch (IOException ex) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("addMovieToCinema"));
             }
@@ -77,8 +77,8 @@ public class ManagerController {
             try {
                 ResponseCreator.sendNotFoundError(response, e.getMessage());
                 if (e.getMessage().equals("auditorium"))
-                    LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), auditoriumName));
-                else LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), cinemaName));
+                    LOGGER.info(LoggerMessageCreator.infoNotFound("AuditoriumEntity", auditoriumName));
+                else LOGGER.info(LoggerMessageCreator.infoNotFound("CinemaEntity", cinemaName));
             } catch (IOException ex) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("addMovieToCinema"));
             }
@@ -89,7 +89,7 @@ public class ManagerController {
     @PostMapping("/add-schedule")
     public ScheduleEntity addSchedule(@RequestBody ScheduleDto schedule, HttpServletResponse response) {
         ScheduleEntity scheduleToReturn = null;
-        ScheduleEntity scheduleToSave = new ScheduleEntity(schedule.getEndingTime(), schedule.getStartingTime(), schedule.getMovie(), schedule.getAuditorium(),schedule.getPrice());
+        ScheduleEntity scheduleToSave = new ScheduleEntity(schedule.getEndingTime(), schedule.getStartingTime(), schedule.getMovie(), schedule.getAuditorium(), schedule.getPrice());
         scheduleToSave.setRemainingTicketCount(schedule.getAuditorium().getCapacity());
         try {
             scheduleToReturn = scheduleService.addSchedule(scheduleToSave);
@@ -97,15 +97,15 @@ public class ManagerController {
             try {
                 ResponseCreator.sendNotFoundError(response, e.getMessage());
                 if (e.getMessage().equals("auditorium"))
-                    LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), schedule.getAuditorium().getName()));
-                else LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), schedule.getMovie().getTitle()));
+                    LOGGER.info(LoggerMessageCreator.infoNotFound("AuditoriumEntity", schedule.getAuditorium().getName()));
+                else LOGGER.info(LoggerMessageCreator.infoNotFound("MovieEntity", schedule.getMovie().getTitle()));
             } catch (IOException ex) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("addSchedule"));
             }
-        } catch (ScheduleException e){
+        } catch (ScheduleException e) {
             try {
-                ResponseCreator.sendScheduleConflictError(response,e.getMessage());
-                LOGGER.info(LoggerMessageCreator.infoScheduleConflict(e.getMessage(),scheduleToSave.toString()));
+                ResponseCreator.sendScheduleConflictError(response, e.getMessage());
+                LOGGER.info(LoggerMessageCreator.infoScheduleConflict(e.getMessage(), scheduleToSave.toString()));
 
             } catch (IOException ex) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("addSchedule"));

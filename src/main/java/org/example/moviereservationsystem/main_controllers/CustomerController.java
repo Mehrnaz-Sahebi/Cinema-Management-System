@@ -6,9 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.moviereservationsystem.LoggerMessageCreator;
 import org.example.moviereservationsystem.ResponseCreator;
-import org.example.moviereservationsystem.address.AddressEntity;
 import org.example.moviereservationsystem.authentication.jwt.JwtUtils;
-import org.example.moviereservationsystem.cinema.CinemaEntity;
 import org.example.moviereservationsystem.schedule.ScheduleEntity;
 import org.example.moviereservationsystem.schedule.ScheduleService;
 import org.example.moviereservationsystem.ticket.TicketEntity;
@@ -25,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 public class CustomerController {
@@ -108,8 +105,8 @@ public class CustomerController {
             try {
                 ResponseCreator.sendNotFoundError(response, e.getMessage());
                 if (e.getMessage().equals("user"))
-                    LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), getPhoneNumber(request)));
-                else LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), scheduleId));
+                    LOGGER.info(LoggerMessageCreator.infoNotFound("UserEntity", getPhoneNumber(request)));
+                else LOGGER.info(LoggerMessageCreator.infoNotFound("ScheduleEntity", scheduleId));
             } catch (IOException ex) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("reserveTicket"));
             }
@@ -130,27 +127,29 @@ public class CustomerController {
         tickets = ticketService.getMyTickets(getPhoneNumber(request));
         return tickets;
     }
+
     @DeleteMapping("/cancel-ticket/{ticketId}")
-    public void cancelTicket(HttpServletRequest request, @PathVariable int ticketId, HttpServletResponse response){
+    public void cancelTicket(HttpServletRequest request, @PathVariable int ticketId, HttpServletResponse response) {
         try {
-            ticketService.cancelTicket(getPhoneNumber(request),ticketId);
-        } catch (EntityNotFoundException e){
+            ticketService.cancelTicket(getPhoneNumber(request), ticketId);
+        } catch (EntityNotFoundException e) {
             try {
-                LOGGER.info(LoggerMessageCreator.infoNotFound("TicketEntity",ticketId));
+                LOGGER.info(LoggerMessageCreator.infoNotFound("TicketEntity", ticketId));
                 ResponseCreator.sendNotFoundError(response, "ticket");
-            } catch (IOException exception){
+            } catch (IOException exception) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("cancelTicket"));
             }
-        } catch (TicketException e){
+        } catch (TicketException e) {
             try {
-                LOGGER.info(LoggerMessageCreator.infoTicketCancellationFailed(e.getMessage(),ticketId));
-                ResponseCreator.sendTicketCancellationError(response,e.getMessage());
-            } catch (IOException exception){
+                LOGGER.info(LoggerMessageCreator.infoTicketCancellationFailed(e.getMessage(), ticketId));
+                ResponseCreator.sendTicketCancellationError(response, e.getMessage());
+            } catch (IOException exception) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("cancelTicket"));
             }
         }
     }
-    public int getPhoneNumber(HttpServletRequest request){
+
+    public int getPhoneNumber(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         String jwtToken = authHeader.substring(7);
         String userPhoneNumber = jwtUtils.extractUsername(jwtToken);

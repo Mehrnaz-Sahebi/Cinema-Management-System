@@ -49,7 +49,7 @@ public class AdminController {
         } catch (EntityExistsException e) {
             try {
                 ResponseCreator.sendAlreadyExistsError(response, "cinema");
-                LOGGER.info(LoggerMessageCreator.infoAlreadyExists("cinema", cinema.getName()));
+                LOGGER.info(LoggerMessageCreator.infoAlreadyExists("CinemaEntity", cinema.getName()));
             } catch (IOException ex) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("addCinema"));
             }
@@ -66,7 +66,7 @@ public class AdminController {
         } catch (EntityExistsException e) {
             try {
                 ResponseCreator.sendAlreadyExistsError(response, "actor");
-                LOGGER.info(LoggerMessageCreator.infoAlreadyExists("actor", actor.toString()));
+                LOGGER.info(LoggerMessageCreator.infoAlreadyExists("ActorEntity", actor.toString()));
             } catch (IOException ex) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("addActor"));
             }
@@ -84,14 +84,13 @@ public class AdminController {
         } catch (EntityExistsException e) {
             try {
                 ResponseCreator.sendAlreadyExistsError(response, "movie");
-                LOGGER.info(LoggerMessageCreator.infoAlreadyExists("movie", movie.getTitle()));
+                LOGGER.info(LoggerMessageCreator.infoAlreadyExists("MovieEntity", movie.getTitle()));
             } catch (IOException ex) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("addMovie"));
             }
         }
         return movieToReturn;
     }
-
 
 
     @PutMapping("/add-actor-to-movie/{movieTitle}")
@@ -103,8 +102,9 @@ public class AdminController {
             try {
                 ResponseCreator.sendNotFoundError(response, e.getMessage());
                 if (e.getMessage().equals("movie"))
-                    LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), movieTitle));
-                else LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), actor.toString()));
+                    LOGGER.info(LoggerMessageCreator.infoNotFound("MovieEntity", movieTitle));
+                else
+                    LOGGER.info(LoggerMessageCreator.infoNotFound("ActorEntity", actor.toString()));
             } catch (IOException ex) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("addActorToMovie"));
             }
@@ -121,7 +121,7 @@ public class AdminController {
             try {
                 ResponseCreator.sendNotFoundError(response, e.getMessage());
                 if (e.getMessage().equals("user"))
-                    LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), userPhoneNumber));
+                    LOGGER.info(LoggerMessageCreator.infoNotFound("UserEntity", userPhoneNumber));
                 else LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), role));
             } catch (IOException ex) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("changeRole"));
@@ -130,53 +130,57 @@ public class AdminController {
         if (userToReturn != null) userToReturn.setPassword("HIDDEN");
         return userToReturn;
     }
+
     @DeleteMapping("/delete-cinema/{cinemaName}")
     public void deleteCinema(@PathVariable String cinemaName, HttpServletResponse response) {
         try {
             cinemaService.deleteCinema(cinemaName);
         } catch (EntityNotFoundException e) {
             try {
-                ResponseCreator.sendNotFoundError(response, "Cinema");
-                LOGGER.info(LoggerMessageCreator.infoNotFound("Cinema", cinemaName));
+                ResponseCreator.sendNotFoundError(response, "cinema");
+                LOGGER.info(LoggerMessageCreator.infoNotFound("CinemaEntity", cinemaName));
             } catch (IOException ex) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("deleteCinema"));
             }
         }
     }
+
     @DeleteMapping("/delete-actor/{firstNAme}/{lastName}")
-    public void deleteActor(@PathVariable String firstNAme,@PathVariable String lastName, HttpServletResponse response) {
+    public void deleteActor(@PathVariable String firstNAme, @PathVariable String lastName, HttpServletResponse response) {
         try {
-            actorService.deleteActor(firstNAme,lastName);
+            actorService.deleteActor(firstNAme, lastName);
         } catch (EntityNotFoundException e) {
             try {
-                ResponseCreator.sendNotFoundError(response, "Actor");
-                LOGGER.info(LoggerMessageCreator.infoNotFound("Actor", firstNAme+" "+lastName));
+                ResponseCreator.sendNotFoundError(response, "actor");
+                LOGGER.info(LoggerMessageCreator.infoNotFound("ActorEntity", firstNAme + " " + lastName));
             } catch (IOException ex) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("deleteActor"));
             }
         }
     }
+
     @DeleteMapping("/delete-movie/{movieTitle}")
     public void deleteMovie(@PathVariable String movieTitle, HttpServletResponse response) {
         try {
             movieService.deleteMovie(movieTitle);
         } catch (EntityNotFoundException e) {
             try {
-                ResponseCreator.sendNotFoundError(response, "Movie");
-                LOGGER.info(LoggerMessageCreator.infoNotFound("Movie", movieTitle));
+                ResponseCreator.sendNotFoundError(response, "movie");
+                LOGGER.info(LoggerMessageCreator.infoNotFound("MovieEntity", movieTitle));
             } catch (IOException ex) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("deleteMovie"));
             }
         }
     }
+
     @DeleteMapping("/delete-user/{phoneNumber}")
     public void deleteUser(@PathVariable int phoneNumber, HttpServletResponse response) {
         try {
             userService.deleteUser(phoneNumber);
         } catch (EntityNotFoundException e) {
             try {
-                ResponseCreator.sendNotFoundError(response, "User");
-                LOGGER.info(LoggerMessageCreator.infoNotFound("User", phoneNumber));
+                ResponseCreator.sendNotFoundError(response, "user");
+                LOGGER.info(LoggerMessageCreator.infoNotFound("UserEntity", phoneNumber));
             } catch (IOException ex) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("deleteUser"));
             }
