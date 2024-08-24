@@ -13,10 +13,15 @@ import org.example.moviereservationsystem.ticket.TicketException;
 import org.example.moviereservationsystem.ticket.TicketService;
 import org.example.moviereservationsystem.user.UserDto;
 import org.example.moviereservationsystem.user.UserEntity;
+import org.example.moviereservationsystem.user.UserEntityDetails;
 import org.example.moviereservationsystem.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -30,7 +35,8 @@ public class CustomerController {
     private UserService userService;
     @Autowired
     private ScheduleService scheduleService;
-
+    @Autowired
+    private JwtDecoder jwtDecoder;
     @Autowired
     private TicketService ticketService;
 
@@ -150,8 +156,9 @@ public class CustomerController {
     public int getPhoneNumber(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         String jwtToken = authHeader.substring(7);
-//        String userPhoneNumber = jwtUtils.extractUsername(jwtToken);
-//        return Integer.parseInt(userPhoneNumber);
-    return 2;
+        Jwt jwt = jwtDecoder.decode(jwtToken);
+        String userPhoneNumber = jwt.getSubject();
+        System.out.println(userPhoneNumber);
+        return Integer.parseInt(userPhoneNumber);
     }
 }

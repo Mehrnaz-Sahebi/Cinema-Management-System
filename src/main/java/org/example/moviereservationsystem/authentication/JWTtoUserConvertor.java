@@ -26,14 +26,11 @@ public class JWTtoUserConvertor implements Converter<Jwt, UsernamePasswordAuthen
         return new UsernamePasswordAuthenticationToken(user, source, extractAuthorities(source));
     }
     private List<GrantedAuthority> extractAuthorities(Jwt jwt) {
-        // Assuming your JWT contains a 'roles' claim that is a list of strings
         Collection<String> roles = jwt.getClaim("roles");
 
         if (roles == null) {
             roles = Collections.emptyList();
         }
-
-        // Convert roles to GrantedAuthority
         return roles.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());

@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthenticationController {
     @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
     private UserService userService;
     @Autowired
     private TokenGenerator tokenGenerator;
@@ -30,15 +28,14 @@ public class AuthenticationController {
     private DaoAuthenticationProvider authenticationProvider;
     public static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
     @PostMapping
-    public ResponseEntity<Token> authenticate(@RequestBody AuthenticationRequest request){
-//        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getPhoneNumber(),request.getPassword()));
+    public ResponseEntity<Object> authenticate(@RequestBody AuthenticationRequest request){
         Authentication authentication = authenticationProvider.authenticate(UsernamePasswordAuthenticationToken.unauthenticated(request.getPhoneNumber(), request.getPassword()));
 
         UserEntityDetails userEntityDetails = (UserEntityDetails) userService.loadUserByUsername(request.getPhoneNumber());
-//        if(userEntityDetails != null){
+        if(userEntityDetails != null){
             return ResponseEntity.ok(tokenGenerator.createToken(authentication));
-//        }
-//        LOGGER.info("Authentication failed for phone number " + request.getPhoneNumber() + "and password " + request.getPassword());
-//        return ResponseEntity.status(400).body("Invalid phone number or password");
+        }
+        LOGGER.info("Authentication failed for phone number " + request.getPhoneNumber() + "and password " + request.getPassword());
+        return ResponseEntity.status(400).body("Invalid phone number or password");
     }
 }
