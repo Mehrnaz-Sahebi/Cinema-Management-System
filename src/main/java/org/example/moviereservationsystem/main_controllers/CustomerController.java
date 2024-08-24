@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.moviereservationsystem.LoggerMessageCreator;
 import org.example.moviereservationsystem.ResponseCreator;
-import org.example.moviereservationsystem.authentication.jwt.JwtUtils;
 import org.example.moviereservationsystem.schedule.ScheduleEntity;
 import org.example.moviereservationsystem.schedule.ScheduleService;
 import org.example.moviereservationsystem.ticket.TicketEntity;
@@ -31,8 +30,7 @@ public class CustomerController {
     private UserService userService;
     @Autowired
     private ScheduleService scheduleService;
-    @Autowired
-    private JwtUtils jwtUtils;
+
     @Autowired
     private TicketService ticketService;
 
@@ -152,7 +150,8 @@ public class CustomerController {
     public int getPhoneNumber(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         String jwtToken = authHeader.substring(7);
-        String userPhoneNumber = jwtUtils.extractUsername(jwtToken);
-        return Integer.parseInt(userPhoneNumber);
+//        String userPhoneNumber = jwtUtils.extractUsername(jwtToken);
+//        return Integer.parseInt(userPhoneNumber);
+    return 2;
     }
 }

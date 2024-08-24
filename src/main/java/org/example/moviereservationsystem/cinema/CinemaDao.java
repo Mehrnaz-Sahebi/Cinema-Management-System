@@ -27,7 +27,7 @@ public class CinemaDao extends BaseDao {
             transaction = session.beginTransaction();
             Query query1 = session.createQuery("FROM CinemaEntity C WHERE C.name =: name or C.addressId =: address");
             query1.setParameter("name", cinema.getName());
-            query1.setParameter("addressId", cinema.getAddressId());
+            query1.setParameter("address", cinema.getAddressId());
             List results1 = query1.list();
             if (!results1.isEmpty()) {
                 throw new EntityExistsException();

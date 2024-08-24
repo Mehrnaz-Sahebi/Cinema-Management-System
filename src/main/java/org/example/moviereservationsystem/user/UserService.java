@@ -8,12 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
 import javax.jws.soap.SOAPBinding;
 
 @Service
-public class UserService extends BaseService implements UserDetailsService {
+public class UserService extends BaseService implements UserDetailsManager {
     @Autowired
     private UserDao userDao;
 
@@ -49,4 +50,29 @@ public class UserService extends BaseService implements UserDetailsService {
         userDao.deleteEntity("id",Integer.toString(phoneNumber),true,UserEntity.class);
     }
 
+    @Override
+    public void createUser(UserDetails user) throws EntityExistsException {
+        UserEntity userToCreate = ((UserEntityDetails) user).getUserEntity();
+        addUser(userToCreate);
+    }
+
+    @Override
+    public void updateUser(UserDetails user) {
+
+    }
+
+    @Override
+    public void deleteUser(String username) {
+        deleteUser(Integer.parseInt(username));
+    }
+
+    @Override
+    public void changePassword(String oldPassword, String newPassword) {
+
+    }
+
+    @Override
+    public boolean userExists(String username) {
+        return false;
+    }
 }
