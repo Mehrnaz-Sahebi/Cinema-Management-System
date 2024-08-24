@@ -26,7 +26,7 @@ public class ScheduleController {
             schedule = scheduleService.getSchedule(id);
         } catch (EntityNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.info(LoggerMessageCreator.infoNotFound("Schedule", id));
+            LOGGER.info(LoggerMessageCreator.infoNotFound("ScheduleEntity", id));
         }
         return schedule;
     }

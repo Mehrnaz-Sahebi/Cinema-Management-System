@@ -9,16 +9,12 @@ import org.example.moviereservationsystem.TableNames;
 import org.example.moviereservationsystem.auditorium.AuditoriumColumnNames;
 import org.example.moviereservationsystem.auditorium.AuditoriumEntity;
 import org.example.moviereservationsystem.base.BaseEntity;
-import org.example.moviereservationsystem.cinema.CinemaEntity;
 import org.example.moviereservationsystem.movie.MovieColumnNames;
 import org.example.moviereservationsystem.movie.MovieEntity;
 import org.example.moviereservationsystem.ticket.TicketEntity;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
 
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.Set;
 
 @Getter
@@ -31,18 +27,24 @@ public class ScheduleEntity implements BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = ScheduleColumnNames.SCHEDULE_ID)
     private int id;
+
     @ManyToOne
     @JoinColumn(name = AuditoriumColumnNames.AUDITORIUM_ID)
     private AuditoriumEntity auditorium;
+
     @ManyToOne
     @JoinColumn(name = MovieColumnNames.MOVIE_ID)
     private MovieEntity movie;
+
     @Column(name = ScheduleColumnNames.STARTING_TIME)
     private Timestamp startingTime;
+
     @Column(name = ScheduleColumnNames.ENDING_TIME)
     private Timestamp endingTime;
+
     @Column(name = ScheduleColumnNames.REMAINING_TICKET_COUNT)
     private int remainingTicketCount;
+
     @Transient
     @OneToMany(mappedBy = "schedule")
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
