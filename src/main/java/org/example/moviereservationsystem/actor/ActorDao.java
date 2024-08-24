@@ -33,7 +33,7 @@ public class ActorDao extends BaseDao {
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorGetting("Actor", id), e);
+            LOGGER.error(LoggerMessageCreator.errorGetting("ActorEntity", id), e);
         } catch (NullPointerException | EntityNotFoundException e) {
             throw new EntityNotFoundException();
         } finally {
@@ -59,7 +59,7 @@ public class ActorDao extends BaseDao {
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorCreating("Actor", actor.toString()), e);
+            LOGGER.error(LoggerMessageCreator.errorCreating("ActorEntity", actor.toString()), e);
             return null;
         } finally {
             session.close();

@@ -26,10 +26,13 @@ public class ActorEntity implements BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = ActorColumnNames.ACTOR_ID, nullable = false)
     private int id;
-    @Column(name = ActorColumnNames.FIRST_NAME )
+
+    @Column(name = ActorColumnNames.FIRST_NAME)
     private String firstName;
+
     @Column(name = ActorColumnNames.LAST_NAME)
     private String lastName;
+
     @Transient
     @Column(name = ActorColumnNames.MOVIES)
     @ManyToMany(mappedBy = "actors")

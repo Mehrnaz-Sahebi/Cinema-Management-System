@@ -15,10 +15,12 @@ public class ActorService extends BaseService {
     public ActorEntity getById(int id) throws EntityNotFoundException {
         return actorDao.getById(id);
     }
+
     public ActorEntity addActor(ActorEntity actor) throws EntityExistsException {
         return actorDao.addActor(actor);
     }
-    public void deleteActor(String firstName, String LastName) throws EntityNotFoundException{
+
+    public void deleteActor(String firstName, String LastName) throws EntityNotFoundException {
         actorDao.deleteActor(firstName, LastName);
     }
 }

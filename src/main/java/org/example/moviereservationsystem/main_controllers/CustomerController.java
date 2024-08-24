@@ -101,24 +101,21 @@ public class CustomerController {
 
     @PostMapping("/reserve-ticket/{scheduleId}")
     public TicketEntity reserveTicket(HttpServletRequest request, @PathVariable int scheduleId, HttpServletResponse response) {
-        String authHeader = request.getHeader("Authorization");
-        String jwtToken = authHeader.substring(7);
-        String userPhoneNumber = jwtUtils.extractUsername(jwtToken);
         TicketEntity ticket = null;
         try {
-            ticket = ticketService.reserveTicket(scheduleId, Integer.parseInt(userPhoneNumber));
+            ticket = ticketService.reserveTicket(scheduleId, getPhoneNumber(request));
         } catch (EntityNotFoundException e) {
             try {
                 ResponseCreator.sendNotFoundError(response, e.getMessage());
                 if (e.getMessage().equals("user"))
-                    LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), userPhoneNumber));
+                    LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), getPhoneNumber(request)));
                 else LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), scheduleId));
             } catch (IOException ex) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("reserveTicket"));
             }
         } catch (TicketException e) {
             try {
-                LOGGER.info(LoggerMessageCreator.infoTicketReservationFailed(e.getMessage(), scheduleId, Integer.parseInt(userPhoneNumber)));
+                LOGGER.info(LoggerMessageCreator.infoTicketReservationFailed(e.getMessage(), scheduleId, getPhoneNumber(request)));
                 ResponseCreator.sendTicketReservationError(response, e.getMessage());
             } catch (IOException exception) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("reserveTicket"));
