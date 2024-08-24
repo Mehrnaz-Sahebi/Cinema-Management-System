@@ -48,6 +48,9 @@ public class ScheduleEntity implements BaseEntity {
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<TicketEntity> tickets;
 
+    @Column(name = ScheduleColumnNames.PRICE)
+    private long price;
+
     public ScheduleEntity(Timestamp endingTime, Timestamp startingTime, MovieEntity movie, AuditoriumEntity auditorium) {
         this.endingTime = endingTime;
         this.startingTime = startingTime;

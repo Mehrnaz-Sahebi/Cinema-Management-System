@@ -8,5 +8,6 @@ public interface ScheduleColumnNames {
     public static final String REMAINING_TICKET_COUNT = "remaining-ticket-count";
     public static final String STARTING_TIME = "starting-time";
     public static final String ENDING_TIME = "ending-time";
+    public static final String PRICE = "price";
 
 }

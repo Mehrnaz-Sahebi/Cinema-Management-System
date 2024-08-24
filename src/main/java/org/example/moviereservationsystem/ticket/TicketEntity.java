@@ -39,6 +39,5 @@ public class TicketEntity implements BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = UserColumnNames.USER_ID)
-    private UserEntity owner
-            ;
+    private UserEntity owner;
 }

@@ -37,6 +37,8 @@ public class UserEntity implements BaseEntity {
     @OneToMany(mappedBy = "owner")
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<TicketEntity> tickets;
+    @Column(name = UserColumnNames.CHARGE)
+    private long charge;
 
     public UserEntity(int id, String firstName, String lastName, String email, String password, String role) {
         this.id = id;
