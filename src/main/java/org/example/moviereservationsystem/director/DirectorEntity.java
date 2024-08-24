@@ -13,14 +13,17 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
 @Embeddable
 public class DirectorEntity {
+
     @Column(name = DirectorColumnNames.DIRECTOR_FIRST_NAME)
     private String firstName;
+
     @Column(name = DirectorColumnNames.DIRECTOR_LAST_NAME)
     private String lastName;
 
