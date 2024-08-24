@@ -26,19 +26,23 @@ public class AuditoriumEntity implements BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = AuditoriumColumnNames.AUDITORIUM_ID, nullable = false)
     private int id;
+
     @Column(name = AuditoriumColumnNames.NAME)
     private String name;
+
     @Column(name = AuditoriumColumnNames.CAPACITY)
     private int capacity;
+
     @Column(name = AuditoriumColumnNames.ROW_COUNT)
     private int rowCount;
 
     @ManyToOne
     @JoinColumn(name = CinemaColumnNames.CINEMA_ID)
     private CinemaEntity cinema;
+
     @Transient
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @OneToMany (mappedBy = "auditorium")
+    @OneToMany(mappedBy = "auditorium")
     private List<ScheduleEntity> schedules;
 
     public AuditoriumEntity(String name, int capacity, int rowCount) {
