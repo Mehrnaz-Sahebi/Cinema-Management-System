@@ -38,7 +38,7 @@ public class MovieDao extends BaseDao {
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorGetting("Movie", id), e);
+            LOGGER.error(LoggerMessageCreator.errorGetting("MovieEntity", id), e);
             e.printStackTrace();
         } catch (NullPointerException | EntityNotFoundException e) {
             throw new EntityNotFoundException();
@@ -53,8 +53,7 @@ public class MovieDao extends BaseDao {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            String hql1 = "FROM MovieEntity M WHERE M.title =: title";
-            Query query1 = session.createQuery(hql1);
+            Query query1 = session.createQuery("FROM MovieEntity M WHERE M.title =: title");
             query1.setParameter("title", movie.getTitle());
             List results1 = query1.list();
             if (!results1.isEmpty()) {
@@ -64,13 +63,14 @@ public class MovieDao extends BaseDao {
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorCreating("Movie", movie.getTitle()), e);
+            LOGGER.error(LoggerMessageCreator.errorCreating("MovieEntity", movie.getTitle()), e);
             return null;
         } finally {
             session.close();
         }
         return movie;
     }
+
     public MovieEntity addMovieToCinema(String movieTitle, String cinemaName) throws EntityNotFoundException {
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;
@@ -78,8 +78,7 @@ public class MovieDao extends BaseDao {
         try {
             transaction = session.beginTransaction();
 
-            String hql1 = "FROM MovieEntity M WHERE M.title =: title";
-            Query query1 = session.createQuery(hql1);
+            Query query1 = session.createQuery("FROM MovieEntity M WHERE M.title =: title");
             query1.setParameter("title", movieTitle);
             List results1 = query1.list();
             if (results1.isEmpty()) {
@@ -87,8 +86,7 @@ public class MovieDao extends BaseDao {
             }
             movieToReturn = (MovieEntity) results1.get(0);
 
-            String hql2 = "FROM CinemaEntity C WHERE C.name =: cinemaName";
-            Query query2 = session.createQuery(hql2);
+            Query query2 = session.createQuery("FROM CinemaEntity C WHERE C.name =: cinemaName");
             query2.setParameter("cinemaName",cinemaName);
             List results2 = query2.list();
             if (results2.isEmpty()){
@@ -100,21 +98,11 @@ public class MovieDao extends BaseDao {
                 cinemasToSave = new HashSet<>();
             }
             cinemasToSave.add(cinemaToAdd);
-
-            String hql3 = "UPDATE MovieEntity M SET M.cinemas =: cinemasToSave WHERE M.title =: title";
-            Query query3 = session.createQuery(hql3);
-            query3.setParameter("cinemasToSave",cinemasToSave);
-            query3.setParameter("title",movieTitle);
-            query3.executeUpdate();
-            String hql4 = "FROM MovieEntity M WHERE M.title =: title";
-            Query query4 = session.createQuery(hql4);
-            query4.setParameter("title",movieTitle);
-            List results4 = query4.getResultList();
-            movieToReturn = (MovieEntity) results4.get(0);
+            movieToReturn.setCinemas(cinemasToSave);
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorUpdating("movie", movieTitle), e);
+            LOGGER.error(LoggerMessageCreator.errorUpdating("MovieEntity", movieTitle), e);
             return null;
         } finally {
             session.close();
@@ -128,8 +116,7 @@ public class MovieDao extends BaseDao {
         try {
             transaction = session.beginTransaction();
 
-            String hql1 = "FROM MovieEntity M WHERE M.title =: title";
-            Query query1 = session.createQuery(hql1);
+            Query query1 = session.createQuery("FROM MovieEntity M WHERE M.title =: title");
             query1.setParameter("title", movieTitle);
             List results1 = query1.list();
             if (results1.isEmpty()) {
@@ -137,8 +124,7 @@ public class MovieDao extends BaseDao {
             }
             movieToReturn = (MovieEntity) results1.get(0);
 
-            String hql2 = "FROM ActorEntity A WHERE A.firstName =: firstName and A.lastName =: lastName";
-            Query query2 = session.createQuery(hql2);
+            Query query2 = session.createQuery("FROM ActorEntity A WHERE A.firstName =: firstName and A.lastName =: lastName");
             query2.setParameter("firstName",actor.getFirstName());
             query2.setParameter("lastName",actor.getLastName());
             List results2 = query2.list();
@@ -152,21 +138,11 @@ public class MovieDao extends BaseDao {
                 actorsToSave = new HashSet<>();
             }
             actorsToSave.add(actorToAdd);
-
-            String hql3 = "UPDATE MovieEntity M SET M.actors =: actorsToSave WHERE M.title =: title";
-            Query query3 = session.createQuery(hql3);
-            query3.setParameter("actorsToSave",actorsToSave);
-            query3.setParameter("title",movieTitle);
-            query3.executeUpdate();
-            String hql4 = "FROM MovieEntity M WHERE M.title =: title";
-            Query query4 = session.createQuery(hql4);
-            query4.setParameter("title",movieTitle);
-            List results4 = query4.getResultList();
-            movieToReturn = (MovieEntity) results4.get(0);
+            movieToReturn.setActors(actorsToSave);
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorUpdating("movie", movieTitle), e);
+            LOGGER.error(LoggerMessageCreator.errorUpdating("MovieEntity", movieTitle), e);
             return null;
         } finally {
             session.close();

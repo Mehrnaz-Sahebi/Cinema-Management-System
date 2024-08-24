@@ -19,25 +19,27 @@ public class MovieController {
     private MovieService movieService;
     public static final Logger LOGGER = LoggerFactory.getLogger(MovieController.class);
 
-    @GetMapping(SLASH_MOVIE_SLASH+"{id}")
+    @GetMapping(SLASH_MOVIE_SLASH + "{id}")
     public MovieEntity getMovie(@PathVariable int id, HttpServletResponse response) {
         MovieEntity movie = null;
         try {
             movie = movieService.getById(id);
         } catch (EntityNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            LOGGER.info(LoggerMessageCreator.infoNotFound("Movie", id));
+            LOGGER.info(LoggerMessageCreator.infoNotFound("MovieEntity", id));
         }
         return movie;
     }
+
     @PostMapping(SLASH_ADD_MOVIE)
     public MovieEntity addMovie(@RequestBody MovieEntity movie, HttpServletResponse response) {
         MovieEntity movieToReturn = null;
         try {
             movieToReturn = movieService.addMovie(movie);
-        }catch (EntityExistsException e){
+        } catch (EntityExistsException e) {
             response.setStatus(HttpServletResponse.SC_CONFLICT);
-            LOGGER.info(LoggerMessageCreator.infoAlreadyExists("Movie", movie.getId()));
-        } return movieToReturn;
+            LOGGER.info(LoggerMessageCreator.infoAlreadyExists("MovieEntity", movie.getId()));
+        }
+        return movieToReturn;
     }
 }

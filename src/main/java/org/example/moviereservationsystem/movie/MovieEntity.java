@@ -32,26 +32,34 @@ public class MovieEntity implements BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = MovieColumnNames.MOVIE_ID, nullable = false)
     private int id;
+
     @Column(name = MovieColumnNames.TITLE)
     private String title;
+
     @Column(name = MovieColumnNames.DESCRIPTION)
     private String description;
+
     @Column(name = MovieColumnNames.YEAR)
     private int year;
+
     @Embedded
     private DirectorEntity directorId;
+
     @Column(name = MovieColumnNames.GENRE)
     private String genre;
+
     @Column(name = MovieColumnNames.RATING)
     private int rating;
+
     @Column(name = MovieColumnNames.LENGTH_IN_MINUTES)
     private int lengthInMinutes;
+
     @ManyToMany
     @Fetch(FetchMode.JOIN)
     @JoinTable(
             name = "movie-actor",
-            joinColumns = { @JoinColumn(name = MovieColumnNames.MOVIE_ID) },
-            inverseJoinColumns = { @JoinColumn(name = ActorColumnNames.ACTOR_ID) }
+            joinColumns = {@JoinColumn(name = MovieColumnNames.MOVIE_ID)},
+            inverseJoinColumns = {@JoinColumn(name = ActorColumnNames.ACTOR_ID)}
     )
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<ActorEntity> actors;
@@ -60,8 +68,8 @@ public class MovieEntity implements BaseEntity {
     @Fetch(FetchMode.JOIN)
     @JoinTable(
             name = "movie-cinema",
-            joinColumns = { @JoinColumn(name = MovieColumnNames.MOVIE_ID) },
-            inverseJoinColumns = { @JoinColumn(name = CinemaColumnNames.CINEMA_ID) }
+            joinColumns = {@JoinColumn(name = MovieColumnNames.MOVIE_ID)},
+            inverseJoinColumns = {@JoinColumn(name = CinemaColumnNames.CINEMA_ID)}
     )
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<CinemaEntity> cinemas;
