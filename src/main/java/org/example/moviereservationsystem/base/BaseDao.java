@@ -20,14 +20,16 @@ public class BaseDao {
     private LocalContainerEntityManagerFactoryBean entityManagerFactory;
     @Getter
     private SessionFactory sessionFactory;
+
     @Autowired
     public void setEntityManagerFactory(LocalContainerEntityManagerFactoryBean entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
         sessionFactory = entityManagerFactory.getNativeEntityManagerFactory().unwrap(SessionFactory.class);
     }
+
     public static final Logger LOGGER = LoggerFactory.getLogger(BaseDao.class);
-    //TODO CAN YOU DO SMTH ABOUT THE LISTS?
-    public <T> T getById(int id, Class<T> entityClass) throws EntityNotFoundException{
+
+    public <T> T getById(int id, Class<T> entityClass) throws EntityNotFoundException {
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;
         T t = null;
@@ -35,15 +37,16 @@ public class BaseDao {
             transaction = session.beginTransaction();
             t = (T) session.get(entityClass, id);
             transaction.commit();
-        } catch (HibernateException e){
+        } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorGetting(entityClass.getSimpleName(),id), e);
+            LOGGER.error(LoggerMessageCreator.errorGetting(entityClass.getSimpleName(), id), e);
         } finally {
             session.close();
         }
-        if (t==null) throw new EntityNotFoundException();
+        if (t == null) throw new EntityNotFoundException();
         return t;
     }
+
     public <T extends BaseEntity> T addEntity(T entity) throws EntityExistsException {
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;
@@ -55,25 +58,24 @@ public class BaseDao {
             //TODO replace save
             session.persist(entity);
             transaction.commit();
-        }
-        catch (HibernateException e){
+        } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorCreating(entity.getClass().getSimpleName(),entity.getId()), e);
-            return null;//TODO be careful
-        }
-        finally{
+            LOGGER.error(LoggerMessageCreator.errorCreating(entity.getClass().getSimpleName(), entity.getId()), e);
+            return null;
+        } finally {
             session.close();
         }
         return entity;
     }
-    public <T extends BaseEntity> void deleteEntity(String fieldName,String fieldValue,Boolean isInt, Class<T> entityClass) throws EntityNotFoundException {
+
+    public <T extends BaseEntity> void deleteEntity(String fieldName, String fieldValue, Boolean isInt, Class<T> entityClass) throws EntityNotFoundException {
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            String hql1 = "FROM "+entityClass.getSimpleName()+" E WHERE E."+fieldName+" =: fieldValue";
+            String hql1 = "FROM " + entityClass.getSimpleName() + " E WHERE E." + fieldName + " =: fieldValue";
             Query query1 = session.createQuery(hql1);
-            if (isInt){
+            if (isInt) {
                 query1.setParameter("fieldValue", Integer.parseInt(fieldValue));
             } else {
                 query1.setParameter("fieldValue", fieldValue);
@@ -82,17 +84,15 @@ public class BaseDao {
             if (results1.isEmpty()) {
                 throw new EntityNotFoundException();
             }
-            String hql = "delete from " + entityClass.getSimpleName() + " E where E."+fieldName+ " =: fieldValue";
+            String hql = "delete from " + entityClass.getSimpleName() + " E where E." + fieldName + " =: fieldValue";
             Query query = session.createQuery(hql);
             query.setParameter("fieldValue", fieldValue);
             query.executeUpdate();
             transaction.commit();
-        }
-        catch (HibernateException e){
+        } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorDeleting(entityClass.getSimpleName(),fieldValue), e);
-        }
-        finally{
+            LOGGER.error(LoggerMessageCreator.errorDeleting(entityClass.getSimpleName(), fieldValue), e);
+        } finally {
             session.close();
         }
     }
