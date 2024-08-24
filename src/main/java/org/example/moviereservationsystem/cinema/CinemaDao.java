@@ -15,37 +15,30 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Repository
 public class CinemaDao extends BaseDao {
     public static final Logger LOGGER = LoggerFactory.getLogger(CinemaDao.class);
+
     public CinemaEntity addCinema(CinemaEntity cinema) throws EntityExistsException {
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            String hql1 = "FROM CinemaEntity C WHERE C.name =: name";
-            Query query1 = session.createQuery(hql1);
-            query1.setParameter("name",cinema.getName());
+            Query query1 = session.createQuery("FROM CinemaEntity C WHERE C.name =: name or C.addressId =: address");
+            query1.setParameter("name", cinema.getName());
+            query1.setParameter("addressId", cinema.getAddressId());
             List results1 = query1.list();
             if (!results1.isEmpty()) {
                 throw new EntityExistsException();
             }
-            String hql2 = "FROM CinemaEntity C WHERE C.addressId =: address";
-            Query query2 = session.createQuery(hql2);
-            query2.setParameter("address",cinema.getAddressId());
-            List results2 = query2.list();
-            if (!results2.isEmpty()){
-                throw new EntityExistsException();
-            }
             session.persist(cinema);
             transaction.commit();
-        }
-        catch (HibernateException e){
+        } catch (HibernateException e) {
             if (transaction != null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorCreating("Cinema",cinema.getId()), e);
+            LOGGER.error(LoggerMessageCreator.errorCreating("CinemaEntity", cinema.getId()), e);
             return null;
-        }
-        finally{
+        } finally {
             session.close();
         }
         return cinema;

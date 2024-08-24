@@ -11,9 +11,6 @@ import org.example.moviereservationsystem.auditorium.AuditoriumEntity;
 import org.example.moviereservationsystem.base.BaseEntity;
 import org.example.moviereservationsystem.movie.MovieEntity;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -29,10 +26,13 @@ public class CinemaEntity implements BaseEntity {
     @Id
     @Column(name = CinemaColumnNames.CINEMA_ID, nullable = false)
     private int id;
+
     @Column(name = CinemaColumnNames.NAME)
     private String name;
+
     @Embedded
     private AddressEntity addressId;
+
     @Transient
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany(mappedBy = "cinema")
@@ -40,7 +40,7 @@ public class CinemaEntity implements BaseEntity {
 
     @Transient
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @ManyToMany (mappedBy = "cinemas")
+    @ManyToMany(mappedBy = "cinemas")
     private Set<MovieEntity> movies;
 
     @Override
@@ -53,6 +53,7 @@ public class CinemaEntity implements BaseEntity {
                 ", movies=" + movies +
                 '}';
     }
+
     public CinemaEntity(String name, AddressEntity addressId, Set<AuditoriumEntity> auditoria, Set<MovieEntity> movies) {
         this.name = name;
         this.addressId = addressId;

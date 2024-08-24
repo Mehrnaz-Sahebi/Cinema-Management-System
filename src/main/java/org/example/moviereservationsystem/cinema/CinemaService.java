@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 public class CinemaService extends BaseService {
     @Autowired
     private CinemaDao cinemaDao;
+
     public CinemaEntity addCinema(CinemaEntity cinema) throws EntityExistsException {
         return cinemaDao.addCinema(cinema);
     }
+
     public void deleteCinema(String cinemaName) throws EntityNotFoundException {
-        cinemaDao.deleteEntity("name",cinemaName,false, CinemaEntity.class);
+        cinemaDao.deleteEntity("name", cinemaName, false, CinemaEntity.class);
     }
 }
