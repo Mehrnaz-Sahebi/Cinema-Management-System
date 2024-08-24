@@ -10,6 +10,4 @@ public interface TableNames {
     public static final String AUDITORIUM = "auditorium";
     public static final String SCHEDULE = "schedule";
     public static final String TICKET = "ticket";
-
-
 }
