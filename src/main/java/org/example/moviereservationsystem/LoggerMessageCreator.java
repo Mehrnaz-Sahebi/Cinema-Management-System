@@ -38,4 +38,7 @@ public class LoggerMessageCreator {
     public static String errorGettingAllWith(String entityName, String fieldName, String value){
         return "Error getting all "+entityName+" from db with " + fieldName + " = " + value + " from db.";
     }
+    public static String infoTicketReservationFailed(String message, int scheduleId, int phoneNumber){
+        return "Ticket reservation failed: " + message + " for user "+phoneNumber+"and schedule "+scheduleId;
+    }
 }

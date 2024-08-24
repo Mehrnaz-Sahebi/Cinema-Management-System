@@ -20,4 +20,5 @@ public class ScheduleDto {
     private MovieEntity movie;
     private Timestamp startingTime;
     private Timestamp endingTime;
+    private long price;
 }

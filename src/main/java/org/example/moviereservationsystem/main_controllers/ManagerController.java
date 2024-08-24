@@ -89,7 +89,7 @@ public class ManagerController {
     @PostMapping("/add-schedule")
     public ScheduleEntity addSchedule(@RequestBody ScheduleDto schedule, HttpServletResponse response) {
         ScheduleEntity scheduleToReturn = null;
-        ScheduleEntity scheduleToSave = new ScheduleEntity(schedule.getEndingTime(), schedule.getStartingTime(), schedule.getMovie(), schedule.getAuditorium());
+        ScheduleEntity scheduleToSave = new ScheduleEntity(schedule.getEndingTime(), schedule.getStartingTime(), schedule.getMovie(), schedule.getAuditorium(),schedule.getPrice());
         scheduleToSave.setRemainingTicketCount(schedule.getAuditorium().getCapacity());
         try {
             scheduleToReturn = scheduleService.addSchedule(scheduleToSave);

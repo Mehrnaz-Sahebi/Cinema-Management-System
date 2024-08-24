@@ -12,6 +12,7 @@ import org.example.moviereservationsystem.cinema.CinemaEntity;
 import org.example.moviereservationsystem.schedule.ScheduleEntity;
 import org.example.moviereservationsystem.schedule.ScheduleService;
 import org.example.moviereservationsystem.ticket.TicketEntity;
+import org.example.moviereservationsystem.ticket.TicketException;
 import org.example.moviereservationsystem.ticket.TicketService;
 import org.example.moviereservationsystem.user.UserDto;
 import org.example.moviereservationsystem.user.UserEntity;
@@ -92,7 +93,7 @@ public class CustomerController {
         List<ScheduleEntity> schedules = scheduleService.getSchedulesForDate(date);
         return schedules;
     }
-    //TODO reduce capacity
+
     @PostMapping("/reserve-ticket/{scheduleId}")
     public TicketEntity reserveTicket(HttpServletRequest request,@PathVariable int scheduleId, HttpServletResponse response) {
         final String authHeader = request.getHeader("Authorization");
@@ -108,6 +109,13 @@ public class CustomerController {
                     LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), userPhoneNumber));
                 else LOGGER.info(LoggerMessageCreator.infoNotFound(e.getMessage(), scheduleId));
             } catch (IOException ex) {
+                LOGGER.error(LoggerMessageCreator.errorWritingResponse("reserveTicket"));
+            }
+        } catch (TicketException e){
+            try {
+                LOGGER.info(LoggerMessageCreator.infoTicketReservationFailed(e.getMessage(),scheduleId,Integer.parseInt(userPhoneNumber)));
+                ResponseCreator.sendTicketReservationError(response, e.getMessage());
+            } catch (IOException exception){
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("reserveTicket"));
             }
         }

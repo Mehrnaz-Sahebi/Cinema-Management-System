@@ -40,4 +40,13 @@ public class TicketEntity implements BaseEntity {
     @ManyToOne
     @JoinColumn(name = UserColumnNames.USER_ID)
     private UserEntity owner;
+
+    @Override
+    public String toString() {
+        return "TicketEntity{" +
+                "id=" + id +
+                ", schedule=" + schedule.getId() +
+                ", owner=" + owner.getId() +
+                '}';
+    }
 }

@@ -17,20 +17,7 @@ public class TicketService extends BaseService {
     private ScheduleDao scheduleDao;
     @Autowired
     private UserDao userDao;
-    public TicketEntity reserveTicket(int scheduleId,int phoneNumber) throws EntityNotFoundException {
-        UserEntity user = null;
-        ScheduleEntity schedule = null;
-        try {
-            schedule = scheduleDao.getById(scheduleId,ScheduleEntity.class);
-        } catch (EntityNotFoundException e) {
-            throw new EntityNotFoundException("schedule");
-        }
-        try {
-            user = userDao.getById(phoneNumber,UserEntity.class);
-        } catch (EntityNotFoundException e) {
-            throw new EntityNotFoundException("user");
-        }
-        TicketEntity ticket = new TicketEntity(user,schedule);
-        return ticketDao.addEntity(ticket);
+    public TicketEntity reserveTicket(int scheduleId,int phoneNumber) throws EntityNotFoundException, TicketException {
+        return ticketDao.reserveTicket(scheduleId,phoneNumber);
     }
 }

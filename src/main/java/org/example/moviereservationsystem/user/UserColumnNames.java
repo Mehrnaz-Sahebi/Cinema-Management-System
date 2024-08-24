@@ -7,5 +7,5 @@ public interface UserColumnNames {
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
     public static final String ROLE = "role";
-    public static final String CHARGE = "charge";
+    public static final String WALLET = "wallet";
 }

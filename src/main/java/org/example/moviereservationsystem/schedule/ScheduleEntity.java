@@ -51,11 +51,12 @@ public class ScheduleEntity implements BaseEntity {
     @Column(name = ScheduleColumnNames.PRICE)
     private long price;
 
-    public ScheduleEntity(Timestamp endingTime, Timestamp startingTime, MovieEntity movie, AuditoriumEntity auditorium) {
+    public ScheduleEntity(Timestamp endingTime, Timestamp startingTime, MovieEntity movie, AuditoriumEntity auditorium, long price) {
         this.endingTime = endingTime;
         this.startingTime = startingTime;
         this.movie = movie;
         this.auditorium = auditorium;
+        this.price = price;
     }
 
     @Override

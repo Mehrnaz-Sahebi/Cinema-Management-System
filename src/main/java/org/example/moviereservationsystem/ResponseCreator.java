@@ -23,4 +23,10 @@ public class ResponseCreator {
         response.setStatus(HttpServletResponse.SC_CONFLICT);
         response.getWriter().write("There is a schedule conflict:"+errorMessage);
     }
+    public static void sendTicketReservationError(HttpServletResponse response, String errorMessage) throws IOException {
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(HttpServletResponse.SC_CONFLICT);
+        response.getWriter().write("Ticket reservation failed: "+errorMessage);
+    }
 }
