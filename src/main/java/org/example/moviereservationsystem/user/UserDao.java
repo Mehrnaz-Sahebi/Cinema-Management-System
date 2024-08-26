@@ -24,23 +24,16 @@ public class UserDao extends BaseDao {
         if (!role.equals(UserRoles.ADMIN) && !role.equals(UserRoles.CUSTOMER) && !role.equals(UserRoles.MANAGER)) {
             throw new EntityNotFoundException("role");
         }
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
+        Session session = getSession();
         UserEntity userToReturn = null;
         try {
-            transaction = session.beginTransaction();
             userToReturn = session.get(UserEntity.class, phoneNumber);
             if (userToReturn == null) {
                 throw new EntityNotFoundException("user");
             }
             userToReturn.setRole(role);
-            transaction.commit();
         } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
             LOGGER.error(LoggerMessageCreator.errorUpdating("UserEntity", Integer.toString(phoneNumber)), e);
-            e.printStackTrace();
-        } finally {
-            session.close();
         }
         return userToReturn;
     }
