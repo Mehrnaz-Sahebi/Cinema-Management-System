@@ -1,6 +1,5 @@
 package org.example.moviereservationsystem.main_controllers;
 
-import com.nimbusds.jose.proc.SecurityContext;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,15 +13,12 @@ import org.example.moviereservationsystem.ticket.TicketException;
 import org.example.moviereservationsystem.ticket.TicketService;
 import org.example.moviereservationsystem.user.UserDto;
 import org.example.moviereservationsystem.user.UserEntity;
-import org.example.moviereservationsystem.user.UserEntityDetails;
 import org.example.moviereservationsystem.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
 

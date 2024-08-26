@@ -1,5 +1,6 @@
 package org.example.moviereservationsystem.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +16,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
-@Getter
 @Table(name = TableNames.USER)
 @Entity
 public class UserEntity implements BaseEntity {
@@ -39,13 +39,45 @@ public class UserEntity implements BaseEntity {
     @Column(name = UserColumnNames.ROLE)
     private String role;
 
-    @Transient
     @OneToMany(mappedBy = "owner")
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<TicketEntity> tickets;
 
     @Column(name = UserColumnNames.WALLET)
     private long wallet;
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+    @JsonIgnore
+    public Set<TicketEntity> getTickets() {
+        return tickets;
+    }
+
+    public long getWallet() {
+        return wallet;
+    }
 
     public UserEntity(int id, String firstName, String lastName, String email, String password, String role) {
         this.id = id;

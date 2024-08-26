@@ -1,5 +1,6 @@
 package org.example.moviereservationsystem.movie;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ import java.util.Set;
 
 @NoArgsConstructor
 @Setter
-@Getter
+
 @Entity
 @Table(name = TableNames.MOVIE)
 @Cacheable
@@ -75,9 +76,53 @@ public class MovieEntity implements BaseEntity {
     private Set<CinemaEntity> cinemas;
 
     @OneToMany(mappedBy = "movie")
-    @Transient
     private Set<ScheduleEntity> schedules;
 
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public DirectorEntity getDirectorId() {
+        return directorId;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public int getLengthInMinutes() {
+        return lengthInMinutes;
+    }
+
+    public Set<ActorEntity> getActors() {
+        return actors;
+    }
+
+    public Set<CinemaEntity> getCinemas() {
+        return cinemas;
+    }
+    @JsonIgnore
+    public Set<ScheduleEntity> getSchedules() {
+        return schedules;
+    }
 
     @Override
     public String toString() {
@@ -103,5 +148,6 @@ public class MovieEntity implements BaseEntity {
         this.rating = rating;
         this.lengthInMinutes = lengthInMinutes;
     }
+
 }
 

@@ -1,6 +1,7 @@
 package org.example.moviereservationsystem.schedule;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import java.sql.Timestamp;
 import java.util.Set;
 
-@Getter
 @Setter
 @NoArgsConstructor
 @Entity
@@ -45,13 +45,45 @@ public class ScheduleEntity implements BaseEntity {
     @Column(name = ScheduleColumnNames.REMAINING_TICKET_COUNT)
     private int remainingTicketCount;
 
-    @Transient
     @OneToMany(mappedBy = "schedule")
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<TicketEntity> tickets;
 
     @Column(name = ScheduleColumnNames.PRICE)
     private long price;
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    public AuditoriumEntity getAuditorium() {
+        return auditorium;
+    }
+
+    public MovieEntity getMovie() {
+        return movie;
+    }
+
+    public Timestamp getStartingTime() {
+        return startingTime;
+    }
+
+    public Timestamp getEndingTime() {
+        return endingTime;
+    }
+
+    public int getRemainingTicketCount() {
+        return remainingTicketCount;
+    }
+    @JsonIgnore
+    public Set<TicketEntity> getTickets() {
+        return tickets;
+    }
+
+    public long getPrice() {
+        return price;
+    }
 
     public ScheduleEntity(Timestamp endingTime, Timestamp startingTime, MovieEntity movie, AuditoriumEntity auditorium, long price) {
         this.endingTime = endingTime;

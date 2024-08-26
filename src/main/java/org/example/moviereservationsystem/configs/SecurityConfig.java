@@ -108,8 +108,7 @@ public class SecurityConfig {
         return NimbusJwtDecoder.withPublicKey(keyUtils.getRefreshTokenPublicKey()).build();
     }
 
-    @Bean
-    @Qualifier("jwtRefreshTokenEncoder")
+    @Bean("jwtRefreshTokenEncoder")
     JwtEncoder jwtRefreshTokenEncoder() {
         JWK jwk = new RSAKey
                 .Builder(keyUtils.getRefreshTokenPublicKey())

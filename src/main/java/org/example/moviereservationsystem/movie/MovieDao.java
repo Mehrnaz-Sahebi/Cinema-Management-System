@@ -25,29 +25,17 @@ public class MovieDao extends BaseDao {
     public static final Logger LOGGER = LoggerFactory.getLogger(MovieDao.class);
 
     public MovieEntity getById(int id) throws EntityNotFoundException {
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
+        Session session = getSession();
         MovieEntity movie = null;
-        try {
-            transaction = session.beginTransaction();
             movie = (MovieEntity) session.get(MovieEntity.class, id);
             Set<ActorEntity> actors = movie.getActors();
             Hibernate.initialize(actors);
             Set<CinemaEntity> cinemas = movie.getCinemas();
             Hibernate.initialize(cinemas);
-            transaction.commit();
-        } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorGetting("MovieEntity", id), e);
-            e.printStackTrace();
-        } catch (NullPointerException | EntityNotFoundException e) {
-            throw new EntityNotFoundException();
-        } finally {
-            session.close();
-        }
+
+
         return movie;
     }
-
     public MovieEntity addMovie(MovieEntity movie) throws EntityExistsException{
         Session session = getSessionFactory().openSession();
         Transaction transaction = null;

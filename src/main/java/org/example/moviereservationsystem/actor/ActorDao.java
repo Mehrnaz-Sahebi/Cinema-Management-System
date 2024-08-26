@@ -22,31 +22,22 @@ public class ActorDao extends BaseDao {
     public static final Logger LOGGER = LoggerFactory.getLogger(ActorDao.class);
 
     public ActorEntity getById(int id) throws EntityNotFoundException {
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
+        Session session = getSession();
         ActorEntity actor = null;
         try {
-            transaction = session.beginTransaction();
             actor = (ActorEntity) session.get(ActorEntity.class, id);
-            Set<MovieEntity> movies = actor.getMovies();
-            Hibernate.initialize(movies);
-            transaction.commit();
-        } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
-            LOGGER.error(LoggerMessageCreator.errorGetting("ActorEntity", id), e);
-        } catch (NullPointerException | EntityNotFoundException e) {
-            throw new EntityNotFoundException();
-        } finally {
-            session.close();
+            if (actor == null) {
+                throw new EntityNotFoundException();
+            }
+        }catch (HibernateException e) {
+            LOGGER.error(LoggerMessageCreator.errorGetting("ActorEntity",id),e);
         }
         return actor;
     }
 
     public ActorEntity addActor(ActorEntity actor) throws EntityExistsException {
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
+        Session session = getSession();
         try {
-            transaction = session.beginTransaction();
             Query query1 = session.createQuery("FROM ActorEntity A WHERE A.firstName =: firstName and A.lastName =: lastName");
             query1.setParameter("lastName", actor.getLastName());
             query1.setParameter("firstName", actor.getFirstName());
@@ -55,22 +46,16 @@ public class ActorDao extends BaseDao {
                 throw new EntityExistsException();
             }
             session.persist(actor);
-            transaction.commit();
         } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
             LOGGER.error(LoggerMessageCreator.errorCreating("ActorEntity", actor.toString()), e);
             return null;
-        } finally {
-            session.close();
         }
         return actor;
     }
 
     public void deleteActor(String firstName, String lastName) throws EntityNotFoundException {
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
+        Session session = getSession();
         try {
-            transaction = session.beginTransaction();
             Query query1 = session.createQuery("FROM ActorEntity A WHERE A.firstName =: firstName and A.lastName =: lastName");
             query1.setParameter("firstName", firstName);
             query1.setParameter("lastName", lastName);
@@ -82,12 +67,8 @@ public class ActorDao extends BaseDao {
             query.setParameter("firstName", firstName);
             query.setParameter("lastName", lastName);
             query.executeUpdate();
-            transaction.commit();
         } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
             LOGGER.error(LoggerMessageCreator.errorDeleting("ActorEntity", firstName + " " + lastName), e);
-        } finally {
-            session.close();
         }
     }
 }
