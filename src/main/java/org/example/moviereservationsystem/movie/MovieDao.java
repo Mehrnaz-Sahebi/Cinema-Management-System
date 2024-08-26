@@ -27,94 +27,77 @@ public class MovieDao extends BaseDao {
     public MovieEntity getById(int id) throws EntityNotFoundException {
         Session session = getSession();
         MovieEntity movie = null;
-            movie = (MovieEntity) session.get(MovieEntity.class, id);
-            Set<ActorEntity> actors = movie.getActors();
-            Hibernate.initialize(actors);
-            Set<CinemaEntity> cinemas = movie.getCinemas();
-            Hibernate.initialize(cinemas);
-
-
+        movie = (MovieEntity) session.get(MovieEntity.class, id);
         return movie;
     }
-    public MovieEntity addMovie(MovieEntity movie) throws EntityExistsException{
+
+    public MovieEntity addMovie(MovieEntity movie) throws EntityExistsException {
         Session session = getSession();
-        try {
-            Query query1 = session.createQuery("FROM MovieEntity M WHERE M.title =: title");
-            query1.setParameter("title", movie.getTitle());
-            List results1 = query1.list();
-            if (!results1.isEmpty()) {
-                throw new EntityExistsException();
-            }
-            session.persist(movie);
-        } catch (HibernateException e) {
-            LOGGER.error(LoggerMessageCreator.errorCreating("MovieEntity", movie.getTitle()), e);
-            return null;
+
+        Query query1 = session.createQuery("FROM MovieEntity M WHERE M.title =: title");
+        query1.setParameter("title", movie.getTitle());
+        List results1 = query1.list();
+        if (!results1.isEmpty()) {
+            throw new EntityExistsException();
         }
+        session.persist(movie);
         return movie;
     }
 
     public MovieEntity addMovieToCinema(String movieTitle, String cinemaName) throws EntityNotFoundException {
         Session session = getSession();
         MovieEntity movieToReturn = null;
-        try {
-            Query query1 = session.createQuery("FROM MovieEntity M WHERE M.title =: title");
-            query1.setParameter("title", movieTitle);
-            List results1 = query1.list();
-            if (results1.isEmpty()) {
-                throw new EntityNotFoundException("movie");
-            }
-            movieToReturn = (MovieEntity) results1.get(0);
-
-            Query query2 = session.createQuery("FROM CinemaEntity C WHERE C.name =: cinemaName");
-            query2.setParameter("cinemaName",cinemaName);
-            List results2 = query2.list();
-            if (results2.isEmpty()){
-                throw new EntityNotFoundException("cinema");
-            }
-            CinemaEntity cinemaToAdd = (CinemaEntity) results2.get(0);
-            Set<CinemaEntity> cinemasToSave = movieToReturn.getCinemas();
-            if (cinemasToSave == null){
-                cinemasToSave = new HashSet<>();
-            }
-            cinemasToSave.add(cinemaToAdd);
-            movieToReturn.setCinemas(cinemasToSave);
-        } catch (HibernateException e) {
-            LOGGER.error(LoggerMessageCreator.errorUpdating("MovieEntity", movieTitle), e);
-            return null;
+        Query query1 = session.createQuery("FROM MovieEntity M WHERE M.title =: title");
+        query1.setParameter("title", movieTitle);
+        List results1 = query1.list();
+        if (results1.isEmpty()) {
+            throw new EntityNotFoundException("movie");
         }
+        movieToReturn = (MovieEntity) results1.get(0);
+
+        Query query2 = session.createQuery("FROM CinemaEntity C WHERE C.name =: cinemaName");
+        query2.setParameter("cinemaName", cinemaName);
+        List results2 = query2.list();
+        if (results2.isEmpty()) {
+            throw new EntityNotFoundException("cinema");
+        }
+        CinemaEntity cinemaToAdd = (CinemaEntity) results2.get(0);
+        Set<CinemaEntity> cinemasToSave = movieToReturn.getCinemas();
+        if (cinemasToSave == null) {
+            cinemasToSave = new HashSet<>();
+        }
+        cinemasToSave.add(cinemaToAdd);
+        movieToReturn.setCinemas(cinemasToSave);
         return movieToReturn;
     }
+
     public MovieEntity addActorToMovie(String movieTitle, ActorEntity actor) throws EntityNotFoundException {
         Session session = getSession();
         MovieEntity movieToReturn = null;
-        try {
-            Query query1 = session.createQuery("FROM MovieEntity M WHERE M.title =: title");
-            query1.setParameter("title", movieTitle);
-            List results1 = query1.list();
-            if (results1.isEmpty()) {
-                throw new EntityNotFoundException("movie");
-            }
-            movieToReturn = (MovieEntity) results1.get(0);
 
-            Query query2 = session.createQuery("FROM ActorEntity A WHERE A.firstName =: firstName and A.lastName =: lastName");
-            query2.setParameter("firstName",actor.getFirstName());
-            query2.setParameter("lastName",actor.getLastName());
-            List results2 = query2.list();
-            if (results2.isEmpty()){
-                throw new EntityNotFoundException("actor");
-            }
-            ActorEntity actorToAdd= (ActorEntity) results2.get(0);
-
-            Set<ActorEntity> actorsToSave = movieToReturn.getActors();
-            if (actorsToSave == null){
-                actorsToSave = new HashSet<>();
-            }
-            actorsToSave.add(actorToAdd);
-            movieToReturn.setActors(actorsToSave);
-        } catch (HibernateException e) {
-            LOGGER.error(LoggerMessageCreator.errorUpdating("MovieEntity", movieTitle), e);
-            return null;
+        Query query1 = session.createQuery("FROM MovieEntity M WHERE M.title =: title");
+        query1.setParameter("title", movieTitle);
+        List results1 = query1.list();
+        if (results1.isEmpty()) {
+            throw new EntityNotFoundException("movie");
         }
+        movieToReturn = (MovieEntity) results1.get(0);
+
+        Query query2 = session.createQuery("FROM ActorEntity A WHERE A.firstName =: firstName and A.lastName =: lastName");
+        query2.setParameter("firstName", actor.getFirstName());
+        query2.setParameter("lastName", actor.getLastName());
+        List results2 = query2.list();
+        if (results2.isEmpty()) {
+            throw new EntityNotFoundException("actor");
+        }
+        ActorEntity actorToAdd = (ActorEntity) results2.get(0);
+
+        Set<ActorEntity> actorsToSave = movieToReturn.getActors();
+        if (actorsToSave == null) {
+            actorsToSave = new HashSet<>();
+        }
+        actorsToSave.add(actorToAdd);
+        movieToReturn.setActors(actorsToSave);
         return movieToReturn;
     }
 }

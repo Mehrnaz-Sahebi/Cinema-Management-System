@@ -17,44 +17,34 @@ import java.util.List;
 public class AuditoriumDao extends BaseDao {
     public AuditoriumEntity addAuditorium(AuditoriumEntity auditorium) throws EntityExistsException {
         Session session = getSession();
-        try {
-            Query query1 = session.createQuery("FROM AuditoriumEntity A WHERE A.name =: name");
-            query1.setParameter("name", auditorium.getName());
-            List results1 = query1.list();
-            if (!results1.isEmpty()) {
-                throw new EntityExistsException();
-            }
-            session.persist(auditorium);
-        } catch (HibernateException e) {
-            LOGGER.error(LoggerMessageCreator.errorCreating("AuditoriumEntity", auditorium.getName()), e);
-            return null;
+        Query query1 = session.createQuery("FROM AuditoriumEntity A WHERE A.name =: name");
+        query1.setParameter("name", auditorium.getName());
+        List results1 = query1.list();
+        if (!results1.isEmpty()) {
+            throw new EntityExistsException();
         }
+        session.persist(auditorium);
         return auditorium;
     }
 
     public AuditoriumEntity addAuditoriumToCinema(String auditoriumName, String cinemaName) throws EntityNotFoundException {
         Session session = getSession();
         AuditoriumEntity auditoriumToReturn = null;
-        try {
-            Query query1 = session.createQuery("FROM CinemaEntity C WHERE C.name =: name");
-            query1.setParameter("name", cinemaName);
-            List results1 = query1.list();
-            if (results1.isEmpty()) {
-                throw new EntityNotFoundException("cinema");
-            }
-            CinemaEntity cinemaToSave = (CinemaEntity) results1.get(0);
-            Query query2 = session.createQuery("FROM AuditoriumEntity A WHERE A.name =: name");
-            query2.setParameter("name", auditoriumName);
-            List results2 = query2.list();
-            if (results2.isEmpty()) {
-                throw new EntityNotFoundException("auditorium");
-            }
-            auditoriumToReturn = (AuditoriumEntity) results2.get(0);
-            auditoriumToReturn.setCinema(cinemaToSave);
-        } catch (HibernateException e) {
-            LOGGER.error(LoggerMessageCreator.errorUpdating("Auditorium", auditoriumName), e);
-            return null;
+        Query query1 = session.createQuery("FROM CinemaEntity C WHERE C.name =: name");
+        query1.setParameter("name", cinemaName);
+        List results1 = query1.list();
+        if (results1.isEmpty()) {
+            throw new EntityNotFoundException("cinema");
         }
+        CinemaEntity cinemaToSave = (CinemaEntity) results1.get(0);
+        Query query2 = session.createQuery("FROM AuditoriumEntity A WHERE A.name =: name");
+        query2.setParameter("name", auditoriumName);
+        List results2 = query2.list();
+        if (results2.isEmpty()) {
+            throw new EntityNotFoundException("auditorium");
+        }
+        auditoriumToReturn = (AuditoriumEntity) results2.get(0);
+        auditoriumToReturn.setCinema(cinemaToSave);
         return auditoriumToReturn;
     }
 }
