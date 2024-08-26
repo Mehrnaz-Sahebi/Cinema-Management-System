@@ -37,10 +37,8 @@ public class MovieDao extends BaseDao {
         return movie;
     }
     public MovieEntity addMovie(MovieEntity movie) throws EntityExistsException{
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
+        Session session = getSession();
         try {
-            transaction = session.beginTransaction();
             Query query1 = session.createQuery("FROM MovieEntity M WHERE M.title =: title");
             query1.setParameter("title", movie.getTitle());
             List results1 = query1.list();
@@ -48,24 +46,17 @@ public class MovieDao extends BaseDao {
                 throw new EntityExistsException();
             }
             session.persist(movie);
-            transaction.commit();
         } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
             LOGGER.error(LoggerMessageCreator.errorCreating("MovieEntity", movie.getTitle()), e);
             return null;
-        } finally {
-            session.close();
         }
         return movie;
     }
 
     public MovieEntity addMovieToCinema(String movieTitle, String cinemaName) throws EntityNotFoundException {
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
+        Session session = getSession();
         MovieEntity movieToReturn = null;
         try {
-            transaction = session.beginTransaction();
-
             Query query1 = session.createQuery("FROM MovieEntity M WHERE M.title =: title");
             query1.setParameter("title", movieTitle);
             List results1 = query1.list();
@@ -87,23 +78,16 @@ public class MovieDao extends BaseDao {
             }
             cinemasToSave.add(cinemaToAdd);
             movieToReturn.setCinemas(cinemasToSave);
-            transaction.commit();
         } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
             LOGGER.error(LoggerMessageCreator.errorUpdating("MovieEntity", movieTitle), e);
             return null;
-        } finally {
-            session.close();
         }
         return movieToReturn;
     }
     public MovieEntity addActorToMovie(String movieTitle, ActorEntity actor) throws EntityNotFoundException {
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
+        Session session = getSession();
         MovieEntity movieToReturn = null;
         try {
-            transaction = session.beginTransaction();
-
             Query query1 = session.createQuery("FROM MovieEntity M WHERE M.title =: title");
             query1.setParameter("title", movieTitle);
             List results1 = query1.list();
@@ -127,13 +111,9 @@ public class MovieDao extends BaseDao {
             }
             actorsToSave.add(actorToAdd);
             movieToReturn.setActors(actorsToSave);
-            transaction.commit();
         } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
             LOGGER.error(LoggerMessageCreator.errorUpdating("MovieEntity", movieTitle), e);
             return null;
-        } finally {
-            session.close();
         }
         return movieToReturn;
     }
