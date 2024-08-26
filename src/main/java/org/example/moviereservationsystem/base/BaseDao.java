@@ -44,13 +44,9 @@ public class BaseDao {
     public <T> T getById(int id, Class<T> entityClass) throws EntityNotFoundException {
         Session session = getSession();
         T t = null;
-        try {
-            t = (T) session.get(entityClass, id);
-            if (t == null) {
-                throw new EntityNotFoundException();
-            }
-        } catch (HibernateException e) {
-            LOGGER.error(LoggerMessageCreator.errorGetting(entityClass.getSimpleName(),id),e);
+        t = (T) session.get(entityClass, id);
+        if (t == null) {
+            throw new EntityNotFoundException();
         }
         return t;
     }
@@ -58,38 +54,31 @@ public class BaseDao {
 
     public <T extends BaseEntity> T addEntity(T entity) throws EntityExistsException {
         Session session = getSession();
-        try {
-            if (session.get(entity.getClass(), entity.getId()) != null) {
-                throw new EntityExistsException();
-            }
-            session.persist(entity);
-        }catch (HibernateException e) {
-            LOGGER.error(LoggerMessageCreator.errorCreating(entity.getClass().getSimpleName(),entity.getId()),e);
+
+        if (session.get(entity.getClass(), entity.getId()) != null) {
+            throw new EntityExistsException();
         }
+        session.persist(entity);
         return entity;
     }
 
     public <T extends BaseEntity> void deleteEntity(String fieldName, String fieldValue, Boolean isInt, Class<T> entityClass) throws EntityNotFoundException {
         Session session = getSession();
-        try {
-            String hql1 = "FROM " + entityClass.getSimpleName() + " E WHERE E." + fieldName + " =: fieldValue";
-            Query query1 = session.createQuery(hql1);
-            if (isInt) {
-                query1.setParameter("fieldValue", Integer.parseInt(fieldValue));
-            } else {
-                query1.setParameter("fieldValue", fieldValue);
-            }
-            List results1 = query1.list();
-            if (results1.isEmpty()) {
-                throw new EntityNotFoundException();
-            }
-            String hql = "delete from " + entityClass.getSimpleName() + " E where E." + fieldName + " =: fieldValue";
-            Query query = session.createQuery(hql);
-            query.setParameter("fieldValue", fieldValue);
-            query.executeUpdate();
-        } catch (HibernateException e) {
-            LOGGER.error(LoggerMessageCreator.errorDeleting(entityClass.getSimpleName(),fieldValue),e);
+        String hql1 = "FROM " + entityClass.getSimpleName() + " E WHERE E." + fieldName + " =: fieldValue";
+        Query query1 = session.createQuery(hql1);
+        if (isInt) {
+            query1.setParameter("fieldValue", Integer.parseInt(fieldValue));
+        } else {
+            query1.setParameter("fieldValue", fieldValue);
         }
+        List results1 = query1.list();
+        if (results1.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+        String hql = "delete from " + entityClass.getSimpleName() + " E where E." + fieldName + " =: fieldValue";
+        Query query = session.createQuery(hql);
+        query.setParameter("fieldValue", fieldValue);
+        query.executeUpdate();
     }
 
     protected Session getSession() {
