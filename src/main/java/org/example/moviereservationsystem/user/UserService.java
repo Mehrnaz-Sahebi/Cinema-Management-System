@@ -47,6 +47,9 @@ public class UserService extends BaseService implements UserDetailsManager {
     public void deleteUser(int phoneNumber) throws EntityNotFoundException{
         userDao.deleteEntity("id",Integer.toString(phoneNumber),true,UserEntity.class);
     }
+    public UserEntity chargeAccount(int phoneNumber, long amount) throws EntityNotFoundException{
+        return userDao.chargeAccount(phoneNumber, amount);
+    }
 
     @Override
     public void createUser(UserDetails user) throws EntityExistsException {
@@ -73,4 +76,5 @@ public class UserService extends BaseService implements UserDetailsManager {
     public boolean userExists(String username) {
         return false;
     }
+
 }

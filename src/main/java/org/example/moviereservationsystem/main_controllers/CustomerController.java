@@ -150,10 +150,20 @@ public class CustomerController {
             }
         }
     }
-    @PutMapping("/charge-account")
-    public UserEntity chargeAccount(HttpServletRequest request, HttpServletResponse response) {
-        UserEntity user = null;
-        return user;
+    @PutMapping("/charge-account/{amount}")
+    public UserEntity chargeAccount(HttpServletRequest request,@PathVariable long amount, HttpServletResponse response) {
+        UserEntity userToReturn = null;
+        try {
+            userToReturn = userService.chargeAccount(getPhoneNumber(request), amount);
+        } catch (EntityNotFoundException e) {
+            try {
+                LOGGER.info(LoggerMessageCreator.infoNotFound("UserEntity", getPhoneNumber(request)));
+                ResponseCreator.sendNotFoundError(response,"user");
+            } catch (IOException exception) {
+                LOGGER.error(LoggerMessageCreator.errorWritingResponse("chargeAccount"));
+            }
+        }
+        return userToReturn;
     }
 
     public int getPhoneNumber(HttpServletRequest request) {

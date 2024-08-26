@@ -33,4 +33,14 @@ public class UserDao extends BaseDao {
         userToReturn.setRole(role);
         return userToReturn;
     }
+    public UserEntity chargeAccount(int phoneNumber, long amount) throws EntityNotFoundException {
+        Session session = getSession();
+        UserEntity userToReturn = null;
+        userToReturn = session.get(UserEntity.class, phoneNumber);
+        if (userToReturn == null) {
+            throw new EntityNotFoundException();
+        }
+        userToReturn.setWallet(userToReturn.getWallet() + amount);
+        return userToReturn;
+    }
 }
