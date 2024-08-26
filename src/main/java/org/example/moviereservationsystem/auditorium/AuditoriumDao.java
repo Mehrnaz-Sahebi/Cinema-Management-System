@@ -16,10 +16,8 @@ import java.util.List;
 @Repository
 public class AuditoriumDao extends BaseDao {
     public AuditoriumEntity addAuditorium(AuditoriumEntity auditorium) throws EntityExistsException {
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
+        Session session = getSession();
         try {
-            transaction = session.beginTransaction();
             Query query1 = session.createQuery("FROM AuditoriumEntity A WHERE A.name =: name");
             query1.setParameter("name", auditorium.getName());
             List results1 = query1.list();
@@ -27,23 +25,17 @@ public class AuditoriumDao extends BaseDao {
                 throw new EntityExistsException();
             }
             session.persist(auditorium);
-            transaction.commit();
         } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
             LOGGER.error(LoggerMessageCreator.errorCreating("AuditoriumEntity", auditorium.getName()), e);
             return null;
-        } finally {
-            session.close();
         }
         return auditorium;
     }
 
     public AuditoriumEntity addAuditoriumToCinema(String auditoriumName, String cinemaName) throws EntityNotFoundException {
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
+        Session session = getSession();
         AuditoriumEntity auditoriumToReturn = null;
         try {
-            transaction = session.beginTransaction();
             Query query1 = session.createQuery("FROM CinemaEntity C WHERE C.name =: name");
             query1.setParameter("name", cinemaName);
             List results1 = query1.list();
@@ -59,13 +51,9 @@ public class AuditoriumDao extends BaseDao {
             }
             auditoriumToReturn = (AuditoriumEntity) results2.get(0);
             auditoriumToReturn.setCinema(cinemaToSave);
-            transaction.commit();
         } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
             LOGGER.error(LoggerMessageCreator.errorUpdating("Auditorium", auditoriumName), e);
             return null;
-        } finally {
-            session.close();
         }
         return auditoriumToReturn;
     }
