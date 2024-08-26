@@ -22,19 +22,14 @@ public class CinemaDao extends BaseDao {
 
     public CinemaEntity addCinema(CinemaEntity cinema) throws EntityExistsException {
         Session session = getSession();
-        try {
-            Query query1 = session.createQuery("FROM CinemaEntity C WHERE C.name =: name or C.addressId =: address");
-            query1.setParameter("name", cinema.getName());
-            query1.setParameter("address", cinema.getAddressId());
-            List results1 = query1.list();
-            if (!results1.isEmpty()) {
-                throw new EntityExistsException();
-            }
-            session.persist(cinema);
-        } catch (HibernateException e) {
-            LOGGER.error(LoggerMessageCreator.errorCreating("CinemaEntity", cinema.getId()), e);
-            return null;
+        Query query1 = session.createQuery("FROM CinemaEntity C WHERE C.name =: name or C.addressId =: address");
+        query1.setParameter("name", cinema.getName());
+        query1.setParameter("address", cinema.getAddressId());
+        List results1 = query1.list();
+        if (!results1.isEmpty()) {
+            throw new EntityExistsException();
         }
+        session.persist(cinema);
         return cinema;
     }
 
