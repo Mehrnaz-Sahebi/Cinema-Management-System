@@ -30,7 +30,6 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -57,10 +56,7 @@ public class SecurityConfig {
                             .requestMatchers("/admin/**")
                             .hasAuthority(UserRoles.ADMIN)
                             .requestMatchers("/manager/**")
-                            .hasAuthority(UserRoles.ADMIN)
-                            .requestMatchers("/manager/**")
-                            .hasAuthority(UserRoles.MANAGER)
-//                    .permitAll()
+                            .hasAnyAuthority(UserRoles.ADMIN,UserRoles.MANAGER)
                             .anyRequest())
                             .authenticated();
 //                    .permitAll();
