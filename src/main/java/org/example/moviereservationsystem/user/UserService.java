@@ -50,6 +50,9 @@ public class UserService extends BaseService implements UserDetailsManager {
     public UserEntity chargeAccount(int phoneNumber, long amount) throws EntityNotFoundException{
         return userDao.chargeAccount(phoneNumber, amount);
     }
+    public UserEntity changePassword(int phoneNumber, String oldPassword, String newPassword) throws EntityNotFoundException, WrongPasswordException {
+        return userDao.changePassword(phoneNumber,oldPassword,newPassword);
+    }
 
     @Override
     public void createUser(UserDetails user) throws EntityExistsException {

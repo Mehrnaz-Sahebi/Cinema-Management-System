@@ -14,6 +14,7 @@ import org.example.moviereservationsystem.ticket.TicketService;
 import org.example.moviereservationsystem.user.UserDto;
 import org.example.moviereservationsystem.user.UserEntity;
 import org.example.moviereservationsystem.user.UserService;
+import org.example.moviereservationsystem.user.WrongPasswordException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,22 +100,22 @@ public class CustomerController {
     }
 
     @PostMapping("/reserve-ticket/{scheduleId}")
-    public TicketEntity reserveTicket(HttpServletRequest request, @PathVariable int scheduleId, HttpServletResponse response) {
+    public TicketEntity reserveTicket( @PathVariable int scheduleId, HttpServletResponse response) {
         TicketEntity ticket = null;
         try {
-            ticket = ticketService.reserveTicket(scheduleId, getPhoneNumber(request));
+            ticket = ticketService.reserveTicket(scheduleId, getPhoneNumber());
         } catch (EntityNotFoundException e) {
             try {
                 ResponseCreator.sendNotFoundError(response, e.getMessage());
                 if (e.getMessage().equals("user"))
-                    LOGGER.info(LoggerMessageCreator.infoNotFound("UserEntity", getPhoneNumber(request)));
+                    LOGGER.info(LoggerMessageCreator.infoNotFound("UserEntity", getPhoneNumber()));
                 else LOGGER.info(LoggerMessageCreator.infoNotFound("ScheduleEntity", scheduleId));
             } catch (IOException ex) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("reserveTicket"));
             }
         } catch (TicketException e) {
             try {
-                LOGGER.info(LoggerMessageCreator.infoTicketReservationFailed(e.getMessage(), scheduleId, getPhoneNumber(request)));
+                LOGGER.info(LoggerMessageCreator.infoTicketReservationFailed(e.getMessage(), scheduleId, getPhoneNumber()));
                 ResponseCreator.sendTicketReservationError(response, e.getMessage());
             } catch (IOException exception) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("reserveTicket"));
@@ -124,16 +125,16 @@ public class CustomerController {
     }
 
     @GetMapping("/my-tickets")
-    public List<TicketEntity> getMyTickets(HttpServletRequest request, HttpServletResponse response) {
+    public List<TicketEntity> getMyTickets( HttpServletResponse response) {
         List<TicketEntity> tickets = null;
-        tickets = ticketService.getMyTickets(getPhoneNumber(request));
+        tickets = ticketService.getMyTickets(getPhoneNumber());
         return tickets;
     }
 
     @DeleteMapping("/cancel-ticket/{ticketId}")
-    public void cancelTicket(HttpServletRequest request, @PathVariable int ticketId, HttpServletResponse response) {
+    public void cancelTicket( @PathVariable int ticketId, HttpServletResponse response) {
         try {
-            ticketService.cancelTicket(getPhoneNumber(request), ticketId);
+            ticketService.cancelTicket(getPhoneNumber(), ticketId);
         } catch (EntityNotFoundException e) {
             try {
                 LOGGER.info(LoggerMessageCreator.infoNotFound("TicketEntity", ticketId));
@@ -150,15 +151,16 @@ public class CustomerController {
             }
         }
     }
+
     @PutMapping("/charge-account/{amount}")
-    public UserEntity chargeAccount(HttpServletRequest request,@PathVariable long amount, HttpServletResponse response) {
+    public UserEntity chargeAccount( @PathVariable long amount, HttpServletResponse response) {
         UserEntity userToReturn = null;
         try {
-            userToReturn = userService.chargeAccount(getPhoneNumber(request), amount);
+            userToReturn = userService.chargeAccount(getPhoneNumber(), amount);
         } catch (EntityNotFoundException e) {
             try {
-                LOGGER.info(LoggerMessageCreator.infoNotFound("UserEntity", getPhoneNumber(request)));
-                ResponseCreator.sendNotFoundError(response,"user");
+                LOGGER.info(LoggerMessageCreator.infoNotFound("UserEntity", getPhoneNumber()));
+                ResponseCreator.sendNotFoundError(response, "user");
             } catch (IOException exception) {
                 LOGGER.error(LoggerMessageCreator.errorWritingResponse("chargeAccount"));
             }
@@ -166,13 +168,30 @@ public class CustomerController {
         return userToReturn;
     }
 
-    public int getPhoneNumber(HttpServletRequest request) {
-//        String authHeader = request.getHeader("Authorization");
-//        String jwtToken = authHeader.substring(7);
-//        Jwt jwt = jwtDecoder.decode(jwtToken);
-//        String userPhoneNumber = jwt.getSubject();
-//        System.out.println(userPhoneNumber);
-//        return Integer.parseInt(userPhoneNumber);
+    @PutMapping("/change-password/{olsPass}/{newPass}")
+    public UserEntity changePassword( @PathVariable String olsPass,@PathVariable String newPass, HttpServletResponse response) {
+        UserEntity userToReturn = null;
+        try {
+            userToReturn = userService.changePassword(getPhoneNumber(), olsPass, newPass);
+        }catch (EntityNotFoundException e){
+            try {
+                LOGGER.info(LoggerMessageCreator.infoNotFound("UserEntity", getPhoneNumber()));
+                ResponseCreator.sendNotFoundError(response, "user");
+            } catch (IOException exception) {
+                LOGGER.error(LoggerMessageCreator.errorWritingResponse("chargeAccount"));
+            }
+        } catch (WrongPasswordException e) {
+            try {
+                LOGGER.info("Wrong password for user "+ getPhoneNumber());
+                ResponseCreator.wrongPassword(response);
+            } catch (IOException exception) {
+                LOGGER.error(LoggerMessageCreator.errorWritingResponse("changePassword"));
+            }
+        }
+        return userToReturn;
+    }
+
+    public int getPhoneNumber() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return Integer.parseInt(authentication.getName());
     }

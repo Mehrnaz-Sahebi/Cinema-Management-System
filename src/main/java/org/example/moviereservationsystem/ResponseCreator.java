@@ -45,4 +45,10 @@ public class ResponseCreator {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getWriter().write("You don't have access.");
     }
+    public static void wrongPassword(HttpServletResponse response) throws IOException {
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write("wrong password.");
+    }
 }
