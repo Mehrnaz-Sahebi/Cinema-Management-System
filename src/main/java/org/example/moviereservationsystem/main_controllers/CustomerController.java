@@ -150,6 +150,11 @@ public class CustomerController {
             }
         }
     }
+    @PutMapping("/charge-account")
+    public UserEntity chargeAccount(HttpServletRequest request, HttpServletResponse response) {
+        UserEntity user = null;
+        return user;
+    }
 
     public int getPhoneNumber(HttpServletRequest request) {
 //        String authHeader = request.getHeader("Authorization");
