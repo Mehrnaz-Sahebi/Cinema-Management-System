@@ -108,37 +108,27 @@ public class ScheduleDao extends BaseDao {
     public List<ScheduleEntity> getSchedulesForCinema(String cinemaName) throws EntityNotFoundException {
         Session session = getSession();
         List results2 = null;
-        try {
-            Query query1 = session.createQuery("FROM CinemaEntity C WHERE C.name =: name");
-            query1.setParameter("name", cinemaName);
-            List results1 = query1.list();
-            if (results1.isEmpty()) {
-                throw new EntityNotFoundException();
-            }
-            CinemaEntity cinema = (CinemaEntity) results1.get(0);
-            Query query2 = session.createQuery("FROM ScheduleEntity S WHERE S.auditorium.cinema =: cinema");
-            query2.setParameter("cinema", cinema);
-            results2 = query2.list();
-        } catch (HibernateException e) {
-            LOGGER.error(LoggerMessageCreator.errorGettingAllWith("ScheduleEntity", "CinemaName", cinemaName), e);
-            return null;
+        Query query1 = session.createQuery("FROM CinemaEntity C WHERE C.name =: name");
+        query1.setParameter("name", cinemaName);
+        List results1 = query1.list();
+        if (results1.isEmpty()) {
+            throw new EntityNotFoundException();
         }
+        CinemaEntity cinema = (CinemaEntity) results1.get(0);
+        Query query2 = session.createQuery("FROM ScheduleEntity S WHERE S.auditorium.cinema =: cinema");
+        query2.setParameter("cinema", cinema);
+        results2 = query2.list();
         return (List<ScheduleEntity>) results2;
     }
 
     public List<ScheduleEntity> getSchedulesForDate(Date date) {
         Session session = getSession();
         List results2 = null;
-        try {
-            Query query2 = session.createQuery("FROM ScheduleEntity S WHERE year (S.startingTime) =: dYear and month (S.startingTime)=: dMonth year and day (S.startingTime)=: dDay");
-            query2.setParameter("dYear", date.getYear());
-            query2.setParameter("dMonth", date.getMonth());
-            query2.setParameter("dDay", date.getDate());
-            results2 = query2.list();
-        } catch (HibernateException e) {
-            LOGGER.error(LoggerMessageCreator.errorGettingAllWith("ScheduleEntity", "Date", date.toString()), e);
-            return null;
-        }
+        Query query2 = session.createQuery("FROM ScheduleEntity S WHERE year (S.startingTime) =: dYear and month (S.startingTime)=: dMonth year and day (S.startingTime)=: dDay");
+        query2.setParameter("dYear", date.getYear());
+        query2.setParameter("dMonth", date.getMonth());
+        query2.setParameter("dDay", date.getDate());
+        results2 = query2.list();
         return (List<ScheduleEntity>) results2;
     }
 

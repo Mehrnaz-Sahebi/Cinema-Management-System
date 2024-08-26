@@ -33,7 +33,6 @@ public class MovieDao extends BaseDao {
 
     public MovieEntity addMovie(MovieEntity movie) throws EntityExistsException {
         Session session = getSession();
-
         Query query1 = session.createQuery("FROM MovieEntity M WHERE M.title =: title");
         query1.setParameter("title", movie.getTitle());
         List results1 = query1.list();
