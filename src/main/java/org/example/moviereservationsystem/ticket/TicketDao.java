@@ -21,10 +21,8 @@ public class TicketDao extends BaseDao {
 
     public TicketEntity reserveTicket(int scheduleId, int phoneNumber) throws EntityNotFoundException, TicketException {
         TicketEntity ticket = null;
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
+        Session session = getSession();
         try {
-            transaction = session.beginTransaction();
             UserEntity user = session.get(UserEntity.class, phoneNumber);
             if (user == null) {
                 throw new EntityNotFoundException("user");
@@ -43,42 +41,30 @@ public class TicketDao extends BaseDao {
             user.setWallet(user.getWallet() - schedule.getPrice());
             ticket = new TicketEntity(user, schedule);
             session.persist(ticket);
-            transaction.commit();
         } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
             LOGGER.error(LoggerMessageCreator.errorCreating("TicketEntity", ticket.toString()));
-        } finally {
-            session.close();
         }
         return ticket;
     }
 
     public List<TicketEntity> getMyTickets(int phoneNumber) {
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
+        Session session = getSession();
         List<TicketEntity> tickets = null;
         try {
-            transaction = session.beginTransaction();
             UserEntity user = session.get(UserEntity.class, phoneNumber);
             Query query = session.createQuery("from TicketEntity T where T.owner =: user");
             query.setParameter("user", user);
             tickets = (List<TicketEntity>) query.list();
-            transaction.commit();
         } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
             LOGGER.error(LoggerMessageCreator.errorGettingAllWith("TicketEntity", "user-id", Integer.toString(phoneNumber)));
-        } finally {
-            session.close();
         }
         return tickets;
     }
 
     public void cancelTicket(int phoneNumber, int ticketId) throws EntityNotFoundException, TicketException {
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
+        Session session = getSession();
         TicketEntity ticket = null;
         try {
-            transaction = session.beginTransaction();
             ticket = session.get(TicketEntity.class, ticketId);
             if (ticket == null) {
                 throw new EntityNotFoundException();
@@ -91,12 +77,8 @@ public class TicketDao extends BaseDao {
             user.setWallet(user.getWallet() + schedule.getPrice());
             schedule.setRemainingTicketCount(schedule.getRemainingTicketCount() + 1);
             session.delete(ticket);
-            transaction.commit();
         } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
             LOGGER.error(LoggerMessageCreator.errorDeleting("TicketEntity", ticket.toString()));
-        } finally {
-            session.close();
         }
     }
 }
