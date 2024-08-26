@@ -30,11 +30,9 @@ public class ScheduleDao extends BaseDao {
     public static final Logger LOGGER = LoggerFactory.getLogger(ScheduleDao.class);
 
     public ScheduleEntity addSchedule(ScheduleEntity schedule) throws ScheduleException, EntityNotFoundException {
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
+        Session session = getSession();
         ScheduleEntity scheduleToReturn = null;
         try {
-            transaction = session.beginTransaction();
             Query query1 = session.createQuery("FROM AuditoriumEntity A WHERE A.name =: name");
             query1.setParameter("name", schedule.getAuditorium().getName());
             List results1 = query1.list();
@@ -62,47 +60,34 @@ public class ScheduleDao extends BaseDao {
             Predicate auditoriumEquals = cb.equal(root.get("auditorium"), schedule.getAuditorium());
             cq.select(root).where(cb.and(auditoriumEquals, cb.or(cb.and(startingTimeAfter, startingTimeBefore), cb.and(endTimeBefore, endTimeAfter))));
             List<ScheduleEntity> results3 = session.createQuery(cq).getResultList();
-            transaction.commit();
             if (!results3.isEmpty()) {
                 throw new ScheduleException("There's another schedule in that time in that auditorium.");
             }
             session.persist(schedule);
-            transaction.commit();
         } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
             LOGGER.error(LoggerMessageCreator.errorCreating("AuditoriumEntity", schedule.toString()), e);
             return null;
-        } finally {
-            session.close();
         }
         return schedule;
     }
 
     public List<ScheduleEntity> getAllSchedules() {
         Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
         List results1 = null;
         try {
-            transaction = session.beginTransaction();
             Query query1 = session.createQuery("FROM ScheduleEntity");
             results1 = query1.list();
-            transaction.commit();
         } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
             LOGGER.error(LoggerMessageCreator.errorGettingAll("ScheduleEntity"), e);
             return null;
-        } finally {
-            session.close();
         }
         return (List<ScheduleEntity>) results1;
     }
 
     public List<ScheduleEntity> getSchedulesForMovie(String movieTitle) throws EntityNotFoundException {
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
+        Session session = getSession();
         List results2 = null;
         try {
-            transaction = session.beginTransaction();
             Query query1 = session.createQuery("FROM MovieEntity M WHERE M.title =: title");
             query1.setParameter("title", movieTitle);
             List results1 = query1.list();
@@ -113,23 +98,17 @@ public class ScheduleDao extends BaseDao {
             Query query2 = session.createQuery("FROM ScheduleEntity S WHERE S.movie =: movie");
             query2.setParameter("movie", movie);
             results2 = query2.list();
-            transaction.commit();
         } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
             LOGGER.error(LoggerMessageCreator.errorGettingAllWith("ScheduleEntity", "MovieTitle", movieTitle), e);
             return null;
-        } finally {
-            session.close();
         }
         return (List<ScheduleEntity>) results2;
     }
 
     public List<ScheduleEntity> getSchedulesForCinema(String cinemaName) throws EntityNotFoundException {
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
+        Session session = getSession();
         List results2 = null;
         try {
-            transaction = session.beginTransaction();
             Query query1 = session.createQuery("FROM CinemaEntity C WHERE C.name =: name");
             query1.setParameter("name", cinemaName);
             List results1 = query1.list();
@@ -140,36 +119,25 @@ public class ScheduleDao extends BaseDao {
             Query query2 = session.createQuery("FROM ScheduleEntity S WHERE S.auditorium.cinema =: cinema");
             query2.setParameter("cinema", cinema);
             results2 = query2.list();
-            transaction.commit();
         } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
             LOGGER.error(LoggerMessageCreator.errorGettingAllWith("ScheduleEntity", "CinemaName", cinemaName), e);
             return null;
-        } finally {
-            session.close();
         }
         return (List<ScheduleEntity>) results2;
     }
 
     public List<ScheduleEntity> getSchedulesForDate(Date date) {
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
+        Session session = getSession();
         List results2 = null;
         try {
-            transaction = session.beginTransaction();
-
             Query query2 = session.createQuery("FROM ScheduleEntity S WHERE year (S.startingTime) =: dYear and month (S.startingTime)=: dMonth year and day (S.startingTime)=: dDay");
             query2.setParameter("dYear", date.getYear());
             query2.setParameter("dMonth", date.getMonth());
             query2.setParameter("dDay", date.getDate());
             results2 = query2.list();
-            transaction.commit();
         } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
             LOGGER.error(LoggerMessageCreator.errorGettingAllWith("ScheduleEntity", "Date", date.toString()), e);
             return null;
-        } finally {
-            session.close();
         }
         return (List<ScheduleEntity>) results2;
     }
