@@ -21,10 +21,8 @@ public class CinemaDao extends BaseDao {
     public static final Logger LOGGER = LoggerFactory.getLogger(CinemaDao.class);
 
     public CinemaEntity addCinema(CinemaEntity cinema) throws EntityExistsException {
-        Session session = getSessionFactory().openSession();
-        Transaction transaction = null;
+        Session session = getSession();
         try {
-            transaction = session.beginTransaction();
             Query query1 = session.createQuery("FROM CinemaEntity C WHERE C.name =: name or C.addressId =: address");
             query1.setParameter("name", cinema.getName());
             query1.setParameter("address", cinema.getAddressId());
@@ -33,13 +31,9 @@ public class CinemaDao extends BaseDao {
                 throw new EntityExistsException();
             }
             session.persist(cinema);
-            transaction.commit();
         } catch (HibernateException e) {
-            if (transaction != null) transaction.rollback();
             LOGGER.error(LoggerMessageCreator.errorCreating("CinemaEntity", cinema.getId()), e);
             return null;
-        } finally {
-            session.close();
         }
         return cinema;
     }
