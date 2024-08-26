@@ -26,15 +26,11 @@ public class UserDao extends BaseDao {
         }
         Session session = getSession();
         UserEntity userToReturn = null;
-        try {
-            userToReturn = session.get(UserEntity.class, phoneNumber);
-            if (userToReturn == null) {
-                throw new EntityNotFoundException("user");
-            }
-            userToReturn.setRole(role);
-        } catch (HibernateException e) {
-            LOGGER.error(LoggerMessageCreator.errorUpdating("UserEntity", Integer.toString(phoneNumber)), e);
+        userToReturn = session.get(UserEntity.class, phoneNumber);
+        if (userToReturn == null) {
+            throw new EntityNotFoundException("user");
         }
+        userToReturn.setRole(role);
         return userToReturn;
     }
 }
