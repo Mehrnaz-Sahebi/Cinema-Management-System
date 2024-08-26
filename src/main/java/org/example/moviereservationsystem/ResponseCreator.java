@@ -39,4 +39,10 @@ public class ResponseCreator {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.getWriter().write("Ticket cancellation failed: " + errorMessage);
     }
+    public static void unauthorizedError(HttpServletResponse response) throws IOException {
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write("You don't have access.");
+    }
 }

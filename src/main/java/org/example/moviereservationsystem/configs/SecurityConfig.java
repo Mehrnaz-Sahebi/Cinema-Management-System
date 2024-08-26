@@ -30,9 +30,9 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.web.SecurityFilterChain;
+@RequiredArgsConstructor
 
 @EnableWebSecurity
-@RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
     @Autowired
@@ -59,12 +59,13 @@ public class SecurityConfig {
                             .hasAnyAuthority(UserRoles.ADMIN,UserRoles.MANAGER)
                             .anyRequest())
                             .authenticated();
+
 //                    .permitAll();
                 })
                 .authenticationProvider(authenticationProvider())
                 .sessionManagement(
                         httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
+        http.logout(config -> config.logoutUrl("/logout").logoutSuccessUrl("/auth"));
         http.csrf(csrf -> csrf.disable());
         http.cors(cors -> cors.disable());
         http.formLogin(Customizer.withDefaults());
