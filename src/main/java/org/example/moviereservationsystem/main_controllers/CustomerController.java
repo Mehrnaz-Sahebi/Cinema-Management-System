@@ -1,5 +1,6 @@
 package org.example.moviereservationsystem.main_controllers;
 
+import com.nimbusds.jose.proc.SecurityContext;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
@@ -154,11 +156,13 @@ public class CustomerController {
     }
 
     public int getPhoneNumber(HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
-        String jwtToken = authHeader.substring(7);
-        Jwt jwt = jwtDecoder.decode(jwtToken);
-        String userPhoneNumber = jwt.getSubject();
-        System.out.println(userPhoneNumber);
-        return Integer.parseInt(userPhoneNumber);
+//        String authHeader = request.getHeader("Authorization");
+//        String jwtToken = authHeader.substring(7);
+//        Jwt jwt = jwtDecoder.decode(jwtToken);
+//        String userPhoneNumber = jwt.getSubject();
+//        System.out.println(userPhoneNumber);
+//        return Integer.parseInt(userPhoneNumber);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return Integer.parseInt(authentication.getName());
     }
 }
