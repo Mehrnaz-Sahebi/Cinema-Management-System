@@ -1,4 +1,4 @@
-# Movie Reservation System
+# Cinema Management System
 
 The **Cinema Management System** is a web-based platform designed to handle the complete management of a cinema, including users, movies, schedules, and ticket reservations. The system provides different roles—**Admin**, **Manager**, and **Customer**—each with specific functionalities to ensure a seamless cinema experience.
 
